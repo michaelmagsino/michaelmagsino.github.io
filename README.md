@@ -1,3 +1,3 @@
-# .github.io
+# michaelmagsino.github.io
 Welcome!
-This is Michael's Place for Codes to be placed
+This is Michael's Place for CT120: Intermediate Creative Coding Projects!
