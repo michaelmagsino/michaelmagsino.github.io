@@ -1,0 +1,44 @@
+{
+    "Good Morning [User]":{
+        "Insert Amount of Sleep":{
+            "10+ Hours": "Are you okay? Is there something wrong :(",
+            "8 Hours": "That is great! I am happy to hear it :)",
+            "6 Hours": "Not too bad, try to get more tonight :|",
+            "< 4 Hours": "Please get some rest, you need it more than you think... :/"
+        },
+        "Have you eaten yet?":{
+            "Yes": "Good! Make sure you won't forget the rest of your meals.",
+            "No": "Please eat something soon, you'll regret it later..."
+        },
+        "Will you do your homework today?":{
+            "Yes": "I am so proud of you :)",
+            "No": "And why not? Do you want to disappoint your parents?"
+        },
+        "Will you go to the gym today?":{
+            "Yes": "Keep it up! Make sure you don't lose your progress",
+            "No": "Why? Are you feeling extra lazy today?"
+        },
+        "Are you still smoking?":{
+            "Yes": "Your health is deteriorating with each hit, please stop",
+            "No": "ERROR: INVALID OUTPUT"
+        }
+
+    },
+    "Analyzing your Answers":{
+        "(Sleep : 8 Hours, Eaten : Yes, Homework : Yes, Gym : Yes, Smoking : No)":
+            "HEALTH = 100% - Looks like you're off to a great start today! Make sure to keep it up. Be aware that your smoking habits will revert back to 'YES', based off of the information you have provided to me. You use it as a crutch. You will come back, they always do, eventually...",
+        "(Sleep : 6 Hours, Eaten : No, Homework : Yes, Gym : No, Smoking : Yes)":
+            "HEALTH = 65% - You are doing all the tasks you needed to do, but your energy levels are too low, be mindful of eating properly and getting a little more sleep",
+        "(Sleep : < 4 Hours, Eaten: Yes, Homework : No, Gym : Yes, Smoking : Yes)":
+            "HEALTH = 55% - You have done all things you wanted to do, but you failed to do your homework. Why is that? Are you really just that lazy. Do Better",
+        "(Sleep : 10+ Hours, Eaten : No, Homework : No, Gym : No, Smoking : Yes)":
+           "HEALTH = ERROR (HEALTH cannot be less than 0) - ANALYZATION FAILURE",
+                "Where would you like to send the Crash Report":{
+                    "Mom": "Are you sure? You don't want to look like you've wasted time",
+                    "Girlfriend": "No. She has her own problems to deal with. Do Not Burden Her",
+                    "Therapist": "Why bother, it's not like you can afford it",
+                    "Myself": "SUCCESSFULLY SUBMITTED - EXECUTED 'Status Quo' "
+                }
+    }
+
+}
