@@ -42,7 +42,7 @@
           .attr("fill", d => color(d.data.name))
           .attr("d", arc)
         .append("title")
-          .text(d => ${d.data.name}: ${d.data.value.toLocaleString()});
+          .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`); // ✅ Fix here
 
       svg.append("g")
           .attr("font-family", "sans-serif")
@@ -51,7 +51,7 @@
         .selectAll()
         .data(pie(data))
         .join("text")
-          .attr("transform", d => translate(${arc.centroid(d)}))
+          .attr("transform", d => `translate(${arc.centroid(d)})`) // ✅ Fix here
           .call(text => text.append("tspan")
               .attr("y", "-0.4em")
               .attr("font-weight", "bold")
