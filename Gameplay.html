@@ -43,7 +43,7 @@
           .attr("fill", d => color(d.data.name))
           .attr("d", arc)
         .append("title")
-          .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`); // ✅ Fix here
+          .text(d => `${d.data.name}: ${d.data.value.toLocaleString()}`);
 
       svg.append("g")
           .attr("font-family", "sans-serif")
@@ -52,7 +52,7 @@
         .selectAll()
         .data(pie(data))
         .join("text")
-          .attr("transform", d => `translate(${arc.centroid(d)})`) // ✅ Fix here
+          .attr("transform", d => `translate(${arc.centroid(d)})`)
           .call(text => text.append("tspan")
               .attr("y", "-0.4em")
               .attr("font-weight", "bold")
@@ -68,11 +68,4 @@
   </script>
 </body>
 </html>
-<h2>I was not familiar with any of these tools but the one that interested me the most (and to be honest, the most simplest) was using D3 to visualize data. To my chagrin, it looked easier than what it actually was. I wanted to represent the data of games I’ve played and their corresponding hours onto a pie chart. I essentially hopped on to excel and made a chart inputting all the games I had that had some decent hours to them then imported it as a .csv file.
-
-  My main issue at first was figuring out why the pie chart was not displaying on the main page. It was amended after I realized the .csv file I was using had the labels wrong so the html file was not reading the data properly.  The headers were “game” and “hours” and from the example code it was instead “name” and “value”. Instead of relabeling the entire code, I just renamed the .csv file to save me some time”
-  
-  The next issue I had was that when the chart was fully displayed, the names were too long for the size of the pie chart so they kind of overlapped with each other. I then attempted to fix the code by changing the arc variable from 500 to 800 and to also change the font sizing. Lo and behold, it failed. And when I tried fixing it, it still failed. I had so many commits to my github page and then I realized that I could have just redeployed my old github commit (lesson learned for next time).
-  
-  It is back to displaying the pie chart with overlapping texts, until I can figure out how to fix the problem properly.
-  </h2>
+<h3><a href="Gameplay_Documentation.html">Documentation</a></h3>
