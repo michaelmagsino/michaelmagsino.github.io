@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ezio Speech Overlay</title>
+  <style>
+    body {
+      background-color: whitesmoke;
+      color: black;
+      font-family: serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+
+    p {
+      transition: all 0.3s ease;
+    }
+
+    .emphasized {
+      font-weight: bold;
+      color: red;
+      font-size: 1.5em;
+    }
+
+    video {
+      max-width: 100%;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <video controls=""><source src="Ezio_Speech.mp4" type="video/mp4"></video>
+  <div id="speech">
+    <p id="line1">When I was a young man,</p>
+    <p id="line2">I had liberty, but I did not see it.</p>
+    <p id="line3">I had time, but I did not know it.</p>
+    <p id="line4">And I had love, but I did not feel it.</p>
+    <p id="line5">Many decades would pass before I understood the meaning of all three.</p>
+    <p id="line6">And now, the twilight of my life,</p>
+    <p id="line7">this understanding has passed into contentment.</p>
+    <p id="line8">Love, liberty, and time:</p>
+    <p id="line9">once so disposable,</p>
+    <p id="line10">are the fuels that drive me forward.</p>
+    <p id="line11">And love, most especially, mio caro.</p>
+    <p id="line12">For you, our children, our brothers and sisters.</p>
+    <p id="line13">And for the vast and wonderful world that gave us life,</p>
+    <p id="line14">and keeps us guessing.</p>
+    <p id="line15">Endless affection,</p>
+    <p id="line16">mia Sofia.</p>
+    <p id="line17">Forever yours,</p>
+    <p id="line18">Ezio Auditore.</p>
+  </div>
+  <script>
+    const video = document.querySelector("video");
+    const lines = Array.from(document.querySelectorAll("#speech p"));
+
+    const timings = [
+      [27.0, 29],       // "When I was a young man,"
+      [30, 33],         // "I had liberty, but I did not see it."
+      [34, 37],         // "I had time, but I did not know it."
+      [38, 41.5],       // "And I had love, but I did not feel it."
+      [42.5, 47.5],     // "Many decades would pass before I understood the meaning of all three."
+      [48, 51],         // "And now, the twilight of my life,"
+      [52.3, 55.5],     // "this understanding has passed into contentment."
+      [56.5, 60.2],     // "Love, liberty, and time:"
+      [61, 63.2],       // "once so disposable,"
+      [63.2, 66.3],     // "are the fuels that drive me forward."
+      [67.3, 71.2],     // "And love, most especially, mio caro."
+      [71.8, 77],       // "For you, our children, our brothers and sisters."
+      [77.6, 82],       // "And for the vast and wonderful world that gave us life,"
+      [82.4, 84.4],     // "and keeps us guessing."
+      [85.3, 87.2],     // "Endless affection,"
+      [87.4, 89.2],     // "mia Sofia."
+      [89.5, 91.1],     // "Forever yours,"
+      [92, 95]          // "Ezio Auditore."
+    ];
+
+    video.addEventListener("timeupdate", () => {
+      const current = video.currentTime;
+      lines.forEach((line, i) => {
+        const [start, end] = timings[i];
+        if (current >= start && current < end) {
+          line.classList.add("emphasized");
+        } else {
+          line.classList.remove("emphasized");
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+<h2><a href="text_color_documentation.html">Documentation</a></h2>
