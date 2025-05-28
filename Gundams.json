@@ -1,0 +1,60 @@
+{
+    "Gundams":[
+        {
+            "name": "RX 78-2 (2.0)",
+            "grade": "RG",
+            "scale": "1/144",
+            "price": 36.99,
+            "img": "images/RG_rx78-2(2.0).jpg",
+            "completion": "February 2025"
+        },
+        {
+            "name": "RX-93 NU Gundam",
+            "grade": "RG",
+            "scale": "1/144",
+            "price": 49.99,
+            "img": "images/RG_rx93.jpg",
+            "completion": "June 2023"
+        },
+        {
+            "name": "Astray Red Frame",
+            "grade": "PG",
+            "scale": "1/60",
+            "price": 209.99,
+            "img": "images/PG_astray_redframe.jpg",
+            "completion": "August 2021"
+        },
+        {
+            "name": "Astray Red Frame Kai",
+            "grade": "MG",
+            "scale": "1/100",
+            "price": 61.99,
+            "img": "MG_redframe_kai.jpg",
+            "completion": "March 2021"
+        },
+        {
+            "name": "",
+            "grade": "",
+            "scale": "",
+            "price": "",
+            "img": "",
+            "completion": ""
+        },
+        {
+            "name": "",
+            "grade": "",
+            "scale": "",
+            "price": "",
+            "img": "",
+            "completion": ""
+        },
+        {
+            "name": "",
+            "grade": "",
+            "scale": "",
+            "price": "",
+            "img": "",
+            "completion": ""
+        }
+    ]
+}
