@@ -33,27 +33,27 @@
             "completion": "March 2021"
         },
         {
-            "name": "",
-            "grade": "",
-            "scale": "",
-            "price": "",
-            "img": "",
-            "completion": ""
+            "name": "Monument Repair Type",
+            "grade": "PG",
+            "scale": "1/60",
+            "price": 169.99,
+            "img": "images/PG_Monument-Repair.jpg",
+            "completion": "WIP May 2025"
         },
         {
-            "name": "",
-            "grade": "",
-            "scale": "",
-            "price": "",
-            "img": "",
-            "completion": ""
+            "name": "Sinanju Stein Ver. Ka",
+            "grade": "MG",
+            "scale": "1/100",
+            "price": 82.99,
+            "img": "images/MG_Sinanju-VerKa.jpg",
+            "completion": "April 2025"
         },
         {
-            "name": "",
-            "grade": "",
-            "scale": "",
-            "price": "",
-            "img": "",
+            "name": "GQuuuuux",
+            "grade": "HG",
+            "scale": "1/144",
+            "price": 21.99,
+            "img": "images/HG_Gquuuuux.jpg",
             "completion": ""
         }
     ]

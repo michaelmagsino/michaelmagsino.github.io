@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Gundam Model Kits</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      margin-bottom: 2rem;
+    }
+    .kit-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      max-width: 1200px;
+      width: 100%;
+    }
+    .kit {
+      background: #1f1f1f;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 280px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+    }
+    .kit img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .kit h2 {
+      margin: 0.5rem 0 0.2rem;
+      font-size: 1.2rem;
+    }
+    .kit p {
+      margin: 0.2rem 0;
+    }
+    #total {
+      margin-top: 3rem;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Gundam Model Kits</h1>
+  <div class="kit-container" id="kits"></div>
+  <div id="total"></div>
+
+  <script>
+    fetch('Gundams.json')
+      .then(response => response.json())
+      .then(data => {
+        let total = 0;
+        const kitsDiv = document.getElementById('kits');
+
+        data.Gundams.forEach(kit => {
+          total += kit.price;
+
+          const kitDiv = document.createElement('div');
+          kitDiv.className = 'kit';
+
+          kitDiv.innerHTML = `
+            <img src="${kit.img}" alt="${kit.name}">
+            <h2>${kit.name}</h2>
+            <p><strong>Grade:</strong> ${kit.grade}</p>
+            <p><strong>Scale:</strong> ${kit.scale}</p>
+            <p><strong>Price:</strong> $${kit.price.toFixed(2)}</p>
+            <p><strong>Completed:</strong> ${kit.completion || 'Not yet'}</p>
+          `;
+
+          kitsDiv.appendChild(kitDiv);
+        });
+
+        const totalDiv = document.getElementById('total');
+        totalDiv.textContent = `Total Spent on Model Kits: $${total.toFixed(2)}`;
+      })
+      .catch(error => {
+        console.error("Failed", error);
+        document.getElementById('kits').innerHTML = "<p style='color:red;'></p>";
+      });
+  </script>
+</body>
+</html>
