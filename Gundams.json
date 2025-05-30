@@ -38,7 +38,7 @@
             "scale": "1/60",
             "price": 169.99,
             "img": "images/PG_Monument-Repair.jpg",
-            "completion": "WIP May 2025"
+            "completion": ""
         },
         {
             "name": "Sinanju Stein Ver. Ka",
@@ -46,7 +46,7 @@
             "scale": "1/100",
             "price": 82.99,
             "img": "images/MG_Sinanju-VerKa.jpg",
-            "completion": "April 2025"
+            "completion": ""
         },
         {
             "name": "GQuuuuux",
@@ -54,7 +54,7 @@
             "scale": "1/144",
             "price": 21.99,
             "img": "images/HG_Gquuuuux.jpg",
-            "completion": ""
+            "completion": "March 2025"
         }
     ]
 }
