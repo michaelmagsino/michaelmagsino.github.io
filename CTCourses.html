@@ -1,17 +1,68 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-        <style>
+  <meta charset="UTF-8" />
+  <title>Other CT Course Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
     body {
       background-color: black;
       color: whitesmoke;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
-        </style>
-    </head>
-    <title>Other CT Course Projects</title>
-    <h1>CT Course Projects</h1>
-    <h2><a href="CT_Project.FinalRev.html">CT100 Final Project Water Cooling</a></h2>
+    h1 {
+      font-size: 2.3rem;
+      margin-bottom: 30px;
+    }
+
+    .project {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+      transition: transform 0.2s ease;
+    }
+
+    .project:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
+
+    a {
+      color: #7aaaff;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      display: inline-block;
+      margin-top: 10px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    a:hover {
+      background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(88,86,214,0.3));
+      box-shadow: 0 0 12px rgba(88, 86, 214, 0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CT Course Projects</h1>
+
+  <div class="project">
+    <a href="CT_Project.FinalRev.html">CT100 Final Project – Water Cooling</a>
+  </div>
+
+</body>
+</html>
