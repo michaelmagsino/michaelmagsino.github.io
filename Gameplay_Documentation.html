@@ -1,25 +1,88 @@
 <!DOCTYPE html>
-<title>Gameplay Documetation</title>
+<html lang="en">
 <head>
-        <style>
+  <meta charset="UTF-8">
+  <title>Gameplay Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
     body {
       background-color: black;
       color: whitesmoke;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      padding: 40px 20px;
     }
 
-        </style>
-    </head>
+    h1 {
+      font-size: 2.3rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-<h1>Gameplay Documentation</h1>
-<h2>I was not familiar with any of these tools but the one that interested me the most (and to be honest, the most simplest) was using D3 to visualize data. To my chagrin, it looked easier than what it actually was. I wanted to represent the data of games I’ve played and their corresponding hours onto a pie chart. I essentially hopped on to excel and made a chart inputting all the games I had that had some decent hours to them then imported it as a .csv file.
+    .entry {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px;
+      max-width: 800px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      transition: transform 0.2s ease;
+    }
 
-  My main issue at first was figuring out why the pie chart was not displaying on the main page. It was amended after I realized the .csv file I was using had the labels wrong so the html file was not reading the data properly.  The headers were “game” and “hours” and from the example code it was instead “name” and “value”. Instead of relabeling the entire code, I just renamed the .csv file to save me some time”
-  
-  The next issue I had was that when the chart was fully displayed, the names were too long for the size of the pie chart so they kind of overlapped with each other. I then attempted to fix the code by changing the arc variable from 500 to 800 and to also change the font sizing. Lo and behold, it failed. And when I tried fixing it, it still failed. I had so many commits to my github page and then I realized that I could have just redeployed my old github commit (lesson learned for next time).
-  
-  It is back to displaying the pie chart with overlapping texts, until I can figure out how to fix the problem properly.
-  </h2>
+    .entry:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
+
+    h2 {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0;
+      text-align: left;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: #333;
+      margin: 40px auto;
+      width: 80%;
+    }
+
+    @media (max-width: 768px) {
+      .entry {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Gameplay Documentation</h1>
+
+  <hr>
+
+  <div class="entry">
+    <h2>
+      I was not familiar with any of these tools, but the one that interested me the most (and to be honest, the most simple) was using D3 to visualize data. To my chagrin, it looked easier than it actually was. I wanted to represent the data of games I’ve played and their corresponding hours in a pie chart. I started in Excel and created a chart by inputting games with decent playtime, then exported it as a .csv file.<br><br>
+
+      My main issue at first was figuring out why the pie chart wasn’t displaying on the main page. It turned out the problem was with the labels in the .csv file — I used “game” and “hours” as headers, but the code expected “name” and “value.” Instead of rewriting the code, I renamed the headers in the .csv to save time.<br><br>
+
+      The next issue came after the chart finally loaded: the game titles were too long and overlapped on the pie chart. I tried increasing the arc radius and changing font sizes from 500 to 800 — but that only made things worse. Even after multiple attempts and commits on GitHub, I ended up reverting to an earlier working version. Lesson learned: **don’t forget about old commits.**<br><br>
+
+      For now, the chart still has overlapping labels. I’ll revisit this once I figure out a clean way to handle long names in limited space.
+    </h2>
+  </div>
+
+  <hr>
+
+</body>
+</html>

@@ -1,26 +1,109 @@
 <!DOCTYPE html>
-<title>Text Color Documentation</title>
+<html lang="en">
 <head>
-        <style>
+  <meta charset="UTF-8">
+  <title>Text Color Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
     body {
       background-color: black;
       color: whitesmoke;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       margin: 0;
-      padding: 20px;
-      text-align: center;
+      padding: 40px 20px;
     }
 
-        </style>
-    </head>
-<h1>Text Color Documentation</h1>
-<h2>This was by far one of the longest coding assignments I have taken on. Originally I had asked the professor for an example of a code that highlighted text at a certain time interval. It can be found here "https://github.com/aphid/aphid.github.io/blob/main/textcolor.html". In this orginal code from the professor, 
-    it displays the time signature that is needed to highlight the selected text which was a great starting point to how I wanted to frame the code. The issues started up where whe I attempted to do this funtion over the same lines of code, either the function would go through each line and "emphazised" the text but 
-    as soon as the next highlighted line goes, it stayed highlighted. The other issue was, which I personally don't recall doing anything wrong with my code's syntax, but when I hit run and debug, the text would highlight then disappear compeletely after it was highlighted. I think I had to to where I had the "deemphasize" 
-    function remove the line of text completely (after looking at a forum on how to get the text to grow big but look smooth, as found in the p function for 'transition' found on this site "https://www.w3schools.com/css/css3_transitions.asp"). Once I dealt with all of that I was browsing Reddit and Youtube for HOURS to figure 
-    out if I could do the timings as an array. I forget which reddit thread I found but it helped me visualize what I needed to do and what search parameters I needed to find a good exmaple of what I was doing. After doing the array, which displayed the text properly, I noticed that the "deemphasize" funtion was still 
-    pretty wonky with my code cause it refused to work, so I instead took that function out and just used 'ele.classList.remove'. That's where I ran into the next issue which was a super simple fix. Since in the professor's orginal code example, the "emph" funtion worked under 'ele' and since I changed to an array and 
-    names all the text with "line1", for exmaple, of course it wouldn't have shown. I probaly wasted an hour or two just figuring it out but that's what I get for looking up exmaple codes and taking them without reading the sytaxes. In terms of swicfthing the video, I just used a youtube to mp4 downloader and used an 
-    amazing edit found on this link "https://www.youtube.com/watch?v=q_eH0HiJi18". It is by far one of my favorite gaming speeches/letter from my favorite franchises. The other main change aside from the colors were changing the allignment, from this website "https://outstandingthemes.com/how-to-center-a-video-in-html/"
-    I was able to figure out how centering worked here. Aside from the various tutorials from the professor, I knew this was gonna be a difficult task because I haven't dealt with videos in html before. I ran it thorugh a program from this website "https://www.htmlvalidator.com/fix-html.php" throughout the entire process to make
-    sure I was not wasting any more time. Overall there were a few things I wish I knew and understood beforehand so I can be less stressed. I also asked the professor for an exmaple on how to make the text clickable so that it goes to the right time but my brain is too fried to attmept it after an hour. </h2>
+    h1 {
+      font-size: 2.3rem;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .entry {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+      box-sizing: border-box;
+      transition: transform 0.2s ease;
+    }
+
+    .entry:hover {
+      transform: scale(1.01);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
+
+    h2 {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.7;
+      margin: 0;
+      text-align: left;
+    }
+
+    a {
+      color: #7aaaff;
+      text-decoration: underline;
+      word-break: break-all;
+    }
+
+    hr {
+      border: none;
+      height: 1px;
+      background: #333;
+      margin: 40px auto;
+      width: 80%;
+    }
+
+    @media (max-width: 768px) {
+      .entry {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 1.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Text Color Documentation</h1>
+
+  <hr>
+
+  <div class="entry">
+    <h2>
+      This was by far one of the longest coding assignments I’ve taken on. I originally asked the professor for an example of a code that highlighted text at specific time intervals. It can be found here:  
+      <a href="https://github.com/aphid/aphid.github.io/blob/main/textcolor.html" target="_blank">Professor’s Original Example</a>.<br><br>
+
+      That example displayed the time signature needed to highlight selected text, which was a great starting point. The problems started when I tried applying this function to multiple lines, the text stayed highlighted instead of reverting, or worse, disappeared altogether due to the “deemphasize” function removing the element entirely.<br><br>
+
+      I got that function from a forum that suggested using `transition` to animate emphasized text, reference here:  
+      <a href="https://www.w3schools.com/css/css3_transitions.asp" target="_blank">W3Schools - CSS Transitions</a>.<br><br>
+
+      I browsed Reddit and YouTube for hours trying to figure out how to manage timings as an array. I forget the exact thread, but it helped clarify my approach. Eventually I used `classList.remove` instead of a broken deemphasize function, which solved the problem.<br><br>
+
+      Another issue: my array used IDs like `line1`, `line2`, etc., while the original code used `ele` references, I wasted hours debugging until I caught the mismatch. Lesson: don’t blindly copy code without checking your syntax.<br><br>
+
+      For the video, I downloaded an MP4 version of this incredible edit:  
+      <a href="https://www.youtube.com/watch?v=q_eH0HiJi18" target="_blank">Ezio’s Letter (Gaming Speech)</a>, which remains one of my favorite narrative moments ever.<br><br>
+
+      I also struggled with centering video until I found this helpful post:  
+      <a href="https://outstandingthemes.com/how-to-center-a-video-in-html/" target="_blank">How to Center Video in HTML</a>.<br><br>
+
+      Finally, I validated my HTML with this tool during development:  
+      <a href="https://www.htmlvalidator.com/fix-html.php" target="_blank">HTML Validator</a>.<br><br>
+
+      In the end, there are definitely things I wish I’d known going in, especially around syncing text and clickable jumps in video, but I’ve learned a ton. I even asked the professor about clickable time markers, but after an hour of brain-melting frustration, I decided to move on. Maybe next version!
+    </h2>
+  </div>
+
+  <hr>
+
+</body>
+</html>

@@ -1,31 +1,104 @@
 <!DOCTYPE html>
-<title>CT20 Projects</title>
+<html lang="en">
 <head>
-        <style>
+  <meta charset="UTF-8">
+  <title>CT20 Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
     body {
       background-color: black;
       color: whitesmoke;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
-        </style>
-    </head>
-    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
 
-    <h1>CT20 Assignments (Winter 2024)</h1>
+    .project-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
 
-    <h2><a href="https://editor.p5js.org/magsino/full/Nc8ac2F4G">Creative Lab</a></h2>
-    <iframe src="https://editor.p5js.org/magsino/full/Nc8ac2F4G"></iframe>
+    .project {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px;
+      width: 420px; /* slightly larger than canvas to fit the button and padding */
+      box-sizing: border-box;
+      transition: transform 0.2s;
+    }
 
-<hr>
+    .project:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
 
-    <h2><a href="https://editor.p5js.org/magsino/full/Wxv_obb-_">Project 1</a></h2>
-    <iframe src="https://editor.p5js.org/magsino/full/Wxv_obb-_"></iframe>
+    .glass-button {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
 
-<hr>
+    .glass-button:hover {
+      background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(88,86,214,0.3));
+      box-shadow: 0 0 12px rgba(88, 86, 214, 0.4);
+    }
 
-    <h2><a href="https://editor.p5js.org/magsino/full/9QK6n0qJ-">Project 2 (It has sound, lower volume accordingly)</a></h2>
-    <iframe src="https://editor.p5js.org/magsino/full/9QK6n0qJ-"></iframe>
+    iframe {
+      width: 400px;
+      height: 400px;
+      border: none;
+      border-radius: 12px;
+    }
+
+    @media (max-width: 900px) {
+      .project-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CT20 Assignments (Winter 2024)</h1>
+
+  <div class="project-grid">
+
+    <div class="project">
+      <a href="https://editor.p5js.org/magsino/full/Nc8ac2F4G" class="glass-button">Creative Lab</a>
+      <iframe src="https://editor.p5js.org/magsino/full/Nc8ac2F4G"></iframe>
+    </div>
+
+    <div class="project">
+      <a href="https://editor.p5js.org/magsino/full/Wxv_obb-_" class="glass-button">Project 1</a>
+      <iframe src="https://editor.p5js.org/magsino/full/Wxv_obb-_"></iframe>
+    </div>
+
+    <div class="project">
+      <a href="https://editor.p5js.org/magsino/full/9QK6n0qJ-" class="glass-button">Project 2 (It has sound)</a>
+      <iframe src="https://editor.p5js.org/magsino/full/9QK6n0qJ-"></iframe>
+    </div>
+
+  </div>
+
+</body>
+</html>

@@ -1,44 +1,152 @@
 <!DOCTYPE html>
-<title>CT 120 Projects</title>
+<html lang="en">
 <head>
-        <style>
+  <meta charset="UTF-8">
+  <title>CT 120 Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
     body {
       background-color: black;
       color: whitesmoke;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
       margin: 0;
-      padding: 20px;
+      padding: 40px 20px;
       text-align: center;
     }
 
-        </style>
-    </head>
-    <h1>Here is where all of my CT120 Assignments will be!</h1>
-        <h2><a href="https://editor.p5js.org/magsino/full/GvsCjUAJZ">Iteration of CT20 Project 2</a></h2>
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
 
-<hr>
+    .project-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 40px;
+    }
 
-        <h2><a href="https://editor.p5js.org/magsino/sketches/GvsCjUAJZ">Iteration Code</a></h2>
-            <h3>This was my final project for CT20 and it is basically an audio visuallizer. Intially going into my old project, I wanted to add more depth as it looked and functioned pretty plainly for the most part. I had intially began working on iterating my old project this past week (4/13/25) but unfortunately the autosave function from p5.js failed me and I only had my orginal copy instead of the new iteration file. So I had very limited time to add to my old project and that, in hindsight, is something I need to check over from now on. What I was able to implement into my new design was instead of having the central line (that is also a wave form) move along with the arcs, I had it coded so that it moved only when the songs were playing and went back to the center when it stopped. In my quick re-code of it this afternoon (4/16/25), I was unable to code it properly (line 371-396). The only thing I was able to successfully do was chaneg the background image to a galaxy whenever the amplitude went over 230. It is well shown when you play the song under "X-Mood". I attempted to add a slider for the volume but it would not set the volume correctly so i gave them a set volume so it isnt too loud. When using this, be aware that pressing the same key multiple times (besides "p") will play the song again on top of the already playing song. Just hit "p" to stop everything!  </h3>
-        
-<hr>
+    .project {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px;
+      width: 420px;
+      box-sizing: border-box;
+      transition: transform 0.2s;
+    }
 
-        <h2><a href="poem.json">Data Poem</a></h2>
-            <h3>There was a lot of researching I had to do in order for me to understand the syntax of javascript as I have never used it before. Hopefully it looks good enough until I get better with js!</h3>
-        
-<hr>
+    .project:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
 
-        <h2><a href="Gameplay.html">Gameplay Data Chart</a></h2>
-        
-<hr>
+    .glass-button {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
 
-        <h2><a href="text_color.html">Highlighted Text as Video Plays</a></h2>
+    .glass-button:hover {
+      background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(88,86,214,0.3));
+      box-shadow: 0 0 12px rgba(88, 86, 214, 0.4);
+    }
 
+    iframe {
+      width: 400px;
+      height: 400px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
 
-<hr>
+    .description {
+      font-size: 0.9rem;
+      color: #ccc;
+      text-align: left;
+      margin-top: 10px;
+    }
 
-        <h2><a href="proposal.html">Proposal</a></h2>
+    @media (max-width: 900px) {
+      .project-grid {
+        flex-direction: column;
+        align-items: center;
+      }
 
-<hr>
+      .description {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
 
-        <h2><a href="GundamCollection.html">Final Project WIP</a></h2>
+  <h1>Here is where all of my CT120 Assignments will be!</h1>
+
+  <div class="project-grid">
+
+    <div class="project">
+      <a href="https://editor.p5js.org/magsino/sketches/GvsCjUAJZ" class="glass-button">Iteration Code</a>
+      <div class="description">
+        <p>Direct link to the editable code version of the project. Use this if you want to see how it was built or make your own edits.</p>
+      </div>
+    </div>
+
+    <div class="project">
+      <a href="poem.json" class="glass-button">Data Poem</a>
+      <div class="description">
+        <p>My first attempt at structuring JSON with poetic intent. This helped me start understanding JavaScript and formatting data for creative display.</p>
+      </div>
+    </div>
+
+    <div class="project">
+      <a href="Gameplay.html" class="glass-button">Gameplay Data Chart</a>
+      <div class="description">
+        <p>A data visualization project using gameplay mechanics and D3.js. It presents comparisons and trends in a custom interactive chart.</p>
+      </div>
+    </div>
+
+    <div class="project">
+      <a href="text_color.html" class="glass-button">Highlighted Text as Video Plays</a>
+      <div class="description">
+        <p>This project syncs highlighted text with video playback — ideal for speeches, lyrics, or narration. Inspired by the rhythm of voice-over visuals.</p>
+      </div>
+    </div>
+
+    <div class="project">
+      <a href="proposal.html" class="glass-button">Proposal</a>
+      <div class="description">
+        <p>Proposal document for the final project outlining my idea, intended tools, and goals for execution.</p>
+      </div>
+    </div>
+
+    <div class="project">
+      <a href="GundamCollection.html" class="glass-button">Final Project WIP</a>
+      <div class="description">
+        <p>In-progress: a fully browsable JSON-powered Gundam model catalog, complete with UI and future interactivity.</p>
+      </div>
+    </div>
+
+ 
+    <div class="project">
+      <a href="https://editor.p5js.org/magsino/full/GvsCjUAJZ" class="glass-button">Iteration of CT20 Project 2</a>
+      <iframe src="https://editor.p5js.org/magsino/full/GvsCjUAJZ"></iframe>
+      <div class="description">
+        <p>This was my final project for CT20, a sound-reactive visualizer. I added a galaxy background that triggers on amplitude spikes, and tried implementing a slider (still in progress). Be aware of overlapping sound from pressing keys repeatedly — use "P" to pause audio.</p>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
