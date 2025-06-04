@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CT100 Project 3 - Cooling Methods Overview</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  
+ 
+
+
+
+
+  <style>
+    :root {
+      --bg-color: #f8f8f8;
+      --text-color: #111;
+      --box-bg: rgba(80, 80, 80, 0.1);
+    }
+    body.dark {
+      --bg-color: #121212;
+      --text-color: #f5f5f5;
+      --box-bg: rgba(255, 255, 255, 0.05);
+    }
+    body {
+      margin: 0;
+      background: var(--bg-color);
+      color: var(--text-color);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+      transition: background-color 0.6s ease, color 0.6s ease;
+    }
+    header {
+      padding: 20px;
+      text-align: center;
+      position: relative;
+    }
+    .dark-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: 1px solid var(--text-color);
+      color: var(--text-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border: none;
+      padding: 10px 18px;
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn:hover { transform: scale(1.05); }
+    .btn.active {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .description-box,
+    .info-box {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      backdrop-filter: blur(12px);
+      background-color: var(--box-bg);
+      border-radius: 20px;
+      text-align: center;
+    }
+    .main-content {
+      display: flex;
+      max-width: 1000px;
+      margin: auto;
+      gap: 30px;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      flex-wrap: wrap;
+    }
+    .image-area {
+      flex: 1;
+      max-width: 400px;
+      text-align: center;
+    }
+    .image-area img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    .chart-area {
+      flex: 1;
+      max-width: 500px;
+    }
+    .pros-cons-box {
+      max-width: 1000px;
+      margin: 20px auto;
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .pros, .cons {
+      flex: 1 1 400px;
+      backdrop-filter: blur(10px);
+      background-color: var(--box-bg);
+      padding: 20px;
+      border-radius: 15px;
+    }
+    .pros ul, .cons ul {
+      text-align: left;
+      padding-left: 20px;
+    }
+    .map-box {
+      max-width: 1000px;
+      margin: 60px auto;
+      padding: 20px;
+      border-radius: 16px;
+      background: var(--box-bg);
+    }
+    .map-box iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Cooling Methods Comparison</h1>
+    <button class="dark-toggle" onclick="toggleDarkMode()">Dark Mode</button>
+    <div class="button-container">
+      <button class="btn" style="background-color:#004080" onclick="showMethod(0)">Once-Through</button>
+      <button class="btn" style="background-color:#d35400" onclick="showMethod(1)">Recirculating</button>
+      <button class="btn" style="background-color:#ff5733" onclick="showMethod(2)">Dry Cooling</button>
+      <button class="btn" style="background-color:#00796b" onclick="showMethod(3)">Cold Plate</button>
+      <button class="btn" style="background-color:#388e3c" onclick="showMethod(4)">Immersion</button>
+    </div>
+  </header>
+
+
+
+
+
+
+
+
+
+
+    <div class="description-box">
+    <h2>Cooling Method Description</h2>
+    <p id="methodDescription"></p>
+  </div>
+
+  <div class="main-content">
+    <div class="image-area">
+      <img id="coolingImage" src="" alt="Cooling Visual">
+      <button id="toggleImage"
+        style="margin-top: 10px; padding: 6px 12px; border-radius: 6px; background: var(--box-bg);
+               border: none; color: var(--text-color); cursor: pointer; font-size: 18px;">
+        &gt;
+      </button>
+    </div>
+    <div class="chart-area">
+      <canvas id="coolingChart" width="400" height="400"></canvas>
+    </div>
+  </div>
+
+  <div class="chart-area" style="margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto;">
+    <canvas id="costChart" width="400" height="250"></canvas>
+  </div>
+
+  <div class="info-box">
+    <p><i class="fa-solid fa-tint"></i> <strong>Water Usage:</strong> <span id="waterUsage"></span></p>
+    <p><i class="fa-solid fa-bolt"></i> <strong>Energy Efficiency:</strong> <span id="energyEfficiency"></span></p>
+    <p><i class="fa-solid fa-cloud"></i> <strong>Ozone Impact:</strong> <span id="ozoneImpact"></span></p>
+  </div>
+
+  <div class="pros-cons-box">
+    <details open class="pros">
+      <summary>Pros</summary>
+      <ul id="prosList"></ul>
+    </details>
+    <details open class="cons">
+      <summary>Cons</summary>
+      <ul id="consList"></ul>
+    </details>
+  </div>
+
+  <div class="map-box">
+    <h2 style="text-align:center;">U.S. Power Plant Map</h2>
+    <iframe src="https://experience.arcgis.com/experience/bb8c905b75f84d908ab83f579498d085/page/Page"
+            allowfullscreen loading="lazy"></iframe>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+  let currentImageIndex = 0;
+
+  const methods = [
+    {
+      name: "Once-Through Cooling",
+      image: ["wc_images/once-thr.jpg", "wc_images/once-through_system.jpg"],
+      waterUsage: "High (up to 50,000 gal/MWh)",
+      energy: 5,
+      ozone: 6,
+      water: 10,
+      energyEfficiency: "Moderate",
+      ozoneImpact: "Thermal pollution concerns",
+      description: "Draws water once to absorb heat and discharges it back. Efficient but causes thermal pollution.",
+      pros: ["Simple design", "Low capital cost", "Rapid cooling"],
+      cons: ["High water use", "Thermal pollution", "Impacts aquatic life"]
+    },
+    {
+      name: "Recirculating Cooling",
+      image: ["wc_images/RecCooling.jpg", "wc_images/recirculating-cooling.png"],
+      waterUsage: "Moderate (600–800 gal/MWh)",
+      energy: 6,
+      ozone: 4,
+      water: 6,
+      energyEfficiency: "High",
+      ozoneImpact: "Evaporative losses",
+      description: "Reuses water in a closed loop with cooling towers. Most common in U.S. power plants.",
+      pros: ["Lower withdrawal than once-through", "High cooling efficiency", "Widely used"],
+      cons: ["Evaporative loss", "Still requires water intake", "Thermal drift risk"]
+    },
+    {
+      name: "Dry Cooling",
+      image: ["wc_images/dry-cooling.jpg", "wc_images/dry-cooling_system.png"],
+      waterUsage: "Very Low (0 gal/MWh)",
+      energy: 4,
+      ozone: 3,
+      water: 1,
+      energyEfficiency: "Lower",
+      ozoneImpact: "Increased fuel use",
+      description: "Uses air instead of water to cool steam. Water-saving but energy-intensive.",
+      pros: ["Zero water use", "No thermal discharge", "Eco-friendly"],
+      cons: ["Less efficient in hot weather", "More expensive", "Lower power output"]
+    },
+    {
+      name: "Cold Plate Liquid Cooling",
+      image: ["wc_images/cold-plate.jpg", "wc_images/cold-plate_system.jpg"],
+      waterUsage: "Low",
+      energy: 8,
+      ozone: 2,
+      water: 2,
+      energyEfficiency: "High",
+      ozoneImpact: "Reduced emissions",
+      description: "Removes heat from chips using cold plates and a liquid loop.",
+      pros: ["High energy efficiency", "Space-saving", "Scalable"],
+      cons: ["More complex system", "Requires direct chip contact", "Potential leaks"]
+    },
+    {
+      name: "Immersion Cooling",
+      image: ["wc_images/immersion-cooling.jpg", "wc_images/immersion-cooling_system.png"],
+      waterUsage: "Very Low",
+      energy: 9,
+      ozone: 1,
+      water: 1,
+      energyEfficiency: "Very High",
+      ozoneImpact: "Minimal impact",
+      description: "Submerges hardware in dielectric fluid for efficient cooling.",
+      pros: ["Ultra-efficient", "Virtually no water use", "Ideal for high-density computing"],
+      cons: ["High initial setup cost", "Fluid maintenance", "Limited standardization"]
+    }
+  ];
+
+  const ctx = document.getElementById('coolingChart').getContext('2d');
+  let radarChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['Water Use', 'Energy Demand', 'Ozone Impact'],
+      datasets: [{
+        label: 'Impact Profile',
+        data: [],
+        backgroundColor: 'rgba(0,123,255,0.3)',
+        borderColor: 'rgba(0,123,255,1)',
+        pointBackgroundColor: 'rgba(0,123,255,1)'
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        r: {
+          suggestedMin: 0,
+          suggestedMax: 10,
+          pointLabels: { font: { size: 14 } }
+        }
+      }
+    }
+  });
+
+  const costCtx = document.getElementById('costChart').getContext('2d');
+  const costValues = [15, 25, 38, 70, 90];
+  const costColors = ['#004080', '#d35400', '#ff5733', '#00796b', '#388e3c'];
+
+  let costChart = new Chart(costCtx, {
+    type: 'bar',
+    data: {
+      labels: methods.map(m => m.name),
+      datasets: [{
+        label: 'Estimated Cost ($)',
+        data: costValues,
+        backgroundColor: costColors,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Cost ($ per MWh or system)'
+          }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
+    }
+  });
+
+  function showMethod(index) {
+    const method = methods[index];
+    currentImageIndex = 0;
+
+    document.getElementById('coolingImage').src = method.image[currentImageIndex];
+    document.getElementById('toggleImage').innerHTML = "&gt;";
+
+    document.getElementById('toggleImage').onclick = function () {
+      currentImageIndex = (currentImageIndex + 1) % method.image.length;
+      document.getElementById('coolingImage').src = method.image[currentImageIndex];
+      document.getElementById('toggleImage').innerHTML = currentImageIndex === 0 ? "&gt;" : "&lt;";
+    };
+
+    document.getElementById('waterUsage').textContent = method.waterUsage;
+    document.getElementById('energyEfficiency').textContent = method.energyEfficiency;
+    document.getElementById('ozoneImpact').textContent = method.ozoneImpact;
+    document.getElementById('methodDescription').textContent = method.description;
+
+    radarChart.data.datasets[0].data = [method.water, method.energy, method.ozone];
+    radarChart.update();
+
+    costChart.data.datasets[0].backgroundColor = costColors.map((color, i) =>
+      i === index ? color : color + '55'
+    );
+    costChart.update();
+
+    document.querySelectorAll('.btn').forEach((btn, i) => {
+      btn.classList.toggle('active', i === index);
+    });
+
+    document.getElementById("prosList").innerHTML = method.pros.map(p => `<li>${p}</li>`).join('');
+    document.getElementById("consList").innerHTML = method.cons.map(c => `<li>${c}</li>`).join('');
+  }
+
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark');
+    const toggle = document.querySelector('.dark-toggle');
+    toggle.textContent = document.body.classList.contains('dark') ? "Light Mode" : "Dark Mode";
+  }
+
+  showMethod(0);
+</script>
+</body>
+</html>
