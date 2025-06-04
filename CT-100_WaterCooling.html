@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cooling Methods Comparison</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f4f4f4;
+      color: #333;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .slider-container {
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+    .stats {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: left;
+    }
+    .stat {
+      margin-bottom: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="range"] {
+      width: 100%;
+    }
+    .method-name {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .image-container {
+      margin: 20px auto;
+      max-width: 400px;
+    }
+    .image-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Cooling Methods Comparison</h1>
+  <div class="slider-container">
+    <label for="coolingMethod">Select Cooling Method:</label>
+    <input type="range" id="coolingMethod" min="0" max="4" step="1" value="0" />
+  </div>
+  <div class="image-container">
+    <img id="coolingImage" src="" alt="Cooling Method Visual">
+  </div>
+  <div class="stats">
+    <div class="method-name" id="methodName"></div>
+    <div class="stat"><strong>Water Usage:</strong> <span id="waterUsage"></span></div>
+    <div class="stat"><strong>Energy Efficiency:</strong> <span id="energyEfficiency"></span></div>
+    <div class="stat"><strong>Environmental Impact:</strong> <span id="environmentalImpact"></span></div>
+    <div class="stat"><strong>Additional Info:</strong> <span id="extraInfo"></span></div>
+  </div>
+
+  <script>
+    const methods = [
+      {
+        name: "Once-Through Cooling (Power Plant)",
+        waterUsage: "Very High (up to 50,000 gal/MWh)",
+        energyEfficiency: "Moderate",
+        environmentalImpact: "Thermal pollution to nearby bodies of water",
+        extraInfo: "Pulls in large volumes of water, heats it, then discharges it back.",
+        image: "https://i.imgur.com/x2NhKUv.png"
+      },
+      {
+        name: "Recirculating Cooling (Power Plant)",
+        waterUsage: "Moderate (600–800 gal/MWh)",
+        energyEfficiency: "High",
+        environmentalImpact: "Consumes water through evaporation",
+        extraInfo: "Uses cooling towers to dissipate heat before reusing water.",
+        image: "https://i.imgur.com/v3m3nQj.png"
+      },
+      {
+        name: "Dry Cooling (Power Plant)",
+        waterUsage: "Very Low (near 0 gal/MWh)",
+        energyEfficiency: "Lower",
+        environmentalImpact: "No water use; more land and energy intensive",
+        extraInfo: "Uses air rather than water to dissipate heat.",
+        image: "https://i.imgur.com/w4h4gO4.png"
+      },
+      {
+        name: "Cold Plate Liquid Cooling (Data Center)",
+        waterUsage: "Low",
+        energyEfficiency: "High",
+        environmentalImpact: "Reduces energy and water consumption",
+        extraInfo: "Liquid runs through cold plates in contact with heat-generating components.",
+        image: "https://i.imgur.com/oUX8ZLZ.png"
+      },
+      {
+        name: "Immersion Cooling (Data Center)",
+        waterUsage: "Very Low",
+        energyEfficiency: "Very High",
+        environmentalImpact: "Minimal water use; highly efficient heat removal",
+        extraInfo: "Hardware submerged in non-conductive liquid that circulates heat.",
+        image: "https://i.imgur.com/CdBRmTR.png"
+      }
+    ];
+
+    const methodName = document.getElementById('methodName');
+    const waterUsage = document.getElementById('waterUsage');
+    const energyEfficiency = document.getElementById('energyEfficiency');
+    const environmentalImpact = document.getElementById('environmentalImpact');
+    const extraInfo = document.getElementById('extraInfo');
+    const coolingImage = document.getElementById('coolingImage');
+    const coolingMethod = document.getElementById('coolingMethod');
+
+    function updateDisplay(index) {
+      const method = methods[index];
+      methodName.textContent = method.name;
+      waterUsage.textContent = method.waterUsage;
+      energyEfficiency.textContent = method.energyEfficiency;
+      environmentalImpact.textContent = method.environmentalImpact;
+      extraInfo.textContent = method.extraInfo;
+      coolingImage.src = method.image;
+      coolingImage.alt = method.name;
+    }
+
+    coolingMethod.addEventListener('input', function() {
+      updateDisplay(this.value);
+    });
+
+    // Initialize
+    updateDisplay(0);
+  </script>
+</body>
+</html>
