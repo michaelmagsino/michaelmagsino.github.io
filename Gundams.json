@@ -70,7 +70,7 @@
             "scale": "1/100",
             "price": 50.99,
             "img": "images/MG_Aile_Strike_Gundam.jpg",
-            "completion": ""
+            "completion": "May 2021"
         },
         {
             "name": "Buster Gundam",
@@ -78,7 +78,7 @@
             "scale": "1/100",
             "price": 55.99,
             "img": "images/MG_Buster_Gundam.jpg",
-            "completion": ""
+            "completion": "April 2022"
         },
         {
             "name": "Gouf Custom",
@@ -86,7 +86,7 @@
             "scale": "1/144",
             "price": 21.99,
             "img": "images/HG_Gouf_Custom.jpg",
-            "completion": ""
+            "completion": "July 2021"
         }
     ]
 }
