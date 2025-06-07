@@ -114,13 +114,13 @@
     }
 
     .featured img {
-  width: 100%;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
+      width: 100%;
+      height: auto;
+      max-height: none;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
 
     .featured h2 {
       color: var(--accent);
@@ -178,6 +178,7 @@
   <header>
     <h1>My Gundam Collection</h1>
     <div class="filter-controls">
+      <a class="doc-link" href="GundamCostGraph.html" target="_blank">Cost Graph</a>
       <select id="filterGrade">
         <option value="All">All Grades</option>
         <option value="HG">HG (1/144)</option>
@@ -195,8 +196,7 @@
         <input type="text" id="searchInput" placeholder="Search by name...">
         <div id="autocomplete" class="autocomplete-list"></div>
       </div>
-      <button id="resetFilters" style="background:none;border:1px solid var(--accent);color:var(--accent);padding:0.4rem 0.6rem;border-radius:5px;font-size:1rem;cursor:pointer;">Reset</button>
-      
+      <button id="resetFilters">Reset</button>
     </div>
   </header>
 
@@ -300,12 +300,12 @@
       });
     });
   document.getElementById('filterGrade').addEventListener('change', displayKits);
-document.getElementById('sortOption').addEventListener('change', displayKits);
-document.getElementById('resetFilters').addEventListener('click', () => {
-  document.getElementById('filterGrade').value = 'All';
-  document.getElementById('sortOption').value = 'default';
-  displayKits();
-});
-</script>
+  document.getElementById('sortOption').addEventListener('change', displayKits);
+  document.getElementById('resetFilters').addEventListener('click', () => {
+    document.getElementById('filterGrade').value = 'All';
+    document.getElementById('sortOption').value = 'default';
+    displayKits();
+  });
+  </script>
 </body>
 </html>
