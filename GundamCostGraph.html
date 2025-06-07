@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Gundam Price Graph</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <title>Gundam Cost Graph</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
       background-color: #111;
@@ -13,95 +13,118 @@
       padding: 2rem;
     }
     h1 {
-      text-align: center;
       color: #9c6bff;
-    }
-    .tooltip {
-      position: absolute;
-      background: #222;
-      color: #eee;
-      padding: 0.7rem;
-      border: 1px solid #9c6bff;
-      border-radius: 8px;
-      pointer-events: none;
-      font-size: 0.9rem;
       text-align: center;
     }
-    .tooltip img {
-      width: 100px;
+    canvas {
+      display: block;
+      max-width: 900px;
+      margin: 2rem auto;
+      background-color: #222;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    #tooltip {
+      position: absolute;
+      background-color: #1f1f1f;
+      color: #eee;
+      padding: 0.5rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      display: none;
+      pointer-events: none;
+      z-index: 999;
+    }
+    #tooltip img {
+      width: 80px;
+      height: auto;
+      border-radius: 6px;
+      display: block;
       margin-top: 0.5rem;
-      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-  <h1>Cost Over Time</h1>
-  <svg width="1000" height="500"></svg>
-  <div class="tooltip" style="opacity: 0;"></div>
+  <h1>Gundam Cost Graph</h1>
+  <canvas id="costChart" width="900" height="500"></canvas>
+  <div id="tooltip"></div>
 
   <script>
-    const svg = d3.select("svg");
-    const margin = {top: 50, right: 30, bottom: 50, left: 70};
-    const width = +svg.attr("width") - margin.left - margin.right;
-    const height = +svg.attr("height") - margin.top - margin.bottom;
-
-    const chart = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const tooltip = d3.select(".tooltip");
-
-    fetch("Gundams.json")
+    fetch('Gundams.json')
       .then(res => res.json())
       .then(data => {
-        const kits = data.Gundams
-          .filter(k => k["Purchased on"])
-          .map(k => ({
-            ...k,
-            year: parseInt(k["Purchased on"].match(/\\b(\\d{4})\\b/)[1])
-          }))
-          .sort((a, b) => a.year - b.year);
+        const gundams = data.Gundams.filter(kit => kit["Purchased"]);
 
-        const x = d3.scaleLinear()
-          .domain(d3.extent(kits, d => d.year))
-          .range([0, width]);
+        const ctx = document.getElementById('costChart').getContext('2d');
+        const tooltip = document.getElementById('tooltip');
 
-        const y = d3.scaleLinear()
-          .domain([0, d3.max(kits, d => d.price)]).nice()
-          .range([height, 0]);
+        const labels = gundams.map(kit => kit.name);
+        const prices = gundams.map(kit => kit.price);
+        const years = gundams.map(kit => kit["Purchased"]);
+        const images = gundams.map(kit => kit.img);
 
-        chart.append("g")
-          .attr("transform", `translate(0,${height})`)
-          .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+        const scatterData = gundams.map((kit, i) => ({
+          x: +kit["Purchased"],
+          y: kit.price,
+          name: kit.name,
+          img: kit.img
+        }));
 
-        chart.append("g").call(d3.axisLeft(y));
-
-        const line = d3.line()
-          .x(d => x(d.year))
-          .y(d => y(d.price));
-
-        chart.append("path")
-          .datum(kits)
-          .attr("fill", "none")
-          .attr("stroke", "#9c6bff")
-          .attr("stroke-width", 2)
-          .attr("d", line);
-
-        chart.selectAll("circle")
-          .data(kits)
-          .enter()
-          .append("circle")
-          .attr("cx", d => x(d.year))
-          .attr("cy", d => y(d.price))
-          .attr("r", 6)
-          .attr("fill", "#9c6bff")
-          .on("mouseover", (e, d) => {
-            tooltip.transition().duration(200).style("opacity", 0.95);
-            tooltip.html(`<strong>${d.name}</strong><br>$${d.price.toFixed(2)}<br>${d["Purchased on"]}<br><img src="${d.img}">`)
-              .style("left", (e.pageX + 15) + "px")
-              .style("top", (e.pageY - 28) + "px");
-          })
-          .on("mouseout", () => {
-            tooltip.transition().duration(300).style("opacity", 0);
-          });
+        const chart = new Chart(ctx, {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Gundam Kit Cost',
+              data: scatterData,
+              backgroundColor: '#9c6bff',
+              pointRadius: 6
+            }]
+          },
+          options: {
+            plugins: {
+              legend: {
+                display: false
+              },
+              tooltip: {
+                enabled: false
+              }
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: 'Year Purchased',
+                  color: '#ccc'
+                },
+                ticks: { color: '#ccc' }
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: 'Cost ($)',
+                  color: '#ccc'
+                },
+                ticks: { color: '#ccc' }
+              }
+            },
+            onHover: (event, chartElements) => {
+              if (chartElements.length > 0) {
+                const point = chartElements[0];
+                const dataset = point.element.$context.raw;
+                tooltip.style.display = 'block';
+                tooltip.style.left = event.clientX + 15 + 'px';
+                tooltip.style.top = event.clientY + 15 + 'px';
+                tooltip.innerHTML = `
+                  <strong>${dataset.name}</strong>
+                  <br>$${dataset.y.toFixed(2)}
+                  <img src="${dataset.img}" alt="${dataset.name}">
+                `;
+              } else {
+                tooltip.style.display = 'none';
+              }
+            }
+          }
+        });
       });
   </script>
 </body>
