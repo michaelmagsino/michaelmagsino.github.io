@@ -1,310 +1,209 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>My Gundam Collection</title>
   <style>
     :root {
       --accent: #9c6bff;
     }
-
     body {
-      font-family: system-ui, sans-serif;
-      background-color: rgb(42, 41, 41);
+      background-color: #1c1c1c;
       color: #eee;
+      font-family: system-ui, sans-serif;
       margin: 0;
       padding: 0;
     }
-
     header {
-      background-color: #282828;
-      color: var(--accent);
+      background-color: #111;
       padding: 1rem 2rem;
       display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
       justify-content: space-between;
       align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      flex-wrap: wrap;
+      border-bottom: 2px solid var(--accent);
     }
-
     header h1 {
+      color: var(--accent);
       margin: 0;
-      font-size: 1.8rem;
-      flex-grow: 1;
     }
-
     .filter-controls {
       display: flex;
+      gap: 1rem;
       flex-wrap: wrap;
-      gap: 0.5rem;
-      align-items: center;
-      position: relative;
+      margin-top: 1rem;
     }
-
-    select, #searchInput, #toggleView {
-      background-color: #1f1f1f;
-      color: var(--accent);
-      padding: 0.5rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      font-size: 1rem;
+    .filter-controls input,
+    .filter-controls select {
+      padding: 0.4rem;
+      border-radius: 5px;
+      border: none;
     }
-
-    .autocomplete-list {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: #1f1f1f;
-      border: 1px solid #444;
-      border-radius: 6px;
-      max-height: 200px;
-      overflow-y: auto;
-      z-index: 5;
-    }
-
-    .autocomplete-item {
-      display: flex;
-      align-items: center;
-      padding: 0.5rem;
-      cursor: pointer;
-      border-bottom: 1px solid #333;
-    }
-
-    .autocomplete-item img {
-      width: 40px;
-      height: 40px;
-      object-fit: cover;
-      border-radius: 4px;
-      margin-right: 0.5rem;
-    }
-
-    .autocomplete-item:hover {
-      background-color: #333;
-    }
-
-    .doc-link {
-      text-decoration: none;
-      color: var(--accent);
-      background-color: #1f1f1f;
-      padding: 0.5rem 0.75rem;
-      border-radius: 6px;
-      border: 1px solid #444;
-      font-size: 1rem;
-      transition: background 0.2s ease;
-    }
-
-    .doc-link:hover {
-      background-color: #333;
-      color: #fff;
-    }
-
-    #featuredGundam {
-      background: #1f1f1f;
-      padding: 1.5rem;
-      border-radius: 12px;
-      margin: 2rem auto;
-      max-width: 700px;
-      text-align: center;
-      box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
-    }
-
-    .featured img {
-  width: 100%;
-  height: auto;
-  max-height: none;
-  object-fit: contain;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-    .featured h2 {
-      color: var(--accent);
-    }
-
     .kit-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 2rem;
       padding: 2rem;
-      max-width: 1200px;
-      margin: 0 auto;
+      gap: 1.5rem;
     }
-
     .kit {
-      background: #1f1f1f;
-      border-radius: 12px;
+      background: #2a2a2a;
+      border-radius: 10px;
       padding: 1rem;
-      width: 280px;
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
-      cursor: pointer;
-      transition: box-shadow 0.3s;
+      width: 260px;
+      box-shadow: 0 0 10px rgba(156, 107, 255, 0.2);
     }
-
     .kit img {
       width: 100%;
-      height: auto;
-      border-radius: 10px;
+      border-radius: 8px;
     }
-
     .kit h2 {
       margin: 0.5rem 0 0.2rem;
-      font-size: 1.2rem;
+      color: var(--accent);
     }
-
     .kit p {
       margin: 0.2rem 0;
     }
-
-    .highlight {
-      box-shadow: 0 0 15px var(--accent), 0 0 30px var(--accent);
-    }
-
     #total {
-      margin: 2rem;
-      font-size: 1.5rem;
-      font-weight: bold;
       text-align: center;
+      margin: 2rem;
+      font-size: 1.4rem;
       color: var(--accent);
+    }
+    .featured {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      border: 2px solid var(--accent);
+      border-radius: 12px;
+      padding: 1rem;
+      background: #1a1a1a;
+    }
+    .featured img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .autocomplete-suggestions {
+      background-color: #333;
+      position: absolute;
+      z-index: 99;
+      width: 200px;
+      border: 1px solid var(--accent);
+    }
+    .autocomplete-suggestions div {
+      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+    .autocomplete-suggestions div:hover {
+      background-color: var(--accent);
+      color: black;
+    }
+    .autocomplete-suggestions img {
+      width: 30px;
+      height: auto;
+      border-radius: 3px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>My Gundam Collection</h1>
+    <h1 id="headerTitle">Gundam Collection</h1>
     <div class="filter-controls">
+      <a href="GundamCostGraph.html" target="_blank" style="color:var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 0.4rem 0.6rem; border-radius: 5px;">Cost Graph</a>
+      <input type="text" id="searchBar" placeholder="Search Gundam...">
       <select id="filterGrade">
         <option value="All">All Grades</option>
-        <option value="HG">HG (1/144)</option>
-        <option value="RG">RG (1/144)</option>
-        <option value="MG">MG (1/100)</option>
-        <option value="PG">PG (1/60)</option>
+        <option value="HG">HG</option>
+        <option value="RG">RG</option>
+        <option value="MG">MG</option>
+        <option value="PG">PG</option>
       </select>
       <select id="sortOption">
         <option value="default">Sort By</option>
         <option value="priceLow">Price: Low to High</option>
         <option value="priceHigh">Price: High to Low</option>
-        <option value="alpha">Alphabetical (A-Z)</option>
+        <option value="alpha">Alphabetical</option>
       </select>
-      <div style="position: relative;">
-        <input type="text" id="searchInput" placeholder="Search by name...">
-        <div id="autocomplete" class="autocomplete-list"></div>
-      </div>
       <button id="resetFilters" style="background:none;border:1px solid var(--accent);color:var(--accent);padding:0.4rem 0.6rem;border-radius:5px;font-size:1rem;cursor:pointer;">Reset</button>
-      
+      <a href="Final_Project-Documentation.html" target="_blank" style="color:var(--accent); text-decoration: none;">Final Project Docs</a>
     </div>
   </header>
 
-  <div id="featuredGundam"></div>
-  <div class="kit-container" id="kits"></div>
-  <div id="total"></div>
+  <h2 style="text-align:center;color:var(--accent);margin-top:2rem;">Featured Gundam</h2>
+  <div id="featuredGundam" class="featured"></div>
+
+  <div id="kits" class="kit-container"></div>
+  
 
   <script>
     let allKits = [];
     let featuredIndex = 0;
 
-    fetch('Gundams.json')
-      .then(response => response.json())
-      .then(data => {
-        allKits = data.Gundams;
-        showFeatured();
-        displayKits();
-      });
-
-    function showFeatured() {
-      const featured = allKits[featuredIndex % allKits.length];
-      const featuredDiv = document.getElementById('featuredGundam');
-      featuredDiv.innerHTML = `
-        <div class="featured">
-          <img src="${featured.img}" alt="${featured.name}">
-          <h2>⭐ Featured Gundam: ${featured.name}</h2>
-          <p><strong>Grade:</strong> ${featured.grade}</p>
-          <p><strong>Scale:</strong> ${featured.scale}</p>
-          <p><strong>Price:</strong> $${featured.price.toFixed(2)}</p>
-          <p><strong>Completed:</strong> ${featured.completion || 'WIP'}</p>
-        </div>`;
-      featuredIndex++;
-      setTimeout(showFeatured, 5000);
+    function displayFeatured() {
+      const featured = allKits[featuredIndex];
+      document.getElementById('featuredGundam').innerHTML = `
+        <img src="${featured.img}" alt="${featured.name}">
+        <h2>${featured.name}</h2>
+        <p><strong>Grade:</strong> ${featured.grade}</p>
+        <p><strong>Scale:</strong> ${featured.scale}</p>
+        <p><strong>Price:</strong> $${featured.price.toFixed(2)}</p>
+        <p><strong>Purchased:</strong> ${featured["Purchased on"] || 'Unknown'}</p>
+      `;
     }
 
     function displayKits() {
       const kitsDiv = document.getElementById('kits');
       kitsDiv.innerHTML = '';
-      const totalDiv = document.getElementById('total');
       let total = 0;
-      const featured = allKits[(featuredIndex - 1 + allKits.length) % allKits.length];
 
+      const search = document.getElementById('searchBar').value.toLowerCase();
       const gradeFilter = document.getElementById('filterGrade').value;
-      const sortOption = document.getElementById('sortOption').value;
+      const sort = document.getElementById('sortOption').value;
 
-      let displayed = allKits.filter(kit => kit.name !== featured.name);
+      let kitsToShow = allKits.filter((kit, i) => i !== featuredIndex);
 
-      if (gradeFilter !== 'All') {
-        displayed = displayed.filter(kit => kit.grade === gradeFilter);
-      }
+      if (search) kitsToShow = kitsToShow.filter(kit => kit.name.toLowerCase().includes(search));
+      if (gradeFilter !== 'All') kitsToShow = kitsToShow.filter(kit => kit.grade === gradeFilter);
 
-      if (sortOption === 'priceLow') {
-        displayed.sort((a, b) => a.price - b.price);
-      } else if (sortOption === 'priceHigh') {
-        displayed.sort((a, b) => b.price - a.price);
-      } else if (sortOption === 'alpha') {
-        displayed.sort((a, b) => a.name.localeCompare(b.name));
-      }
+      if (sort === 'priceLow') kitsToShow.sort((a, b) => a.price - b.price);
+      if (sort === 'priceHigh') kitsToShow.sort((a, b) => b.price - a.price);
+      if (sort === 'alpha') kitsToShow.sort((a, b) => a.name.localeCompare(b.name));
 
-      displayed.forEach(kit => {
+      kitsToShow.forEach(kit => {
         total += kit.price;
-        const kitDiv = document.createElement('div');
-        kitDiv.className = 'kit';
-        kitDiv.setAttribute('data-name', kit.name.toLowerCase());
-        kitDiv.innerHTML = `
+        const div = document.createElement('div');
+        div.className = 'kit';
+        div.innerHTML = `
           <img src="${kit.img}" alt="${kit.name}">
           <h2>${kit.name}</h2>
           <p><strong>Grade:</strong> ${kit.grade}</p>
           <p><strong>Scale:</strong> ${kit.scale}</p>
           <p><strong>Price:</strong> $${kit.price.toFixed(2)}</p>
-          <p><strong>Completed:</strong> ${kit.completion || 'WIP'}</p>`;
-        kitsDiv.appendChild(kitDiv);
+          <p><strong>Purchased:</strong> ${kit["Purchased on"] || 'Unknown'}</p>
+        `;
+        kitsDiv.appendChild(div);
       });
-      totalDiv.textContent = `Total Spent: $${total.toFixed(2)}`;
+
+      document.getElementById('headerTitle').textContent = `Gundam Collection - Total: $${total.toFixed(2)}`;
     }
 
-    document.getElementById('searchInput').addEventListener('input', function () {
-      const val = this.value.toLowerCase();
-      const list = document.getElementById('autocomplete');
-      list.innerHTML = '';
-      if (!val) return;
-
-      allKits.forEach(kit => {
-        if (kit.name.toLowerCase().includes(val)) {
-          const item = document.createElement('div');
-          item.className = 'autocomplete-item';
-          item.innerHTML = `<img src="${kit.img}" alt="" /><span>${kit.name}</span>`;
-          item.addEventListener('click', () => {
-            const card = [...document.querySelectorAll('.kit')].find(k => k.dataset.name === kit.name.toLowerCase());
-            if (card) {
-              card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              card.classList.add('highlight');
-              setTimeout(() => card.classList.remove('highlight'), 2000);
-            }
-            document.getElementById('autocomplete').innerHTML = '';
-            document.getElementById('searchInput').value = '';
-          });
-          list.appendChild(item);
-        }
-      });
+    document.getElementById('resetFilters').addEventListener('click', () => {
+      document.getElementById('filterGrade').value = 'All';
+      document.getElementById('sortOption').value = 'default';
+      document.getElementById('searchBar').value = '';
+      displayKits();
     });
-  document.getElementById('filterGrade').addEventListener('change', displayKits);
-document.getElementById('sortOption').addEventListener('change', displayKits);
-document.getElementById('resetFilters').addEventListener('click', () => {
-  document.getElementById('filterGrade').value = 'All';
-  document.getElementById('sortOption').value = 'default';
-  displayKits();
-});
-</script>
+
+    fetch('Gundams.json')
+      .then(res => res.json())
+      .then(data => {
+        allKits = data.Gundams;
+        featuredIndex = Math.floor(Math.random() * allKits.length);
+        displayFeatured();
+        displayKits();
+      });
+  </script>
 </body>
 </html>

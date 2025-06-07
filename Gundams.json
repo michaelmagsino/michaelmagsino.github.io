@@ -4,6 +4,7 @@
             "name": "RX 78-2 (2.0)",
             "grade": "RG",
             "scale": "1/144",
+            "Purchased on": "February 2025",
             "price": 36.99,
             "img": "images/RG_rx78-2(2.0).jpg",
             "completion": "February 2025"
@@ -12,6 +13,7 @@
             "name": "RX-93 NU Gundam",
             "grade": "RG",
             "scale": "1/144",
+            "Purchased on": "June 2025",
             "price": 49.99,
             "img": "images/RG_rx93.jpg",
             "completion": "June 2023"
@@ -20,6 +22,7 @@
             "name": "Astray Red Frame",
             "grade": "PG",
             "scale": "1/60",
+            "Purchased on": "July 2021",
             "price": 209.99,
             "img": "images/PG_astray_redframe.jpg",
             "completion": "August 2021"
@@ -28,6 +31,7 @@
             "name": "Astray Red Frame Kai",
             "grade": "MG",
             "scale": "1/100",
+            "Purchased on":"February 2021",
             "price": 61.99,
             "img": "images/MG_redframe_kai.jpg",
             "completion": "March 2021"
@@ -36,6 +40,7 @@
             "name": "Monument Repair Type",
             "grade": "PG",
             "scale": "1/60",
+            "Purchased on": "May 2025",
             "price": 169.99,
             "img": "images/PG_Monument-Repair.jpg",
             "completion": ""
@@ -44,6 +49,7 @@
             "name": "Sinanju Stein Ver. Ka",
             "grade": "MG",
             "scale": "1/100",
+            "Purchased on": "March 2025",
             "price": 82.99,
             "img": "images/MG_Sinanju-VerKa.jpg",
             "completion": ""
@@ -52,6 +58,7 @@
             "name": "GQuuuuux",
             "grade": "HG",
             "scale": "1/144",
+            "Purchased on": "March 2025",
             "price": 21.99,
             "img": "images/HG_Gquuuuux.jpg",
             "completion": "March 2025"
@@ -60,6 +67,7 @@
             "name": "Wing Zero EW Ver. Ka",
             "grade": "MG",
             "scale": "1/100",
+            "Purchased on": "May 2022",
             "price": 45.99,
             "img": "images/MG_WingZero_VerKa.jpg",
             "completion": "June 2022"
@@ -68,6 +76,7 @@
             "name": "Aile Strike Gundam RM",
             "grade": "MG",
             "scale": "1/100",
+            "Purchased on": "May 2021",
             "price": 50.99,
             "img": "images/MG_Aile_Strike_Gundam.jpg",
             "completion": "May 2021"
@@ -76,6 +85,7 @@
             "name": "Buster Gundam",
             "grade": "MG",
             "scale": "1/100",
+            "Purchased on": "April 2022",
             "price": 55.99,
             "img": "images/MG_Buster_Gundam.jpg",
             "completion": "April 2022"
@@ -84,6 +94,7 @@
             "name": "Gouf Custom",
             "grade": "HG",
             "scale": "1/144",
+            "Purchased on": "July 2021",
             "price": 21.99,
             "img": "images/HG_Gouf_Custom.jpg",
             "completion": "July 2021"
