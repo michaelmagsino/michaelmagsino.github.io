@@ -287,6 +287,15 @@
             "price": 58.99,
             "img": "images/MG_StrikeFreedom.jpg",
             "completion": "March 2021"
+        },
+        {
+            "name": "Gundam MK-II",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "February 2021",
+            "price": 30.99,
+            "img": "images/RG_MKIIGundam.jpg",
+            "completion": "February 2021"
         }
     ]
 }
