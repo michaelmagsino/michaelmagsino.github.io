@@ -22,10 +22,10 @@
             "name": "Astray Red Frame",
             "grade": "PG",
             "scale": "1/60",
-            "Purchased on": "July 2021",
+            "Purchased on": "Decmeber 2020",
             "price": 209.99,
             "img": "images/PG_astray_redframe.jpg",
-            "completion": "August 2021"
+            "completion": "December 2020"
         },
         {
             "name": "Astray Red Frame Kai",
@@ -98,6 +98,204 @@
             "price": 21.99,
             "img": "images/HG_Gouf_Custom.jpg",
             "completion": "July 2021"
+        },
+        {
+            "name": "Gouf Custom",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "July 2021",
+            "price": 21.99,
+            "img": "images/HG_Gouf_Custom.jpg",
+            "completion": "July 2021"
+        },
+        {
+            "name": "Barbataurus",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "January 2022",
+            "price": 25.99,
+            "img": "images/HG_Barbataurus.jpg",
+            "completion": "January 2022"
+        },
+        {
+            "name": "Barbatos",
+            "grade": "MG",
+            "scale": "1/100",
+            "Purchased on": "August 2022",
+            "price": 54.99,
+            "img": "images/MG_Barbatos.jpg",
+            "completion": "August 2022"
+        },
+        {
+            "name": "Wing Gundam Zero EW",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "July 2022",
+            "price": 31.99,
+            "img": "images/RG_Wing-Gundam-Zero-EW.jpg",
+            "completion": "July 2022"
+        },
+        {
+            "name": "Sinanju Stein",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "May 2021",
+            "price": 31.99,
+            "img": "images/HG_SinanjuStein.jpg",
+            "completion": "May 2021"
+        },
+        {
+            "name": "Tallgeese",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "March 2025",
+            "price": 26.99,
+            "img": "images/RG_Tallgeese.jpg",
+            "completion": "March 2025"
+        },
+        {
+            "name": "Stargazer Gundam",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "May 2022",
+            "price": 21.99,
+            "img": "images/HG_StargazerGundam.jpg",
+            "completion": "May 2022"
+        },
+        {
+            "name": "Gundam G40 (Industrial Design Ver.)",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "July 2021",
+            "price": 31.99,
+            "img": "images/HG_GundamG40.jpg",
+            "completion": "July 2021"
+        },
+        {
+            "name": "Heavy Arms",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "September 2021",
+            "price": 18.99,
+            "img": "images/HG_Heavyarms.jpg",
+            "completion": "September 2021"
+        },
+        {
+            "name": "RX 78-2 (Revive)",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "February 2021",
+            "price": 12.99,
+            "img": "images/RG_Wing-Gundam-Zero-EW.jpg",
+            "completion": "February 2021"
+        },
+        {
+            "name": "MS-06S Zaku II",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "August 2021",
+            "price": 29.99,
+            "img": "images/RG_CharsZakuII.jpg",
+            "completion": "August 2021"
+        },
+        {
+            "name": "Astray Red Frame",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "November 2022",
+            "price": 30.99,
+            "img": "images/RG_AstrayRedFrame.jpg",
+            "completion": "November 2022"
+        },
+        {
+            "name": "Amatsu Mina",
+            "grade": "RG",
+            "scale": "1/144",
+            "Purchased on": "July 2021",
+            "price": 38.99,
+            "img": "images/RG_AmatsuMina.jpg",
+            "completion": "July 2021"
+        },
+        {
+            "name": "Gundam EX",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "February 2025",
+            "price": 21.99,
+            "img": "images/HG_GundamEX.jpg",
+            "completion": "February 2025"
+        },
+        {
+            "name": "Unicorn Gundam",
+            "grade": "MG",
+            "scale": "1/100",
+            "Purchased on": "March 2022",
+            "price": 31.99,
+            "img": "images/MG_UnicornGundam.jpg",
+            "completion": "March 2022"
+        },
+        {
+            "name": "Sword Impulse Gundam",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "December 2022",
+            "price": 17.99,
+            "img": "images/HG_SwordImpulseGundam.jpg",
+            "completion": "December 2022"
+        },
+        {
+            "name": "00 Seven Sword/G",
+            "grade": "PG",
+            "scale": "1/60",
+            "Purchased on": "July 2022",
+            "price": 271.99,
+            "img": "images/PG_00SevenSwordG.jpg",
+            "completion": "July 2022"
+        },
+        {
+            "name": "Black Knight Squad Cal-re.A",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "February 2025",
+            "price": 40.99,
+            "img": "images/HG_BlackKnightSquadCalRe.jpg",
+            "completion": "February 2025"
+        },
+        {
+            "name": "Astray Blue Frame Second L",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "January 2022",
+            "price": 24.99,
+            "img": "images/HG_AstrayBlueFrame.jpg",
+            "completion": "January 2022"
+        },
+        {
+            "name": "Wing Gundam",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "November 2020",
+            "price": 24.99,
+            "img": "images/HG_WingGundam.jpg",
+            "completion": "November 2020"
+        },
+        {
+            "name": "Astray Red Frame",
+            "grade": "HG",
+            "scale": "1/144",
+            "Purchased on": "October 2020",
+            "price": 21.99,
+            "img": "images/HG_AstrayRedFrame.jpg",
+            "completion": "October 2020"
+        },
+        {
+            "name": "Strike Freedom Gundam(Ver. 1)",
+            "grade": "MG",
+            "scale": "1/100",
+            "Purchased on": "March 2021",
+            "price": 58.99,
+            "img": "images/MG_StrikeFreedom.jpg",
+            "completion": "March 2021"
         }
     ]
 }
