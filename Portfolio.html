@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CT 120 Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      background-color: black;
+      color: whitesmoke;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 40px;
+    }
+
+    .project-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .project {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 20px;
+      width: 420px;
+      box-sizing: border-box;
+      transition: transform 0.2s;
+    }
+
+    .project:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
+    }
+
+    .glass-button {
+      display: block;
+      margin: 0 auto 15px;
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      text-decoration: none;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .glass-button:hover {
+      background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(88,86,214,0.3));
+      box-shadow: 0 0 12px rgba(88, 86, 214, 0.4);
+    }
+
+    iframe {
+      width: 1080px;
+      height: 1350px;
+      border: none;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #ccc;
+      text-align: left;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .project-grid {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .description {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+    <div class = "project-grid">
+
+        <div class = "project">
+                <a href = "https://www.instagram.com/p/DHUF0QLM6di/?igsh=NjZiM2M3MzIxNA%3D%3D&img_index=1" class = glass-button>Student Highlight IG Post
+                <iframe src = "PortfolioPictures/Connie Sheu - Classical Guitarist (1).png"></iframe>
+                </a>
+                <div class = "description">
+                    <p>A post I created myself for UCSC's Art's Division Instagram that features one student from my cohort. This was an especially popular post for the page with a total of 41 total likes, when the page averages about</p>
+                </div>
+        </div>
+
+    </div>
+</body>
