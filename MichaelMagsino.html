@@ -67,19 +67,6 @@
       isolation: isolate;
     }
 
-    .canvas::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image:
-        radial-gradient(circle at 16% 21%, rgba(0,0,0,0.045) 0 1px, transparent 1px),
-        radial-gradient(circle at 78% 64%, rgba(0,0,0,0.04) 0 1px, transparent 1px);
-      background-size: 22px 22px, 28px 28px;
-      opacity: 0.16;
-      pointer-events: none;
-      z-index: -2;
-    }
-
     .canvas::after {
       content: "";
       position: absolute;
@@ -88,47 +75,6 @@
       border-radius: 22px;
       pointer-events: none;
       z-index: -1;
-    }
-
-    .dot-field {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .sketch-dot {
-      position: absolute;
-      width: var(--size);
-      height: var(--size);
-      left: var(--x);
-      top: var(--y);
-      opacity: 0.24;
-      animation: dotFidget var(--duration) ease-in-out infinite;
-      animation-delay: var(--delay);
-      transform-origin: center;
-    }
-
-    .sketch-dot::before,
-    .sketch-dot::after {
-      content: "";
-      position: absolute;
-      display: block;
-    }
-
-    .sketch-dot::before {
-      inset: 0;
-      border: 1.5px solid rgba(17,17,17,0.48);
-      border-radius: 44% 56% 47% 53% / 52% 42% 58% 48%;
-    }
-
-    .sketch-dot::after {
-      width: 26%;
-      height: 26%;
-      border-radius: 50%;
-      background: rgba(17,17,17,0.35);
-      right: -8%;
-      top: -8%;
     }
 
     .centerpiece {
@@ -149,7 +95,7 @@
 
     .small-label {
       font-family: "Special Elite", monospace;
-      font-size: 0.78rem;
+      font-size: clamp(0.64rem, 1vw, 0.78rem);
       text-transform: uppercase;
       letter-spacing: 0.16em;
       opacity: 0.72;
@@ -158,7 +104,7 @@
 
     #main-title {
       font-family: "Caveat", cursive;
-      font-size: clamp(3.4rem, 8vw, 7rem);
+      font-size: clamp(2.9rem, 7.4vw, 6.6rem);
       font-weight: 700;
       line-height: 0.92;
       letter-spacing: -0.02em;
@@ -181,8 +127,8 @@
     }
 
     .subcopy {
-      margin-top: 18px;
-      font-size: 0.92rem;
+      margin-top: clamp(12px, 1.6vw, 18px);
+      font-size: clamp(0.78rem, 1.1vw, 0.92rem);
       max-width: 560px;
       margin-inline: auto;
       line-height: 1.6;
@@ -261,9 +207,9 @@
     }
 
     .item-caption {
-      margin-top: 8px;
+      margin-top: clamp(5px, 0.8vw, 8px);
       font-family: "Special Elite", monospace;
-      font-size: 0.72rem;
+      font-size: clamp(0.58rem, 0.9vw, 0.72rem);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       opacity: 0.64;
@@ -273,8 +219,8 @@
 
     .item-bio {
       top: 18%;
-      left: 13%;
-      --item-width: 178px;
+      left: clamp(5%, 9vw, 13%);
+      --item-width: clamp(145px, 15vw, 210px);
       --rotate: -9deg;
       --hover-rotate: -4deg;
       --delay: 120ms;
@@ -282,8 +228,8 @@
 
     .item-projects {
       top: 16%;
-      right: 12%;
-      --item-width: 230px;
+      right: clamp(4%, 8vw, 12%);
+      --item-width: clamp(165px, 18vw, 265px);
       --rotate: 7deg;
       --hover-rotate: 3deg;
       --delay: 220ms;
@@ -291,8 +237,8 @@
 
     .item-resume {
       bottom: 16%;
-      left: 16%;
-      --item-width: 150px;
+      left: clamp(7%, 10vw, 16%);
+      --item-width: clamp(125px, 12vw, 175px);
       --rotate: 8deg;
       --hover-rotate: 4deg;
       --delay: 320ms;
@@ -300,8 +246,8 @@
 
     .item-statement {
       bottom: 14%;
-      right: 15%;
-      --item-width: 185px;
+      right: clamp(7%, 10vw, 15%);
+      --item-width: clamp(145px, 15vw, 210px);
       --rotate: -7deg;
       --hover-rotate: -3deg;
       --delay: 420ms;
@@ -326,8 +272,8 @@
       border: 2px solid var(--ink);
       border-radius: 22px;
       box-shadow: 11px 11px 0 0 var(--ink);
-      padding: 18px;
-      width: min(320px, 80vw);
+      padding: clamp(14px, 1.7vw, 20px);
+      width: clamp(240px, 26vw, 350px);
       display: grid;
       gap: 12px;
       place-items: center;
@@ -358,7 +304,7 @@
     .focus-label {
       display: inline-block;
       font-family: "Caveat", cursive;
-      font-size: 2.35rem;
+      font-size: clamp(1.8rem, 3vw, 2.35rem);
       line-height: 1;
       white-space: nowrap;
       transform: translateX(-105%);
@@ -372,7 +318,7 @@
     .focus-hint {
       margin-top: 6px;
       font-family: "Special Elite", monospace;
-      font-size: 0.78rem;
+      font-size: clamp(0.66rem, 1vw, 0.78rem);
       opacity: 0.65;
     }
 
@@ -397,7 +343,7 @@
 
     .modal-card {
       position: relative;
-      width: min(760px, 100%);
+      width: min(760px, calc(100vw - 44px));
       max-height: 88vh;
       overflow: auto;
       background: var(--paper);
@@ -450,12 +396,13 @@
 
     .modal-card h2 {
       font-family: "Caveat", cursive;
-      font-size: clamp(2.1rem, 4vw, 3.1rem);
+      font-size: clamp(2rem, 4vw, 3.1rem);
       line-height: 1;
       margin-bottom: 12px;
     }
 
     .modal-card p {
+      font-size: clamp(0.92rem, 1.35vw, 1.05rem);
       line-height: 1.7;
       margin-bottom: 14px;
       max-width: 62ch;
@@ -485,7 +432,7 @@
     }
 
     .mini-card p {
-      font-size: 0.95rem;
+      font-size: clamp(0.88rem, 1.2vw, 0.95rem);
       margin-bottom: 10px;
     }
 
@@ -513,6 +460,12 @@
 
     .resume-button {
       cursor: pointer;
+    }
+
+    .mini-card a:hover,
+    .resume-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 0 var(--ink);
     }
 
     .resume-viewer {
@@ -579,12 +532,6 @@
       background: white;
     }
 
-    .mini-card a:hover,
-    .resume-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0 0 var(--ink);
-    }
-
     ul.scribble-list {
       margin: 8px 0 16px 18px;
       line-height: 1.8;
@@ -607,29 +554,6 @@
       }
     }
 
-    @keyframes dotFidget {
-      0% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.18;
-      }
-      25% {
-        transform: translate(0.6px, -0.7px) rotate(2deg) scale(1.02);
-        opacity: 0.24;
-      }
-      50% {
-        transform: translate(-0.5px, 0.5px) rotate(-1deg) scale(0.99);
-        opacity: 0.2;
-      }
-      75% {
-        transform: translate(0.8px, 0.2px) rotate(1deg) scale(1.01);
-        opacity: 0.24;
-      }
-      100% {
-        transform: translate(0, 0) rotate(0deg) scale(1);
-        opacity: 0.18;
-      }
-    }
-
     @media (max-width: 980px) {
       .canvas {
         min-height: 100svh;
@@ -647,25 +571,25 @@
       .item-bio {
         top: 17%;
         left: 4%;
-        --item-width: 145px;
+        --item-width: 160px;
       }
 
       .item-projects {
         top: 18%;
         right: 3%;
-        --item-width: 180px;
+        --item-width: 205px;
       }
 
       .item-resume {
         bottom: 13%;
         left: 8%;
-        --item-width: 130px;
+        --item-width: 145px;
       }
 
       .item-statement {
         bottom: 12%;
         right: 7%;
-        --item-width: 150px;
+        --item-width: 170px;
       }
     }
 
@@ -696,25 +620,25 @@
       .item-bio {
         top: 12%;
         left: 4%;
-        --item-width: 118px;
+        --item-width: 132px;
       }
 
       .item-projects {
         top: 14%;
         right: 2%;
-        --item-width: 138px;
+        --item-width: 155px;
       }
 
       .item-resume {
         bottom: 12%;
         left: 8%;
-        --item-width: 108px;
+        --item-width: 122px;
       }
 
       .item-statement {
         bottom: 10%;
         right: 6%;
-        --item-width: 126px;
+        --item-width: 142px;
       }
 
       .item-caption {
@@ -732,13 +656,16 @@
       .focus-card {
         width: min(300px, 88vw);
       }
+
+      .resume-viewer-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
     }
   </style>
 </head>
 <body>
   <main class="canvas" id="canvas">
-    <div class="dot-field" id="dotField" aria-hidden="true"></div>
-
     <section class="centerpiece" aria-label="Main title">
       <div class="centerpiece-inner">
         <div class="small-label">designer • ux/ui • creative technology</div>
@@ -851,7 +778,7 @@
   <div class="modal" id="modal-bio" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Bio section">✕</button>
-      <div class="modal-kicker">Bio</div>
+      <div class="modal-kicker">Profile</div>
       <h2>About Me</h2>
       <p>
         I’m Michael Magsino, a multidisciplinary creative focused on graphic design,
@@ -875,8 +802,8 @@
   <div class="modal" id="modal-projects" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Projects section">✕</button>
-      <div class="modal-kicker">Projects</div>
-      <h2>Selected Work</h2>
+      <div class="modal-kicker">Selected Work</div>
+      <h2>Projects</h2>
 
       <div class="sketch-grid">
         <div class="mini-card">
@@ -921,10 +848,12 @@
   <div class="modal" id="modal-resume" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Resume section">✕</button>
-      <div class="modal-kicker">Resume</div>
-      <h2>Resume</h2>
+      <div class="modal-kicker">Credentials</div>
+      <h2>Resume Overview</h2>
       <p>
-        View or download my resume below. It includes my graphic design, UX/UI, creative technology, and visual content experience across web, print, branding, and digital marketing work.
+        View or download my resume below. It includes my graphic design, UX/UI,
+        creative technology, and visual content experience across web, print,
+        branding, and digital marketing work.
       </p>
 
       <ul class="scribble-list">
@@ -949,6 +878,7 @@
         <button type="button" id="closeResumeViewer" aria-label="Close resume viewer">✕</button>
       </div>
     </div>
+
     <iframe
       src="portfolio_pdf/MichaelMagsino_Resume.pdf"
       title="Michael Magsino Resume PDF"
@@ -959,8 +889,8 @@
   <div class="modal" id="modal-statement" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Artist Statement section">✕</button>
-      <div class="modal-kicker">Artist Statement</div>
-      <h2>Artist Statement</h2>
+      <div class="modal-kicker">Perspective</div>
+      <h2>Creative Statement</h2>
       <p>
         Michael Magsino (he/him) is a multidisciplinary creative that primarily focuses on graphic design, UX/UI, and some recent projects within sound design. Much of his latest pieces have revolved around the dissection of mental health and the many ways he copes with them. Alongside that, various works in personal/school sites, web/app prototyping, and numerous graphic design works. Throughout his venture within the arts, he has worked with assorted tools such as the Adobe Suite (Photoshop, Illustrator, Audition), Canva, Figma, and Framer, just to name a few.
       </p>
@@ -983,48 +913,12 @@
     const items = document.querySelectorAll(".sketch-item");
     const modals = document.querySelectorAll(".modal");
     const closeButtons = document.querySelectorAll(".close-modal");
-    const dotField = document.getElementById("dotField");
+
     const viewResumeButton = document.getElementById("viewResumeButton");
     const resumeViewer = document.getElementById("resumeViewer");
     const closeResumeViewer = document.getElementById("closeResumeViewer");
 
     let isHoveringItem = false;
-
-    const dots = [
-      { x: "7%", y: "10%", size: "10px", duration: "3.4s", delay: "0.3s" },
-      { x: "17%", y: "18%", size: "7px", duration: "4.1s", delay: "0.9s" },
-      { x: "10%", y: "31%", size: "8px", duration: "3.8s", delay: "1.4s" },
-      { x: "24%", y: "9%", size: "6px", duration: "4.7s", delay: "0.2s" },
-      { x: "30%", y: "22%", size: "9px", duration: "3.6s", delay: "1.1s" },
-      { x: "82%", y: "12%", size: "8px", duration: "4.3s", delay: "0.5s" },
-      { x: "89%", y: "21%", size: "7px", duration: "3.7s", delay: "1.2s" },
-      { x: "74%", y: "8%", size: "10px", duration: "4.9s", delay: "0.6s" },
-      { x: "67%", y: "19%", size: "6px", duration: "3.5s", delay: "1.5s" },
-      { x: "92%", y: "35%", size: "8px", duration: "4.6s", delay: "0.7s" },
-      { x: "6%", y: "66%", size: "7px", duration: "3.9s", delay: "1.8s" },
-      { x: "15%", y: "82%", size: "10px", duration: "4.4s", delay: "0.4s" },
-      { x: "27%", y: "74%", size: "6px", duration: "3.3s", delay: "1.6s" },
-      { x: "20%", y: "91%", size: "8px", duration: "4.0s", delay: "0.8s" },
-      { x: "76%", y: "78%", size: "9px", duration: "4.2s", delay: "1.0s" },
-      { x: "88%", y: "86%", size: "7px", duration: "3.8s", delay: "1.7s" },
-      { x: "67%", y: "90%", size: "8px", duration: "4.5s", delay: "0.1s" },
-      { x: "58%", y: "79%", size: "6px", duration: "3.6s", delay: "1.3s" },
-      { x: "4%", y: "48%", size: "8px", duration: "4.8s", delay: "0.4s" },
-      { x: "95%", y: "57%", size: "7px", duration: "3.9s", delay: "1.9s" }
-    ];
-
-    function buildDots() {
-      dots.forEach(dot => {
-        const span = document.createElement("span");
-        span.className = "sketch-dot";
-        span.style.setProperty("--x", dot.x);
-        span.style.setProperty("--y", dot.y);
-        span.style.setProperty("--size", dot.size);
-        span.style.setProperty("--duration", dot.duration);
-        span.style.setProperty("--delay", dot.delay);
-        dotField.appendChild(span);
-      });
-    }
 
     function typeTitle() {
       titleEl.textContent = "";
@@ -1181,7 +1075,6 @@
     });
 
     window.addEventListener("DOMContentLoaded", () => {
-      buildDots();
       typeTitle();
     });
   </script>
