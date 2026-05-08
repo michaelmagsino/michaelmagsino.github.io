@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Michael Magsino's Portfolio</title>
-  <meta
-    name="description"
-    content="A sketch-style personal portfolio for Michael Magsino."
-  />
+  <meta name="description" content="A sketch-style personal portfolio for Michael Magsino." />
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap');
@@ -16,15 +13,24 @@
       --paper: #f6f6f2;
       --paper-dark: #ecece6;
       --ink: #111111;
+      --card-bg: rgba(255,255,255,0.88);
+      --header-bg: rgba(255,255,255,0.92);
+      --line-soft: rgba(17,17,17,0.08);
+      --dash-soft: rgba(17,17,17,0.18);
+      --overlay: rgba(0,0,0,0.22);
       --blur: 5px;
       --transition: 260ms ease;
-      --max-width: 100vw;
     }
 
     body.dark-mode {
       --paper: #181818;
       --paper-dark: #101010;
       --ink: #f2f2ec;
+      --card-bg: rgba(24,24,24,0.92);
+      --header-bg: rgba(24,24,24,0.92);
+      --line-soft: rgba(242,242,236,0.14);
+      --dash-soft: rgba(242,242,236,0.18);
+      --overlay: rgba(0,0,0,0.48);
     }
 
     * {
@@ -44,14 +50,15 @@
       color: var(--ink);
       background:
         linear-gradient(rgba(255,255,255,0.2), rgba(255,255,255,0.2)),
-        repeating-linear-gradient(
-          0deg,
-          transparent 0,
-          transparent 27px,
-          rgba(0,0,0,0.018) 28px
-        ),
+        repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(0,0,0,0.018) 28px),
         linear-gradient(180deg, var(--paper), var(--paper-dark));
       overflow-x: hidden;
+    }
+
+    body.dark-mode {
+      background:
+        repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(255,255,255,0.018) 28px),
+        linear-gradient(180deg, var(--paper), var(--paper-dark));
     }
 
     body.modal-open {
@@ -63,32 +70,45 @@
       font: inherit;
     }
 
+    button {
+      color: inherit;
+    }
+
+    .sketch-button,
+    .theme-toggle,
+    .close-modal,
+    .pill-button,
+    .showcase-header button,
+    .viewer-action {
+      border: 2px solid var(--ink);
+      background: var(--card-bg);
+      color: var(--ink);
+      cursor: pointer;
+      box-shadow: 4px 4px 0 0 var(--ink);
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .sketch-button:hover,
+    .theme-toggle:hover,
+    .close-modal:hover,
+    .pill-button:hover,
+    .showcase-header button:hover,
+    .viewer-action:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 0 var(--ink);
+    }
+
     .theme-toggle {
       position: fixed;
       top: clamp(16px, 2vw, 26px);
       right: clamp(16px, 2vw, 26px);
       z-index: 40;
-      border: 2px solid var(--ink);
       border-radius: 999px;
-      background: rgba(255,255,255,0.9);
-      color: var(--ink);
-      box-shadow: 4px 4px 0 0 var(--ink);
       padding: 9px 13px;
-      cursor: pointer;
       font-family: "Special Elite", monospace;
       font-size: clamp(0.68rem, 0.9vw, 0.78rem);
       text-transform: uppercase;
       letter-spacing: 0.08em;
-      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
-    }
-
-    .theme-toggle:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0 0 var(--ink);
-    }
-
-    body.dark-mode .theme-toggle {
-      background: rgba(24,24,24,0.9);
     }
 
     .canvas {
@@ -105,7 +125,7 @@
       content: "";
       position: absolute;
       inset: clamp(10px, 1.3vw, 18px);
-      border: 2px dashed rgba(17,17,17,0.08);
+      border: 2px dashed var(--line-soft);
       border-radius: 22px;
       pointer-events: none;
       z-index: -1;
@@ -127,8 +147,19 @@
       max-width: min(760px, 54vw);
     }
 
-    .small-label {
+    .small-label,
+    .subcopy,
+    .item-caption,
+    .modal-kicker,
+    .mini-card h3,
+    .showcase-header,
+    .viewer-header,
+    .gallery-title,
+    .focus-hint {
       font-family: "Special Elite", monospace;
+    }
+
+    .small-label {
       font-size: clamp(0.7rem, 1vw, 0.9rem);
       text-transform: uppercase;
       letter-spacing: 0.16em;
@@ -167,7 +198,6 @@
       margin-inline: auto;
       line-height: 1.6;
       opacity: 0.72;
-      font-family: "Special Elite", monospace;
     }
 
     .canvas-items {
@@ -186,10 +216,7 @@
       padding: 0;
       opacity: 0;
       transform: translateY(18px) scale(0.94) rotate(var(--rotate, 0deg));
-      transition:
-        transform 520ms cubic-bezier(.18,.89,.32,1.1),
-        opacity 420ms ease,
-        filter var(--transition);
+      transition: transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--transition);
       transition-delay: var(--delay, 0ms);
       outline: none;
       user-select: none;
@@ -240,9 +267,17 @@
       stroke-linejoin: round;
     }
 
+    body.dark-mode .sketch-svg * {
+      stroke: var(--ink);
+    }
+
+    body.dark-mode .custom-sketch,
+    body.dark-mode .focus-icon .custom-sketch {
+      filter: invert(1);
+    }
+
     .item-caption {
       margin-top: clamp(5px, 0.8vw, 8px);
-      font-family: "Special Elite", monospace;
       font-size: clamp(0.58rem, 0.9vw, 0.72rem);
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -302,7 +337,7 @@
 
     .focus-card {
       position: absolute;
-      background: rgba(255,255,255,0.94);
+      background: var(--card-bg);
       border: 2px solid var(--ink);
       border-radius: 22px;
       box-shadow: 11px 11px 0 0 var(--ink);
@@ -351,28 +386,34 @@
 
     .focus-hint {
       margin-top: 6px;
-      font-family: "Special Elite", monospace;
       font-size: clamp(0.66rem, 1vw, 0.78rem);
       opacity: 0.65;
     }
 
-    .modal {
+    .modal,
+    .fullscreen-viewer,
+    .showcase {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.22);
-      display: grid;
-      place-items: center;
-      padding: 22px;
       opacity: 0;
       pointer-events: none;
       transition: opacity var(--transition);
-      z-index: 50;
-      backdrop-filter: blur(3px);
     }
 
-    .modal.open {
+    .modal.open,
+    .fullscreen-viewer.open,
+    .showcase.open {
       opacity: 1;
       pointer-events: auto;
+    }
+
+    .modal {
+      background: var(--overlay);
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      z-index: 50;
+      backdrop-filter: blur(3px);
     }
 
     .modal-card {
@@ -391,7 +432,7 @@
       content: "";
       position: absolute;
       inset: 12px;
-      border: 1px dashed rgba(17,17,17,0.18);
+      border: 1px dashed var(--dash-soft);
       border-radius: 18px;
       pointer-events: none;
     }
@@ -404,22 +445,12 @@
       place-items: center;
       width: 42px;
       height: 42px;
-      border: 2px solid var(--ink);
       border-radius: 50%;
-      background: white;
-      color: var(--ink);
-      cursor: pointer;
       font-size: 1.2rem;
-      box-shadow: 4px 4px 0 0 var(--ink);
       z-index: 3;
     }
 
-    .close-modal:hover {
-      transform: translateY(-2px);
-    }
-
     .modal-kicker {
-      font-family: "Special Elite", monospace;
       font-size: 0.78rem;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -428,10 +459,14 @@
       margin-bottom: 8px;
     }
 
-    .modal-card h2 {
+    .modal-card h2,
+    .showcase-intro h2 {
       font-family: "Caveat", cursive;
-      font-size: clamp(2rem, 4vw, 3.1rem);
       line-height: 1;
+    }
+
+    .modal-card h2 {
+      font-size: clamp(2rem, 4vw, 3.1rem);
       margin-bottom: 12px;
     }
 
@@ -452,13 +487,12 @@
     .mini-card {
       border: 2px solid var(--ink);
       border-radius: 18px;
-      background: rgba(255,255,255,0.8);
+      background: var(--card-bg);
       box-shadow: 6px 6px 0 0 var(--ink);
       padding: 16px;
     }
 
     .mini-card h3 {
-      font-family: "Special Elite", monospace;
       font-size: 0.9rem;
       margin-bottom: 10px;
       text-transform: uppercase;
@@ -470,20 +504,14 @@
       margin-bottom: 10px;
     }
 
-    .mini-card a,
-    .project-button,
-    .resume-button {
+    .pill-button,
+    .mini-card a {
       display: inline-block;
       margin-top: 6px;
       padding: 10px 14px;
-      border: 2px solid var(--ink);
       border-radius: 999px;
-      background: white;
-      color: var(--ink);
       text-decoration: none;
-      box-shadow: 4px 4px 0 0 var(--ink);
       font-weight: 600;
-      transition: transform var(--transition), box-shadow var(--transition);
     }
 
     .resume-actions {
@@ -493,172 +521,78 @@
       margin-top: 18px;
     }
 
-    .resume-button {
-      cursor: pointer;
-    }
-
-    .mini-card a:hover,
-    .project-button:hover,
-    .resume-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0 0 var(--ink);
-    }
-
-    .resume-viewer {
-      position: fixed;
-      inset: 0;
+    .fullscreen-viewer,
+    .showcase {
       display: grid;
       grid-template-rows: auto 1fr;
       background: var(--paper);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition);
+    }
+
+    .fullscreen-viewer {
       z-index: 80;
     }
 
-    .resume-viewer.open {
-      opacity: 1;
-      pointer-events: auto;
+    .showcase {
+      z-index: 82;
     }
 
-    .resume-viewer-header {
+    .viewer-header,
+    .showcase-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       padding: 14px 18px;
       border-bottom: 2px solid var(--ink);
-      background: rgba(255,255,255,0.92);
-      font-family: "Special Elite", monospace;
+      background: var(--header-bg);
       text-transform: uppercase;
       letter-spacing: 0.08em;
       font-size: 0.8rem;
     }
 
-    .resume-viewer-actions {
+    .viewer-actions {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .resume-viewer-actions a,
-    .resume-viewer-actions button {
-      border: 2px solid var(--ink);
+    .viewer-action,
+    .showcase-header button {
       border-radius: 999px;
-      background: white;
-      color: var(--ink);
-      text-decoration: none;
-      box-shadow: 3px 3px 0 0 var(--ink);
       padding: 8px 12px;
-      cursor: pointer;
-      font: inherit;
-      transition: transform var(--transition), box-shadow var(--transition);
+      text-decoration: none;
     }
 
-    .resume-viewer-actions a:hover,
-    .resume-viewer-actions button:hover {
-      transform: translateY(-2px);
-      box-shadow: 5px 5px 0 0 var(--ink);
-    }
-
-    .resume-frame {
+    .resume-frame,
+    .gundam-frame {
       width: 100%;
       height: 100%;
       border: 0;
       background: white;
     }
 
-    .sukoon-showcase,
-    .corsair-showcase,
-    .gundam-showcase {
-      position: fixed;
-      inset: 0;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      background: var(--paper);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--transition);
-      z-index: 82;
-    }
-
-    .sukoon-showcase.open,
-    .corsair-showcase.open,
-    .gundam-showcase.open {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .sukoon-header,
-    .corsair-header,
-    .gundam-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 14px 18px;
-      border-bottom: 2px solid var(--ink);
-      background: rgba(255,255,255,0.92);
-      font-family: "Special Elite", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.8rem;
-    }
-
-    .sukoon-header button,
-    .corsair-header button,
-    .gundam-header button {
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: white;
-      color: var(--ink);
-      box-shadow: 3px 3px 0 0 var(--ink);
-      padding: 8px 12px;
-      cursor: pointer;
-      font: inherit;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    .sukoon-header button:hover,
-    .corsair-header button:hover,
-    .gundam-header button:hover {
-      transform: translateY(-2px);
-      box-shadow: 5px 5px 0 0 var(--ink);
-    }
-
-    .sukoon-content,
-    .corsair-content,
-    .gundam-content {
+    .showcase-content {
       overflow: auto;
       padding: clamp(22px, 4vw, 46px);
     }
 
-    .sukoon-intro,
-    .corsair-intro,
-    .gundam-intro {
+    .showcase-intro {
       max-width: 850px;
       margin: 0 auto clamp(24px, 4vw, 42px);
       text-align: center;
     }
 
-    .sukoon-intro h2,
-    .corsair-intro h2,
-    .gundam-intro h2 {
-      font-family: "Caveat", cursive;
+    .showcase-intro h2 {
       font-size: clamp(2.6rem, 5vw, 4.4rem);
-      line-height: 1;
       margin-bottom: 12px;
     }
 
-    .sukoon-intro p,
-    .corsair-intro p,
-    .gundam-intro p {
+    .showcase-intro p {
       font-size: clamp(0.95rem, 1.4vw, 1.08rem);
       line-height: 1.7;
     }
 
-    .sukoon-grid,
-    .corsair-grid {
+    .showcase-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: clamp(18px, 3vw, 34px);
@@ -666,8 +600,7 @@
       margin: 0 auto;
     }
 
-    .sukoon-item,
-    .corsair-item {
+    .showcase-item {
       position: relative;
       overflow: hidden;
       border: 2px solid var(--ink);
@@ -677,17 +610,21 @@
       min-height: 280px;
     }
 
-    .sukoon-item.instagram {
+    .showcase-item.instagram,
+    .showcase-item.square {
       aspect-ratio: 1 / 1;
     }
 
-    .sukoon-item.paper {
+    .showcase-item.paper {
       aspect-ratio: 8.5 / 11;
       max-height: 760px;
     }
 
-    .sukoon-item img,
-    .corsair-item img {
+    .showcase-item.wide {
+      aspect-ratio: 16 / 9;
+    }
+
+    .showcase-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -695,32 +632,18 @@
       transition: filter var(--transition), transform var(--transition);
     }
 
-    .sukoon-carousel {
-      position: relative;
-      width: 100%;
-      height: 100%;
+    .showcase-item:hover img {
+      filter: blur(5px);
+      transform: scale(1.02);
     }
 
-    .sukoon-carousel img {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      animation: sukoonFade calc(var(--slides) * 3s) infinite;
-      animation-delay: calc(var(--i) * 3s);
-    }
-
-    .sukoon-carousel img:first-child {
-      opacity: 1;
-    }
-
-    .sukoon-overlay,
-    .corsair-overlay {
+    .item-overlay {
       position: absolute;
       inset: 0;
       display: grid;
       place-items: center;
       padding: 24px;
-      background: rgba(0, 0, 0, 0.62);
+      background: rgba(0,0,0,0.62);
       color: white;
       text-align: center;
       opacity: 0;
@@ -728,8 +651,11 @@
       pointer-events: none;
     }
 
-    .sukoon-overlay h3,
-    .corsair-overlay h3 {
+    .showcase-item:hover .item-overlay {
+      opacity: 1;
+    }
+
+    .item-overlay h3 {
       font-family: "Special Elite", monospace;
       font-size: clamp(0.9rem, 1.4vw, 1.1rem);
       text-transform: uppercase;
@@ -737,66 +663,36 @@
       margin-bottom: 10px;
     }
 
-    .sukoon-overlay p,
-    .corsair-overlay p {
+    .item-overlay p {
       max-width: 44ch;
       margin: 0 auto;
       font-size: clamp(0.9rem, 1.25vw, 1rem);
       line-height: 1.65;
     }
 
-    .sukoon-item:hover img,
-    .corsair-item:hover img {
-      filter: blur(5px);
-      transform: scale(1.02);
+    .stacked-carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
     }
 
-    .sukoon-item:hover .sukoon-overlay,
-    .corsair-item:hover .corsair-overlay {
+    .stacked-carousel img {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      animation: carouselFade calc(var(--slides) * 3s) infinite;
+      animation-delay: calc(var(--i) * 3s);
+    }
+
+    .stacked-carousel img:first-child {
       opacity: 1;
     }
 
-    .corsair-case-scroll {
-      width: min(1180px, 100%);
-      height: min(76vh, 860px);
-      margin: 0 auto clamp(26px, 4vw, 46px);
-      border: 2px solid var(--ink);
-      border-radius: 24px;
-      box-shadow: 10px 10px 0 0 var(--ink);
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: white;
-      scroll-behavior: smooth;
-    }
-
-    .corsair-case-image {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .corsair-gallery-title {
-      width: min(1180px, 100%);
-      margin: 0 auto 18px;
-      font-family: "Special Elite", monospace;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      font-size: 0.86rem;
-      opacity: 0.72;
-    }
-
-    .corsair-item.wide {
-      aspect-ratio: 16 / 9;
-    }
-
-    .corsair-item.square {
-      aspect-ratio: 1 / 1;
-    }
-
+    .scroll-frame,
     .gundam-frame-wrap {
       width: min(1180px, 100%);
       height: min(76vh, 860px);
-      margin: 0 auto clamp(18px, 3vw, 28px);
+      margin: 0 auto clamp(26px, 4vw, 46px);
       border: 2px solid var(--ink);
       border-radius: 24px;
       box-shadow: 10px 10px 0 0 var(--ink);
@@ -804,12 +700,25 @@
       background: white;
     }
 
-    .gundam-frame {
+    .scroll-frame {
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .scroll-frame img {
       width: 100%;
-      height: 100%;
-      border: 0;
+      height: auto;
       display: block;
-      background: white;
+    }
+
+    .gallery-title {
+      width: min(1180px, 100%);
+      margin: 0 auto 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.86rem;
+      opacity: 0.72;
     }
 
     .gundam-actions {
@@ -819,163 +728,36 @@
       justify-content: center;
     }
 
-    .gundam-actions a {
-      display: inline-block;
-      padding: 10px 14px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: white;
-      color: var(--ink);
-      text-decoration: none;
-      box-shadow: 4px 4px 0 0 var(--ink);
-      font-weight: 600;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
-
-    .gundam-actions a:hover {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0 0 var(--ink);
-    }
-
     ul.scribble-list {
       margin: 8px 0 16px 18px;
       line-height: 1.8;
     }
 
-    body.dark-mode .canvas::after,
-    body.dark-mode .modal-card::before {
-      border-color: rgba(242,242,236,0.18);
-    }
-
-    body.dark-mode .modal,
-    body.dark-mode .resume-viewer,
-    body.dark-mode .sukoon-showcase,
-    body.dark-mode .corsair-showcase,
-    body.dark-mode .gundam-showcase {
-      background: var(--paper);
-    }
-
-    body.dark-mode .modal {
-      background: rgba(0,0,0,0.48);
-    }
-
-    body.dark-mode .modal-card,
-    body.dark-mode .mini-card,
-    body.dark-mode .focus-card,
-    body.dark-mode .sukoon-item,
-    body.dark-mode .corsair-item,
-    body.dark-mode .corsair-case-scroll,
-    body.dark-mode .gundam-frame-wrap {
-      background: #181818;
-    }
-
-    body.dark-mode .resume-viewer-header,
-    body.dark-mode .sukoon-header,
-    body.dark-mode .corsair-header,
-    body.dark-mode .gundam-header {
-      background: rgba(24,24,24,0.92);
-    }
-
-    body.dark-mode .close-modal,
-    body.dark-mode .mini-card a,
-    body.dark-mode .project-button,
-    body.dark-mode .resume-button,
-    body.dark-mode .resume-viewer-actions a,
-    body.dark-mode .resume-viewer-actions button,
-    body.dark-mode .sukoon-header button,
-    body.dark-mode .corsair-header button,
-    body.dark-mode .gundam-header button,
-    body.dark-mode .gundam-actions a {
-      background: #181818;
-      color: var(--ink);
-    }
-
-    body.dark-mode .sketch-svg * {
-      stroke: var(--ink);
-    }
-
-    body.dark-mode .custom-sketch,
-    body.dark-mode .focus-icon .custom-sketch {
-      filter: invert(1);
-    }
-
-    body.dark-mode .resume-frame,
-    body.dark-mode .gundam-frame {
-      background: #ffffff;
-    }
-
     @keyframes blink {
-      50% {
-        opacity: 0;
-      }
+      50% { opacity: 0; }
     }
 
     @keyframes revealText {
-      from {
-        transform: translateX(-105%);
-        opacity: 1;
-      }
-      to {
-        transform: translateX(0);
-        opacity: 1;
-      }
+      from { transform: translateX(-105%); opacity: 1; }
+      to { transform: translateX(0); opacity: 1; }
     }
 
-    @keyframes sukoonFade {
-      0% {
-        opacity: 0;
-      }
-      4% {
-        opacity: 1;
-      }
-      24% {
-        opacity: 1;
-      }
-      30% {
-        opacity: 0;
-      }
-      100% {
-        opacity: 0;
-      }
+    @keyframes carouselFade {
+      0% { opacity: 0; }
+      4% { opacity: 1; }
+      24% { opacity: 1; }
+      30% { opacity: 0; }
+      100% { opacity: 0; }
     }
 
     @media (max-width: 980px) {
-      .canvas {
-        min-height: 100svh;
-      }
-
-      .centerpiece {
-        position: absolute;
-        min-height: 100svh;
-      }
-
-      .canvas-items {
-        min-height: calc(100svh - 60px);
-      }
-
-      .item-bio {
-        top: 17%;
-        left: 5%;
-        --item-width: 190px;
-      }
-
-      .item-projects {
-        top: 18%;
-        right: 4%;
-        --item-width: 245px;
-      }
-
-      .item-resume {
-        bottom: 18%;
-        left: 7%;
-        --item-width: 155px;
-      }
-
-      .item-statement {
-        bottom: 17%;
-        right: 6%;
-        --item-width: 185px;
-      }
+      .canvas { min-height: 100svh; }
+      .centerpiece { min-height: 100svh; }
+      .canvas-items { min-height: calc(100svh - 60px); }
+      .item-bio { top: 17%; left: 5%; --item-width: 190px; }
+      .item-projects { top: 18%; right: 4%; --item-width: 245px; }
+      .item-resume { bottom: 18%; left: 7%; --item-width: 155px; }
+      .item-statement { bottom: 17%; right: 6%; --item-width: 185px; }
     }
 
     @media (max-width: 700px) {
@@ -985,80 +767,29 @@
       }
 
       .centerpiece {
-        inset: 0;
         min-height: 112svh;
         padding: 90px 22px 240px;
       }
 
-      .canvas-items {
-        min-height: 105svh;
-      }
-
-      #main-title {
-        font-size: clamp(3.2rem, 15vw, 5rem);
-      }
-
-      .subcopy {
-        font-size: 0.9rem;
-      }
-
-      .item-bio {
-        top: 11%;
-        left: 4%;
-        --item-width: 150px;
-      }
-
-      .item-projects {
-        top: 13%;
-        right: 2%;
-        --item-width: 175px;
-      }
-
-      .item-resume {
-        bottom: 16%;
-        left: 7%;
-        --item-width: 126px;
-      }
-
-      .item-statement {
-        bottom: 15%;
-        right: 5%;
-        --item-width: 145px;
-      }
-
-      .item-caption {
-        font-size: 0.62rem;
-      }
-
-      .sketch-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .modal-card {
-        padding: 20px;
-      }
-
-      .focus-card {
-        width: min(360px, 88vw);
-      }
-
-      .resume-viewer-header,
-      .sukoon-header,
-      .corsair-header,
-      .gundam-header {
+      .canvas-items { min-height: 105svh; }
+      #main-title { font-size: clamp(3.2rem, 15vw, 5rem); }
+      .subcopy { font-size: 0.9rem; }
+      .item-bio { top: 11%; left: 4%; --item-width: 150px; }
+      .item-projects { top: 13%; right: 2%; --item-width: 175px; }
+      .item-resume { bottom: 16%; left: 7%; --item-width: 126px; }
+      .item-statement { bottom: 15%; right: 5%; --item-width: 145px; }
+      .item-caption { font-size: 0.62rem; }
+      .sketch-grid,
+      .showcase-grid { grid-template-columns: 1fr; }
+      .modal-card { padding: 20px; }
+      .focus-card { width: min(360px, 88vw); }
+      .viewer-header,
+      .showcase-header {
         align-items: flex-start;
         flex-direction: column;
       }
-
-      .sukoon-grid,
-      .corsair-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .corsair-case-scroll,
-      .gundam-frame-wrap {
-        height: 72vh;
-      }
+      .scroll-frame,
+      .gundam-frame-wrap { height: 72vh; }
     }
   </style>
 </head>
@@ -1070,115 +801,32 @@
       <div class="centerpiece-inner">
         <div class="small-label">designer • ux/ui • creative technology</div>
         <h1 id="main-title" class="typing" aria-live="polite"></h1>
-        <p class="subcopy">
-          Hover and click over each image.
-        </p>
+        <p class="subcopy">Hover and click over each image.</p>
       </div>
     </section>
 
     <section class="canvas-items" aria-label="Portfolio sections">
-      <button
-        class="sketch-item item-bio"
-        data-label="Bio"
-        data-target="modal-bio"
-        aria-label="Open Bio section"
-      >
-        <img
-          src="portfolio_images/Michael_ID.png"
-          alt="Sketch of Michael's artist ID"
-          class="sketch-svg custom-sketch"
-          onload="this.nextElementSibling.style.display='none'"
-          onerror="this.style.display='none'"
-        />
-        <svg class="sketch-svg" viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="12" y="15" width="156" height="90" rx="10" stroke="#111" stroke-width="2.8"/>
-          <circle cx="48" cy="50" r="15" stroke="#111" stroke-width="2.8"/>
-          <path d="M28 77C31 68 40 64 48 64C56 64 65 68 68 77" stroke="#111" stroke-width="2.8"/>
-          <path d="M86 38H146" stroke="#111" stroke-width="2.8"/>
-          <path d="M86 55H146" stroke="#111" stroke-width="2.8"/>
-          <path d="M86 72H130" stroke="#111" stroke-width="2.8"/>
-          <path d="M18 20C25 12 39 13 43 20" stroke="#111" stroke-width="2"/>
-          <path d="M143 91C149 87 154 88 160 93" stroke="#111" stroke-width="2"/>
-        </svg>
+      <button class="sketch-item item-bio" data-label="Bio" data-target="modal-bio" aria-label="Open Bio section">
+        <img src="portfolio_images/Michael_ID.png" alt="Sketch of Michael's artist ID" class="sketch-svg custom-sketch" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+        <svg class="sketch-svg" viewBox="0 0 180 120" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="12" y="15" width="156" height="90" rx="10" stroke="#111" stroke-width="2.8"/><circle cx="48" cy="50" r="15" stroke="#111" stroke-width="2.8"/><path d="M28 77C31 68 40 64 48 64C56 64 65 68 68 77" stroke="#111" stroke-width="2.8"/><path d="M86 38H146" stroke="#111" stroke-width="2.8"/><path d="M86 55H146" stroke="#111" stroke-width="2.8"/><path d="M86 72H130" stroke="#111" stroke-width="2.8"/><path d="M18 20C25 12 39 13 43 20" stroke="#111" stroke-width="2"/><path d="M143 91C149 87 154 88 160 93" stroke="#111" stroke-width="2"/></svg>
         <div class="item-caption">Bio</div>
       </button>
 
-      <button
-        class="sketch-item item-projects"
-        data-label="Projects"
-        data-target="modal-projects"
-        aria-label="Open Projects section"
-      >
-        <img
-          src="portfolio_images/Project_Sketch.png"
-          alt="Sketch representing Michael's projects"
-          class="sketch-svg custom-sketch"
-          onload="this.nextElementSibling.style.display='none'"
-          onerror="this.style.display='none'"
-        />
-        <svg class="sketch-svg" viewBox="0 0 210 130" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="20" y="18" width="170" height="82" rx="8" stroke="#111" stroke-width="2.8"/>
-          <path d="M72 108H138" stroke="#111" stroke-width="2.8"/>
-          <path d="M95 100L88 108" stroke="#111" stroke-width="2.8"/>
-          <path d="M115 100L122 108" stroke="#111" stroke-width="2.8"/>
-          <path d="M37 38H101" stroke="#111" stroke-width="2.8"/>
-          <path d="M37 56H154" stroke="#111" stroke-width="2.8"/>
-          <path d="M37 74H121" stroke="#111" stroke-width="2.8"/>
-          <path d="M166 28L171 35L180 36L173 42L175 51L166 46L157 51L159 42L152 36L161 35L166 28Z" stroke="#111" stroke-width="2"/>
-          <path d="M28 109C42 116 55 116 67 111" stroke="#111" stroke-width="2"/>
-        </svg>
+      <button class="sketch-item item-projects" data-label="Projects" data-target="modal-projects" aria-label="Open Projects section">
+        <img src="portfolio_images/Project_Sketch.png" alt="Sketch representing Michael's projects" class="sketch-svg custom-sketch" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+        <svg class="sketch-svg" viewBox="0 0 210 130" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="18" width="170" height="82" rx="8" stroke="#111" stroke-width="2.8"/><path d="M72 108H138" stroke="#111" stroke-width="2.8"/><path d="M95 100L88 108" stroke="#111" stroke-width="2.8"/><path d="M115 100L122 108" stroke="#111" stroke-width="2.8"/><path d="M37 38H101" stroke="#111" stroke-width="2.8"/><path d="M37 56H154" stroke="#111" stroke-width="2.8"/><path d="M37 74H121" stroke="#111" stroke-width="2.8"/><path d="M166 28L171 35L180 36L173 42L175 51L166 46L157 51L159 42L152 36L161 35L166 28Z" stroke="#111" stroke-width="2"/><path d="M28 109C42 116 55 116 67 111" stroke="#111" stroke-width="2"/></svg>
         <div class="item-caption">Projects</div>
       </button>
 
-      <button
-        class="sketch-item item-resume"
-        data-label="Resume"
-        data-target="modal-resume"
-        aria-label="Open Resume section"
-      >
-        <img
-          src="portfolio_images/Resume_Sketch.png"
-          alt="Sketch representing Michael's resume"
-          class="sketch-svg custom-sketch"
-          onload="this.nextElementSibling.style.display='none'"
-          onerror="this.style.display='none'"
-        />
-        <svg class="sketch-svg" viewBox="0 0 165 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M35 12H104L130 38V186H35V12Z" stroke="#111" stroke-width="2.8"/>
-          <path d="M104 12V38H130" stroke="#111" stroke-width="2.8"/>
-          <path d="M50 62H115" stroke="#111" stroke-width="2.8"/>
-          <path d="M50 84H115" stroke="#111" stroke-width="2.8"/>
-          <path d="M50 106H104" stroke="#111" stroke-width="2.8"/>
-          <path d="M50 128H112" stroke="#111" stroke-width="2.8"/>
-          <path d="M50 150H92" stroke="#111" stroke-width="2.8"/>
-          <path d="M29 28C21 35 22 44 31 50" stroke="#111" stroke-width="2"/>
-        </svg>
+      <button class="sketch-item item-resume" data-label="Resume" data-target="modal-resume" aria-label="Open Resume section">
+        <img src="portfolio_images/Resume_Sketch.png" alt="Sketch representing Michael's resume" class="sketch-svg custom-sketch" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+        <svg class="sketch-svg" viewBox="0 0 165 200" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M35 12H104L130 38V186H35V12Z" stroke="#111" stroke-width="2.8"/><path d="M104 12V38H130" stroke="#111" stroke-width="2.8"/><path d="M50 62H115" stroke="#111" stroke-width="2.8"/><path d="M50 84H115" stroke="#111" stroke-width="2.8"/><path d="M50 106H104" stroke="#111" stroke-width="2.8"/><path d="M50 128H112" stroke="#111" stroke-width="2.8"/><path d="M50 150H92" stroke="#111" stroke-width="2.8"/><path d="M29 28C21 35 22 44 31 50" stroke="#111" stroke-width="2"/></svg>
         <div class="item-caption">Resume</div>
       </button>
 
-      <button
-        class="sketch-item item-statement"
-        data-label="Artist Statement"
-        data-target="modal-statement"
-        aria-label="Open Artist Statement section"
-      >
-        <img
-          src="portfolio_images/Statement_Sketch.png"
-          alt="Sketch representing Michael's artist statement"
-          class="sketch-svg custom-sketch"
-          onload="this.nextElementSibling.style.display='none'"
-          onerror="this.style.display='none'"
-        />
-        <svg class="sketch-svg" viewBox="0 0 185 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M24 18H120L156 48V132H24V18Z" stroke="#111" stroke-width="2.8"/>
-          <path d="M120 18V48H156" stroke="#111" stroke-width="2.8"/>
-          <path d="M44 62H132" stroke="#111" stroke-width="2.8"/>
-          <path d="M44 82H138" stroke="#111" stroke-width="2.8"/>
-          <path d="M44 102H118" stroke="#111" stroke-width="2.8"/>
-          <path d="M18 22L11 28L17 34" stroke="#111" stroke-width="2.8"/>
-          <path d="M166 104L174 112" stroke="#111" stroke-width="2.8"/>
-          <path d="M171 98L179 106" stroke="#111" stroke-width="2.8"/>
-        </svg>
+      <button class="sketch-item item-statement" data-label="Artist Statement" data-target="modal-statement" aria-label="Open Artist Statement section">
+        <img src="portfolio_images/Statement_Sketch.png" alt="Sketch representing Michael's artist statement" class="sketch-svg custom-sketch" onload="this.nextElementSibling.style.display='none'" onerror="this.style.display='none'" />
+        <svg class="sketch-svg" viewBox="0 0 185 150" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 18H120L156 48V132H24V18Z" stroke="#111" stroke-width="2.8"/><path d="M120 18V48H156" stroke="#111" stroke-width="2.8"/><path d="M44 62H132" stroke="#111" stroke-width="2.8"/><path d="M44 82H138" stroke="#111" stroke-width="2.8"/><path d="M44 102H118" stroke="#111" stroke-width="2.8"/><path d="M18 22L11 28L17 34" stroke="#111" stroke-width="2.8"/><path d="M166 104L174 112" stroke="#111" stroke-width="2.8"/><path d="M171 98L179 106" stroke="#111" stroke-width="2.8"/></svg>
         <div class="item-caption">Artist Statement</div>
       </button>
     </section>
@@ -1188,9 +836,7 @@
     <div class="focus-card">
       <div class="focus-icon" id="focusIcon"></div>
       <div class="focus-text">
-        <span class="focus-label-wrap">
-          <span class="focus-label" id="focusLabel"></span>
-        </span>
+        <span class="focus-label-wrap"><span class="focus-label" id="focusLabel"></span></span>
         <div class="focus-hint">click to open</div>
       </div>
     </div>
@@ -1201,17 +847,8 @@
       <button class="close-modal" type="button" aria-label="Close Bio section">✕</button>
       <div class="modal-kicker">Profile</div>
       <h2>About Me</h2>
-      <p>
-        I’m Michael Magsino, a multidisciplinary creative focused on graphic design,
-        UX/UI, and creative technology. My work often blends visual polish with
-        interactive thinking, and I’m especially drawn to projects that feel expressive,
-        intentional, and human.
-      </p>
-      <p>
-        I’m interested in how design can shape atmosphere, storytelling, and
-        emotional connection, whether that takes the form of a website, interface,
-        campaign, or interactive experience.
-      </p>
+      <p>I’m Michael Magsino, a multidisciplinary creative focused on graphic design, UX/UI, and creative technology. My work often blends visual polish with interactive thinking, and I’m especially drawn to projects that feel expressive, intentional, and human.</p>
+      <p>I’m interested in how design can shape atmosphere, storytelling, and emotional connection, whether that takes the form of a website, interface, campaign, or interactive experience.</p>
       <ul class="scribble-list">
         <li>Creative Technologies student at UC Santa Cruz</li>
         <li>Focus areas: graphic design, UX/UI, web design, and sound-based experimentation</li>
@@ -1225,42 +862,26 @@
       <button class="close-modal" type="button" aria-label="Close Projects section">✕</button>
       <div class="modal-kicker">Selected Work</div>
       <h2>Projects</h2>
-
       <div class="sketch-grid">
         <div class="mini-card">
           <h3>Hiraeth UI</h3>
-          <p>
-            A diegetic UI concept for a narrative game exploring memory, surveillance,
-            and climate collapse.
-          </p>
-          <a href="#" target="_blank" rel="noreferrer">Project Link</a>
+          <p>A diegetic UI concept for a narrative game exploring memory, surveillance, and climate collapse.</p>
+          <a class="pill-button" href="#" target="_blank" rel="noreferrer">Project Link</a>
         </div>
-
         <div class="mini-card">
           <h3>Corsair Case Study</h3>
-          <p>
-            A brand-focused campaign and packaging exploration centered around one
-            product across multiple touchpoints.
-          </p>
-          <button class="project-button" type="button" id="openCorsairShowcase">View Case Study</button>
+          <p>A brand-focused campaign and packaging exploration centered around one product across multiple touchpoints.</p>
+          <button class="pill-button" type="button" data-open="corsairShowcase">View Case Study</button>
         </div>
-
         <div class="mini-card">
           <h3>Gundam Collection App</h3>
-          <p>
-            A filterable web app for cataloging model kits, built with HTML, CSS,
-            JavaScript, and a custom data structure.
-          </p>
-          <button class="project-button" type="button" id="openGundamShowcase">View Project</button>
+          <p>A filterable web app for cataloging model kits, built with HTML, CSS, JavaScript, and a custom data structure.</p>
+          <button class="pill-button" type="button" data-open="gundamShowcase">View Project</button>
         </div>
-
         <div class="mini-card">
           <h3>Sukoon Design Work</h3>
-          <p>
-            Visual content for social media, newsletters, and web materials created
-            for a mental wellness startup.
-          </p>
-          <button class="project-button" type="button" id="openSukoonShowcase">View Showcase</button>
+          <p>Visual content for social media, newsletters, and web materials created for a mental wellness startup.</p>
+          <button class="pill-button" type="button" data-open="sukoonShowcase">View Showcase</button>
         </div>
       </div>
     </div>
@@ -1271,160 +892,103 @@
       <button class="close-modal" type="button" aria-label="Close Resume section">✕</button>
       <div class="modal-kicker">Credentials</div>
       <h2>Resume Overview</h2>
-      <p>
-        View or download my resume below. It includes my graphic design, UX/UI,
-        creative technology, and visual content experience across web, print,
-        branding, and digital marketing work.
-      </p>
-
+      <p>View or download my resume below. It includes my graphic design, UX/UI, creative technology, and visual content experience across web, print, branding, and digital marketing work.</p>
       <ul class="scribble-list">
         <li>Graphic Designer</li>
         <li>Creative Strategy and Content Creation Lead at Sukoon</li>
         <li>Dean's Student Leadership Board Member at UCSC</li>
         <li>Tools: Figma, Adobe Creative Suite, Canva, Framer, HTML, CSS, and GitHub</li>
       </ul>
-
       <div class="resume-actions">
-        <button class="resume-button" type="button" id="viewResumeButton">View Resume</button>
-        <a class="resume-button" href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download Resume</a>
+        <button class="pill-button" type="button" id="viewResumeButton">View Resume</button>
+        <a class="pill-button" href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download Resume</a>
       </div>
     </div>
   </div>
 
-  <div class="resume-viewer" id="resumeViewer" aria-hidden="true">
-    <div class="resume-viewer-header">
+  <div class="fullscreen-viewer" id="resumeViewer" aria-hidden="true">
+    <div class="viewer-header">
       <span>Michael Magsino Resume</span>
-      <div class="resume-viewer-actions">
-        <a href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download</a>
-        <button type="button" id="closeResumeViewer" aria-label="Close resume viewer">✕</button>
+      <div class="viewer-actions">
+        <a class="viewer-action" href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download</a>
+        <button class="viewer-action" type="button" data-close="resumeViewer" aria-label="Close resume viewer">✕</button>
       </div>
     </div>
-
-    <iframe
-      src="portfolio_pdf/MichaelMagsino_Resume.pdf"
-      title="Michael Magsino Resume PDF"
-      class="resume-frame"
-    ></iframe>
+    <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
   </div>
 
-  <div class="gundam-showcase" id="gundamShowcase" aria-hidden="true">
-    <div class="gundam-header">
+  <div class="showcase" id="gundamShowcase" aria-hidden="true">
+    <div class="showcase-header">
       <span>Gundam Collection App Showcase</span>
-      <button type="button" id="closeGundamShowcase" aria-label="Close Gundam showcase">✕</button>
+      <button type="button" data-close="gundamShowcase" aria-label="Close Gundam showcase">✕</button>
     </div>
-
-    <div class="gundam-content">
-      <section class="gundam-intro" aria-label="Gundam project introduction">
+    <div class="showcase-content">
+      <section class="showcase-intro" aria-label="Gundam project introduction">
         <h2>Gundam Collection App</h2>
-        <p>
-          This Gundam Collection App was created as my final project for CT120, serving as the culmination of the coding concepts learned throughout the quarter. The project uses HTML, CSS, JavaScript, and structured data to create an interactive model kit catalog with search, filtering, featured models, and a visual cost graph.
-        </p>
+        <p>This Gundam Collection App was created as my final project for CT120, serving as the culmination of the coding concepts learned throughout the quarter. The project uses HTML, CSS, JavaScript, and structured data to create an interactive model kit catalog with search, filtering, featured models, and a visual cost graph.</p>
       </section>
-
       <div class="gundam-frame-wrap">
-        <iframe
-          src="GundamCollection.html"
-          title="Gundam Collection App"
-          class="gundam-frame"
-          loading="lazy"
-        ></iframe>
+        <iframe src="GundamCollection.html" title="Gundam Collection App" class="gundam-frame" loading="lazy"></iframe>
       </div>
-
       <div class="gundam-actions">
-        <a href="GundamCollection.html" target="_blank" rel="noreferrer">Open Full Site</a>
+        <a class="pill-button" href="GundamCollection.html" target="_blank" rel="noreferrer">Open Full Site</a>
       </div>
     </div>
   </div>
 
-  <div class="corsair-showcase" id="corsairShowcase" aria-hidden="true">
-    <div class="corsair-header">
+  <div class="showcase" id="corsairShowcase" aria-hidden="true">
+    <div class="showcase-header">
       <span>Corsair Case Study Showcase</span>
-      <button type="button" id="closeCorsairShowcase" aria-label="Close Corsair showcase">✕</button>
+      <button type="button" data-close="corsairShowcase" aria-label="Close Corsair showcase">✕</button>
     </div>
-
-    <div class="corsair-content">
-      <section class="corsair-intro" aria-label="Corsair case study introduction">
+    <div class="showcase-content">
+      <section class="showcase-intro" aria-label="Corsair case study introduction">
         <h2>Corsair Case Study</h2>
-        <p>
-          A brand-focused portfolio case study exploring the Corsair Vanguard Pro 96 across presentation, web banner, packaging, and social media touchpoints. The work focuses on product hierarchy, dark visual styling, brand consistency, and adapting one product into multiple polished design contexts.
-        </p>
+        <p>A brand-focused portfolio case study exploring the Corsair Vanguard Pro 96 across presentation, web banner, packaging, and social media touchpoints. The work focuses on product hierarchy, dark visual styling, brand consistency, and adapting one product into multiple polished design contexts.</p>
       </section>
-
-      <div class="corsair-case-scroll" aria-label="Scrollable Corsair case study">
-        <img
-          src="corsairpics/cspec.png"
-          alt="Scrollable Corsair case study presentation"
-          class="corsair-case-image"
-        />
+      <div class="scroll-frame" aria-label="Scrollable Corsair case study">
+        <img src="corsairpics/cspec.png" alt="Scrollable Corsair case study presentation" />
       </div>
-
-      <h3 class="corsair-gallery-title">Product Mockups</h3>
-      <section class="corsair-grid" aria-label="Corsair product mockups">
-        <article class="corsair-item wide">
+      <h3 class="gallery-title">Product Mockups</h3>
+      <section class="showcase-grid" aria-label="Corsair product mockups">
+        <article class="showcase-item wide">
           <img src="corsairpics/cbanner.png" alt="Corsair Vanguard Pro 96 web banner mockup" />
-          <div class="corsair-overlay">
-            <div>
-              <h3>Web Banner Mockup</h3>
-              <p>A web banner concept for the Corsair Vanguard Pro 96, focusing on product hierarchy, dark brand styling, and a direct value line: “Compact Design. Elite Speed. Hall Effect Precision.”</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>Web Banner Mockup</h3><p>A web banner concept for the Corsair Vanguard Pro 96, focusing on product hierarchy, dark brand styling, and a direct value line: “Compact Design. Elite Speed. Hall Effect Precision.”</p></div></div>
         </article>
-
-        <article class="corsair-item wide">
+        <article class="showcase-item wide">
           <img src="corsairpics/cpkg.png" alt="Corsair Vanguard Pro 96 packaging mockup" />
-          <div class="corsair-overlay">
-            <div>
-              <h3>Packaging Mockup</h3>
-              <p>A packaging concept for the Corsair Vanguard Pro 96, using Corsair’s high-contrast black and yellow brand language with a simplified product-focused layout.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>Packaging Mockup</h3><p>A packaging concept for the Corsair Vanguard Pro 96, using Corsair’s high-contrast black and yellow brand language with a simplified product-focused layout.</p></div></div>
         </article>
-
-        <article class="corsair-item square">
+        <article class="showcase-item square">
           <img src="corsairpics/csocial.png" alt="Corsair Vanguard Pro 96 social media mockup" />
-          <div class="corsair-overlay">
-            <div>
-              <h3>Social Media Mockup</h3>
-              <p>A social media post mockup designed to match the visual tone of Corsair’s social presence after studying the brand’s existing product-focused content.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>Social Media Mockup</h3><p>A social media post mockup designed to match the visual tone of Corsair’s social presence after studying the brand’s existing product-focused content.</p></div></div>
         </article>
       </section>
     </div>
   </div>
 
-  <div class="sukoon-showcase" id="sukoonShowcase" aria-hidden="true">
-    <div class="sukoon-header">
+  <div class="showcase" id="sukoonShowcase" aria-hidden="true">
+    <div class="showcase-header">
       <span>Sukoon Visual Design Showcase</span>
-      <button type="button" id="closeSukoonShowcase" aria-label="Close Sukoon showcase">✕</button>
+      <button type="button" data-close="sukoonShowcase" aria-label="Close Sukoon showcase">✕</button>
     </div>
-
-    <div class="sukoon-content">
-      <section class="sukoon-intro" aria-label="Sukoon showcase introduction">
+    <div class="showcase-content">
+      <section class="showcase-intro" aria-label="Sukoon showcase introduction">
         <h2>Sukoon Design Work</h2>
-        <p>
-          A selection of visual content created for Sukoon, including social media graphics, newsletter design, and branded communication materials. This work supported Sukoon’s digital presence through warm, minimal, and culturally thoughtful visuals across Instagram, LinkedIn, and email distribution.
-        </p>
+        <p>A selection of visual content created for Sukoon, including social media graphics, newsletter design, and branded communication materials. This work supported Sukoon’s digital presence through warm, minimal, and culturally thoughtful visuals across Instagram, LinkedIn, and email distribution.</p>
       </section>
-
-      <section class="sukoon-grid" aria-label="Sukoon selected design work">
-        <article class="sukoon-item instagram">
-          <div class="sukoon-carousel" style="--slides: 4;">
+      <section class="showcase-grid" aria-label="Sukoon selected design work">
+        <article class="showcase-item instagram">
+          <div class="stacked-carousel" style="--slides: 4;">
             <img src="sukoonpics/SC1.png" alt="Sukoon Circle Instagram carousel slide 1" style="--i: 0;" />
             <img src="sukoonpics/SC2.png" alt="Sukoon Circle Instagram carousel slide 2" style="--i: 1;" />
             <img src="sukoonpics/SC3.png" alt="Sukoon Circle Instagram carousel slide 3" style="--i: 2;" />
             <img src="sukoonpics/SC4.png" alt="Sukoon Circle Instagram carousel slide 4" style="--i: 3;" />
           </div>
-          <div class="sukoon-overlay">
-            <div>
-              <h3>Sukoon Circle Instagram Carousel</h3>
-              <p>Instagram post series promoting Sukoon Circle, Sukoon’s inaugural in-person event.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>Sukoon Circle Instagram Carousel</h3><p>Instagram post series promoting Sukoon Circle, Sukoon’s inaugural in-person event.</p></div></div>
         </article>
-
-        <article class="sukoon-item instagram">
-          <div class="sukoon-carousel" style="--slides: 6;">
+        <article class="showcase-item instagram">
+          <div class="stacked-carousel" style="--slides: 6;">
             <img src="sukoonpics/sh1.png" alt="Seasonal reflection Instagram carousel slide 1" style="--i: 0;" />
             <img src="sukoonpics/sh2.png" alt="Seasonal reflection Instagram carousel slide 2" style="--i: 1;" />
             <img src="sukoonpics/sh3.png" alt="Seasonal reflection Instagram carousel slide 3" style="--i: 2;" />
@@ -1432,32 +996,15 @@
             <img src="sukoonpics/sh5.png" alt="Seasonal reflection Instagram carousel slide 5" style="--i: 4;" />
             <img src="sukoonpics/sh6.png" alt="Seasonal reflection Instagram carousel slide 6" style="--i: 5;" />
           </div>
-          <div class="sukoon-overlay">
-            <div>
-              <h3>Seasonal Reflection Instagram Carousel</h3>
-              <p>Instagram carousel reflecting on changing seasons and the emotions that can come with those transitions.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>Seasonal Reflection Instagram Carousel</h3><p>Instagram carousel reflecting on changing seasons and the emotions that can come with those transitions.</p></div></div>
         </article>
-
-        <article class="sukoon-item paper">
+        <article class="showcase-item paper">
           <img src="sukoonpics/sn.png" alt="First Sukoon newsletter opening page" />
-          <div class="sukoon-overlay">
-            <div>
-              <h3>First Sukoon Newsletter</h3>
-              <p>The first newsletter distributed via email by Sukoon, shown through its opening page.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>First Sukoon Newsletter</h3><p>The first newsletter distributed via email by Sukoon, shown through its opening page.</p></div></div>
         </article>
-
-        <article class="sukoon-item instagram">
+        <article class="showcase-item instagram">
           <img src="sukoonpics/first.png" alt="First Sukoon LinkedIn post" />
-          <div class="sukoon-overlay">
-            <div>
-              <h3>First Sukoon LinkedIn Post</h3>
-              <p>The first LinkedIn post created for Sukoon, establishing an early visual direction for the brand’s professional social presence.</p>
-            </div>
-          </div>
+          <div class="item-overlay"><div><h3>First Sukoon LinkedIn Post</h3><p>The first LinkedIn post created for Sukoon, establishing an early visual direction for the brand’s professional social presence.</p></div></div>
         </article>
       </section>
     </div>
@@ -1468,43 +1015,21 @@
       <button class="close-modal" type="button" aria-label="Close Artist Statement section">✕</button>
       <div class="modal-kicker">Perspective</div>
       <h2>Creative Statement</h2>
-      <p>
-        Michael Magsino (he/him) is a multidisciplinary creative that primarily focuses on graphic design, UX/UI, and some recent projects within sound design. Much of his latest pieces have revolved around the dissection of mental health and the many ways he copes with them. Alongside that, various works in personal/school sites, web/app prototyping, and numerous graphic design works. Throughout his venture within the arts, he has worked with assorted tools such as the Adobe Suite (Photoshop, Illustrator, Audition), Canva, Figma, and Framer, just to name a few.
-      </p>
-      <p>
-        With his recent work in a health-tech startup as the creative design lead, he was able to synthesize his skills in both design and marketing to produce graphic design work across socials, websites, and collaborative initiatives with mental health professionals during his time with the company. This granted him the opportunity to sharpen his ability to work within deadlines, lead projects, and collaborate with diverse teams.
-      </p>
+      <p>Michael Magsino (he/him) is a multidisciplinary creative that primarily focuses on graphic design, UX/UI, and some recent projects within sound design. Much of his latest pieces have revolved around the dissection of mental health and the many ways he copes with them. Alongside that, various works in personal/school sites, web/app prototyping, and numerous graphic design works. Throughout his venture within the arts, he has worked with assorted tools such as the Adobe Suite (Photoshop, Illustrator, Audition), Canva, Figma, and Framer, just to name a few.</p>
+      <p>With his recent work in a health-tech startup as the creative design lead, he was able to synthesize his skills in both design and marketing to produce graphic design work across socials, websites, and collaborative initiatives with mental health professionals during his time with the company. This granted him the opportunity to sharpen his ability to work within deadlines, lead projects, and collaborate with diverse teams.</p>
     </div>
   </div>
 
   <script>
-    const titleText = "Michael Magsino's Portfolio";
-    const titleEl = document.getElementById("main-title");
     const body = document.body;
     const canvas = document.getElementById("canvas");
+    const titleEl = document.getElementById("main-title");
     const themeToggle = document.getElementById("themeToggle");
-
     const focusPreview = document.getElementById("focusPreview");
     const focusIcon = document.getElementById("focusIcon");
     const focusLabel = document.getElementById("focusLabel");
-
     const items = document.querySelectorAll(".sketch-item");
     const modals = document.querySelectorAll(".modal");
-    const closeButtons = document.querySelectorAll(".close-modal");
-
-    const viewResumeButton = document.getElementById("viewResumeButton");
-    const resumeViewer = document.getElementById("resumeViewer");
-    const closeResumeViewer = document.getElementById("closeResumeViewer");
-    const openGundamShowcase = document.getElementById("openGundamShowcase");
-    const gundamShowcase = document.getElementById("gundamShowcase");
-    const closeGundamShowcase = document.getElementById("closeGundamShowcase");
-    const openCorsairShowcase = document.getElementById("openCorsairShowcase");
-    const corsairShowcase = document.getElementById("corsairShowcase");
-    const closeCorsairShowcase = document.getElementById("closeCorsairShowcase");
-    const openSukoonShowcase = document.getElementById("openSukoonShowcase");
-    const sukoonShowcase = document.getElementById("sukoonShowcase");
-    const closeSukoonShowcase = document.getElementById("closeSukoonShowcase");
-
     let isHoveringItem = false;
 
     function updateThemeButton() {
@@ -1520,23 +1045,17 @@
     }
 
     function loadSavedTheme() {
-      const savedTheme = localStorage.getItem("portfolio-theme");
-      if (savedTheme === "dark") {
-        body.classList.add("dark-mode");
-      }
+      if (localStorage.getItem("portfolio-theme") === "dark") body.classList.add("dark-mode");
       updateThemeButton();
     }
 
     function typeTitle() {
+      const titleText = "Michael Magsino's Portfolio";
       titleEl.textContent = "";
       titleEl.classList.add("typing");
-
       let index = 0;
-
       const interval = window.setInterval(() => {
-        titleEl.textContent += titleText[index];
-        index += 1;
-
+        titleEl.textContent += titleText[index++];
         if (index >= titleText.length) {
           window.clearInterval(interval);
           titleEl.classList.remove("typing");
@@ -1552,34 +1071,20 @@
       item.classList.add("is-origin");
 
       const icon = item.querySelector(".sketch-svg").cloneNode(true);
-      focusIcon.innerHTML = "";
-      focusIcon.appendChild(icon);
-
+      focusIcon.replaceChildren(icon);
       focusLabel.textContent = item.dataset.label;
       focusLabel.classList.remove("write-in");
       void focusLabel.offsetWidth;
       focusLabel.classList.add("write-in");
-
       focusPreview.classList.add("visible");
       focusPreview.setAttribute("aria-hidden", "false");
 
       const focusCard = focusPreview.querySelector(".focus-card");
       const rect = item.getBoundingClientRect();
-
       requestAnimationFrame(() => {
         const cardRect = focusCard.getBoundingClientRect();
-
-        let left = rect.left + rect.width / 2;
-        let top = rect.top + rect.height / 2;
-
-        const minLeft = cardRect.width / 2 + 16;
-        const maxLeft = window.innerWidth - cardRect.width / 2 - 16;
-        const minTop = cardRect.height / 2 + 16;
-        const maxTop = window.innerHeight - cardRect.height / 2 - 16;
-
-        left = Math.max(minLeft, Math.min(left, maxLeft));
-        top = Math.max(minTop, Math.min(top, maxTop));
-
+        const left = Math.max(cardRect.width / 2 + 16, Math.min(rect.left + rect.width / 2, window.innerWidth - cardRect.width / 2 - 16));
+        const top = Math.max(cardRect.height / 2 + 16, Math.min(rect.top + rect.height / 2, window.innerHeight - cardRect.height / 2 - 16));
         focusCard.style.left = `${left}px`;
         focusCard.style.top = `${top}px`;
       });
@@ -1587,10 +1092,8 @@
 
     function hidePreview() {
       isHoveringItem = false;
-
       window.setTimeout(() => {
         if (isHoveringItem || document.querySelector(".modal.open")) return;
-
         canvas.classList.remove("has-focus");
         items.forEach(el => el.classList.remove("is-origin"));
         focusPreview.classList.remove("visible");
@@ -1598,139 +1101,62 @@
       }, 80);
     }
 
-    function openModal(id) {
-      const modal = document.getElementById(id);
-      if (!modal) return;
-
-      modals.forEach(m => {
-        m.classList.remove("open");
-        m.setAttribute("aria-hidden", "true");
-      });
-
-      modal.classList.add("open");
-      modal.setAttribute("aria-hidden", "false");
+    function openLayer(layer) {
+      if (!layer) return;
+      layer.classList.add("open");
+      layer.setAttribute("aria-hidden", "false");
       body.classList.add("modal-open");
-      canvas.classList.add("has-focus");
-      focusPreview.classList.remove("visible");
+      if (layer.classList.contains("modal")) {
+        canvas.classList.add("has-focus");
+        focusPreview.classList.remove("visible");
+      }
     }
 
-    function closeModal(modal) {
-      modal.classList.remove("open");
-      modal.setAttribute("aria-hidden", "true");
-      body.classList.remove("modal-open");
-      canvas.classList.remove("has-focus");
-      items.forEach(el => el.classList.remove("is-origin"));
-      focusPreview.classList.remove("visible");
-      focusPreview.setAttribute("aria-hidden", "true");
+    function closeLayer(layer) {
+      if (!layer) return;
+      layer.classList.remove("open");
+      layer.setAttribute("aria-hidden", "true");
+      if (!document.querySelector(".modal.open, .showcase.open, .fullscreen-viewer.open")) {
+        body.classList.remove("modal-open");
+        canvas.classList.remove("has-focus");
+        items.forEach(el => el.classList.remove("is-origin"));
+        focusPreview.classList.remove("visible");
+        focusPreview.setAttribute("aria-hidden", "true");
+      }
     }
 
-    function openResumeViewer() {
-      resumeViewer.classList.add("open");
-      resumeViewer.setAttribute("aria-hidden", "false");
-      body.classList.add("modal-open");
-    }
-
-    function closeResumeViewerOverlay() {
-      resumeViewer.classList.remove("open");
-      resumeViewer.setAttribute("aria-hidden", "true");
-      body.classList.remove("modal-open");
-    }
-
-    function openGundamOverlay() {
-      gundamShowcase.classList.add("open");
-      gundamShowcase.setAttribute("aria-hidden", "false");
-      body.classList.add("modal-open");
-    }
-
-    function closeGundamOverlay() {
-      gundamShowcase.classList.remove("open");
-      gundamShowcase.setAttribute("aria-hidden", "true");
-      body.classList.remove("modal-open");
-    }
-
-    function openCorsairOverlay() {
-      corsairShowcase.classList.add("open");
-      corsairShowcase.setAttribute("aria-hidden", "false");
-      body.classList.add("modal-open");
-    }
-
-    function closeCorsairOverlay() {
-      corsairShowcase.classList.remove("open");
-      corsairShowcase.setAttribute("aria-hidden", "true");
-      body.classList.remove("modal-open");
-    }
-
-    function openSukoonOverlay() {
-      sukoonShowcase.classList.add("open");
-      sukoonShowcase.setAttribute("aria-hidden", "false");
-      body.classList.add("modal-open");
-    }
-
-    function closeSukoonOverlay() {
-      sukoonShowcase.classList.remove("open");
-      sukoonShowcase.setAttribute("aria-hidden", "true");
-      body.classList.remove("modal-open");
-    }
-
-    themeToggle.addEventListener("click", () => {
-      const nextTheme = body.classList.contains("dark-mode") ? "light" : "dark";
-      setTheme(nextTheme);
-    });
+    themeToggle.addEventListener("click", () => setTheme(body.classList.contains("dark-mode") ? "light" : "dark"));
 
     items.forEach(item => {
       item.addEventListener("mouseenter", () => showPreview(item));
       item.addEventListener("focus", () => showPreview(item));
       item.addEventListener("mouseleave", hidePreview);
       item.addEventListener("blur", hidePreview);
-      item.addEventListener("click", () => openModal(item.dataset.target));
+      item.addEventListener("click", () => {
+        modals.forEach(closeLayer);
+        openLayer(document.getElementById(item.dataset.target));
+      });
     });
 
-    viewResumeButton.addEventListener("click", openResumeViewer);
-    closeResumeViewer.addEventListener("click", closeResumeViewerOverlay);
-    openGundamShowcase.addEventListener("click", openGundamOverlay);
-    closeGundamShowcase.addEventListener("click", closeGundamOverlay);
-    openCorsairShowcase.addEventListener("click", openCorsairOverlay);
-    closeCorsairShowcase.addEventListener("click", closeCorsairOverlay);
-    openSukoonShowcase.addEventListener("click", openSukoonOverlay);
-    closeSukoonShowcase.addEventListener("click", closeSukoonOverlay);
+    document.querySelectorAll("[data-open]").forEach(button => {
+      button.addEventListener("click", () => openLayer(document.getElementById(button.dataset.open)));
+    });
 
-    closeButtons.forEach(button => {
-      button.addEventListener("click", () => {
-        const modal = button.closest(".modal");
-        closeModal(modal);
-      });
+    document.getElementById("viewResumeButton").addEventListener("click", () => openLayer(document.getElementById("resumeViewer")));
+
+    document.querySelectorAll("[data-close], .close-modal").forEach(button => {
+      button.addEventListener("click", () => closeLayer(button.closest(".modal, .showcase, .fullscreen-viewer") || document.getElementById(button.dataset.close)));
     });
 
     modals.forEach(modal => {
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) closeModal(modal);
+      modal.addEventListener("click", e => {
+        if (e.target === modal) closeLayer(modal);
       });
     });
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        modals.forEach(modal => {
-          if (modal.classList.contains("open")) {
-            closeModal(modal);
-          }
-        });
-
-        if (resumeViewer.classList.contains("open")) {
-          closeResumeViewerOverlay();
-        }
-
-        if (gundamShowcase.classList.contains("open")) {
-          closeGundamOverlay();
-        }
-
-        if (corsairShowcase.classList.contains("open")) {
-          closeCorsairOverlay();
-        }
-
-        if (sukoonShowcase.classList.contains("open")) {
-          closeSukoonOverlay();
-        }
-      }
+    document.addEventListener("keydown", e => {
+      if (e.key !== "Escape") return;
+      document.querySelectorAll(".modal.open, .showcase.open, .fullscreen-viewer.open").forEach(closeLayer);
     });
 
     window.addEventListener("DOMContentLoaded", () => {
