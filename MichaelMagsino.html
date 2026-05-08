@@ -18,7 +18,13 @@
       --ink: #111111;
       --blur: 5px;
       --transition: 260ms ease;
-      --max-width: 1400px;
+      --max-width: 100vw;
+    }
+
+    body.dark-mode {
+      --paper: #181818;
+      --paper-dark: #101010;
+      --ink: #f2f2ec;
     }
 
     * {
@@ -57,12 +63,40 @@
       font: inherit;
     }
 
+    .theme-toggle {
+      position: fixed;
+      top: clamp(16px, 2vw, 26px);
+      right: clamp(16px, 2vw, 26px);
+      z-index: 40;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      color: var(--ink);
+      box-shadow: 4px 4px 0 0 var(--ink);
+      padding: 9px 13px;
+      cursor: pointer;
+      font-family: "Special Elite", monospace;
+      font-size: clamp(0.68rem, 0.9vw, 0.78rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+    }
+
+    .theme-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 0 var(--ink);
+    }
+
+    body.dark-mode .theme-toggle {
+      background: rgba(24,24,24,0.9);
+    }
+
     .canvas {
       position: relative;
       min-height: 100vh;
-      width: min(100%, var(--max-width));
-      margin: 0 auto;
-      padding: 30px;
+      width: 100vw;
+      margin: 0;
+      padding: clamp(18px, 2vw, 32px);
       overflow: hidden;
       isolation: isolate;
     }
@@ -70,7 +104,7 @@
     .canvas::after {
       content: "";
       position: absolute;
-      inset: 18px;
+      inset: clamp(10px, 1.3vw, 18px);
       border: 2px dashed rgba(17,17,17,0.08);
       border-radius: 22px;
       pointer-events: none;
@@ -90,12 +124,12 @@
     }
 
     .centerpiece-inner {
-      max-width: 820px;
+      max-width: min(760px, 54vw);
     }
 
     .small-label {
       font-family: "Special Elite", monospace;
-      font-size: clamp(0.64rem, 1vw, 0.78rem);
+      font-size: clamp(0.7rem, 1vw, 0.9rem);
       text-transform: uppercase;
       letter-spacing: 0.16em;
       opacity: 0.72;
@@ -104,7 +138,7 @@
 
     #main-title {
       font-family: "Caveat", cursive;
-      font-size: clamp(2.9rem, 7.4vw, 6.6rem);
+      font-size: clamp(3.6rem, 7.8vw, 8.4rem);
       font-weight: 700;
       line-height: 0.92;
       letter-spacing: -0.02em;
@@ -128,7 +162,7 @@
 
     .subcopy {
       margin-top: clamp(12px, 1.6vw, 18px);
-      font-size: clamp(0.78rem, 1.1vw, 0.92rem);
+      font-size: clamp(0.85rem, 1.1vw, 1rem);
       max-width: 560px;
       margin-inline: auto;
       line-height: 1.6;
@@ -138,7 +172,7 @@
 
     .canvas-items {
       position: relative;
-      min-height: calc(100vh - 60px);
+      min-height: calc(100vh - 36px);
       z-index: 10;
     }
 
@@ -184,8 +218,8 @@
     }
 
     .canvas.has-focus .sketch-item.is-origin {
-      filter: blur(1px);
-      opacity: 0.48;
+      filter: none;
+      opacity: 0;
     }
 
     .sketch-svg {
@@ -193,7 +227,7 @@
       width: 100%;
       height: auto;
       overflow: visible;
-      filter: drop-shadow(4px 5px 0 rgba(17, 17, 17, 0.13));
+      filter: none;
     }
 
     .custom-sketch {
@@ -219,8 +253,8 @@
 
     .item-bio {
       top: 18%;
-      left: clamp(5%, 9vw, 13%);
-      --item-width: clamp(145px, 15vw, 210px);
+      left: clamp(8%, 16vw, 23%);
+      --item-width: clamp(230px, 19vw, 360px);
       --rotate: -9deg;
       --hover-rotate: -4deg;
       --delay: 120ms;
@@ -228,26 +262,26 @@
 
     .item-projects {
       top: 16%;
-      right: clamp(4%, 8vw, 12%);
-      --item-width: clamp(165px, 18vw, 265px);
+      right: clamp(8%, 16vw, 22%);
+      --item-width: clamp(270px, 24vw, 440px);
       --rotate: 7deg;
       --hover-rotate: 3deg;
       --delay: 220ms;
     }
 
     .item-resume {
-      bottom: 16%;
-      left: clamp(7%, 10vw, 16%);
-      --item-width: clamp(125px, 12vw, 175px);
+      bottom: 20%;
+      left: clamp(10%, 18vw, 24%);
+      --item-width: clamp(170px, 14vw, 260px);
       --rotate: 8deg;
       --hover-rotate: 4deg;
       --delay: 320ms;
     }
 
     .item-statement {
-      bottom: 14%;
-      right: clamp(7%, 10vw, 15%);
-      --item-width: clamp(145px, 15vw, 210px);
+      bottom: 19%;
+      right: clamp(10%, 18vw, 24%);
+      --item-width: clamp(195px, 16vw, 300px);
       --rotate: -7deg;
       --hover-rotate: -3deg;
       --delay: 420ms;
@@ -273,7 +307,7 @@
       border-radius: 22px;
       box-shadow: 11px 11px 0 0 var(--ink);
       padding: clamp(14px, 1.7vw, 20px);
-      width: clamp(240px, 26vw, 350px);
+      width: clamp(380px, 38vw, 620px);
       display: grid;
       gap: 12px;
       place-items: center;
@@ -287,7 +321,7 @@
 
     .focus-icon {
       width: 100%;
-      max-width: 250px;
+      max-width: 520px;
     }
 
     .focus-text {
@@ -437,6 +471,7 @@
     }
 
     .mini-card a,
+    .project-button,
     .resume-button {
       display: inline-block;
       margin-top: 6px;
@@ -463,6 +498,7 @@
     }
 
     .mini-card a:hover,
+    .project-button:hover,
     .resume-button:hover {
       transform: translateY(-2px);
       box-shadow: 6px 6px 0 0 var(--ink);
@@ -532,9 +568,340 @@
       background: white;
     }
 
+    .sukoon-showcase,
+    .corsair-showcase,
+    .gundam-showcase {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: var(--paper);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity var(--transition);
+      z-index: 82;
+    }
+
+    .sukoon-showcase.open,
+    .corsair-showcase.open,
+    .gundam-showcase.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .sukoon-header,
+    .corsair-header,
+    .gundam-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--ink);
+      background: rgba(255,255,255,0.92);
+      font-family: "Special Elite", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.8rem;
+    }
+
+    .sukoon-header button,
+    .corsair-header button,
+    .gundam-header button {
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: white;
+      color: var(--ink);
+      box-shadow: 3px 3px 0 0 var(--ink);
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .sukoon-header button:hover,
+    .corsair-header button:hover,
+    .gundam-header button:hover {
+      transform: translateY(-2px);
+      box-shadow: 5px 5px 0 0 var(--ink);
+    }
+
+    .sukoon-content,
+    .corsair-content,
+    .gundam-content {
+      overflow: auto;
+      padding: clamp(22px, 4vw, 46px);
+    }
+
+    .sukoon-intro,
+    .corsair-intro,
+    .gundam-intro {
+      max-width: 850px;
+      margin: 0 auto clamp(24px, 4vw, 42px);
+      text-align: center;
+    }
+
+    .sukoon-intro h2,
+    .corsair-intro h2,
+    .gundam-intro h2 {
+      font-family: "Caveat", cursive;
+      font-size: clamp(2.6rem, 5vw, 4.4rem);
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+
+    .sukoon-intro p,
+    .corsair-intro p,
+    .gundam-intro p {
+      font-size: clamp(0.95rem, 1.4vw, 1.08rem);
+      line-height: 1.7;
+    }
+
+    .sukoon-grid,
+    .corsair-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: clamp(18px, 3vw, 34px);
+      width: min(1180px, 100%);
+      margin: 0 auto;
+    }
+
+    .sukoon-item,
+    .corsair-item {
+      position: relative;
+      overflow: hidden;
+      border: 2px solid var(--ink);
+      border-radius: 22px;
+      background: white;
+      box-shadow: 8px 8px 0 0 var(--ink);
+      min-height: 280px;
+    }
+
+    .sukoon-item.instagram {
+      aspect-ratio: 1 / 1;
+    }
+
+    .sukoon-item.paper {
+      aspect-ratio: 8.5 / 11;
+      max-height: 760px;
+    }
+
+    .sukoon-item img,
+    .corsair-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: filter var(--transition), transform var(--transition);
+    }
+
+    .sukoon-carousel {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .sukoon-carousel img {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      animation: sukoonFade calc(var(--slides) * 3s) infinite;
+      animation-delay: calc(var(--i) * 3s);
+    }
+
+    .sukoon-carousel img:first-child {
+      opacity: 1;
+    }
+
+    .sukoon-overlay,
+    .corsair-overlay {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.62);
+      color: white;
+      text-align: center;
+      opacity: 0;
+      transition: opacity var(--transition);
+      pointer-events: none;
+    }
+
+    .sukoon-overlay h3,
+    .corsair-overlay h3 {
+      font-family: "Special Elite", monospace;
+      font-size: clamp(0.9rem, 1.4vw, 1.1rem);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .sukoon-overlay p,
+    .corsair-overlay p {
+      max-width: 44ch;
+      margin: 0 auto;
+      font-size: clamp(0.9rem, 1.25vw, 1rem);
+      line-height: 1.65;
+    }
+
+    .sukoon-item:hover img,
+    .corsair-item:hover img {
+      filter: blur(5px);
+      transform: scale(1.02);
+    }
+
+    .sukoon-item:hover .sukoon-overlay,
+    .corsair-item:hover .corsair-overlay {
+      opacity: 1;
+    }
+
+    .corsair-case-scroll {
+      width: min(1180px, 100%);
+      height: min(76vh, 860px);
+      margin: 0 auto clamp(26px, 4vw, 46px);
+      border: 2px solid var(--ink);
+      border-radius: 24px;
+      box-shadow: 10px 10px 0 0 var(--ink);
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: white;
+      scroll-behavior: smooth;
+    }
+
+    .corsair-case-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .corsair-gallery-title {
+      width: min(1180px, 100%);
+      margin: 0 auto 18px;
+      font-family: "Special Elite", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.86rem;
+      opacity: 0.72;
+    }
+
+    .corsair-item.wide {
+      aspect-ratio: 16 / 9;
+    }
+
+    .corsair-item.square {
+      aspect-ratio: 1 / 1;
+    }
+
+    .gundam-frame-wrap {
+      width: min(1180px, 100%);
+      height: min(76vh, 860px);
+      margin: 0 auto clamp(18px, 3vw, 28px);
+      border: 2px solid var(--ink);
+      border-radius: 24px;
+      box-shadow: 10px 10px 0 0 var(--ink);
+      overflow: hidden;
+      background: white;
+    }
+
+    .gundam-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: white;
+    }
+
+    .gundam-actions {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+    }
+
+    .gundam-actions a {
+      display: inline-block;
+      padding: 10px 14px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: white;
+      color: var(--ink);
+      text-decoration: none;
+      box-shadow: 4px 4px 0 0 var(--ink);
+      font-weight: 600;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .gundam-actions a:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 0 var(--ink);
+    }
+
     ul.scribble-list {
       margin: 8px 0 16px 18px;
       line-height: 1.8;
+    }
+
+    body.dark-mode .canvas::after,
+    body.dark-mode .modal-card::before {
+      border-color: rgba(242,242,236,0.18);
+    }
+
+    body.dark-mode .modal,
+    body.dark-mode .resume-viewer,
+    body.dark-mode .sukoon-showcase,
+    body.dark-mode .corsair-showcase,
+    body.dark-mode .gundam-showcase {
+      background: var(--paper);
+    }
+
+    body.dark-mode .modal {
+      background: rgba(0,0,0,0.48);
+    }
+
+    body.dark-mode .modal-card,
+    body.dark-mode .mini-card,
+    body.dark-mode .focus-card,
+    body.dark-mode .sukoon-item,
+    body.dark-mode .corsair-item,
+    body.dark-mode .corsair-case-scroll,
+    body.dark-mode .gundam-frame-wrap {
+      background: #181818;
+    }
+
+    body.dark-mode .resume-viewer-header,
+    body.dark-mode .sukoon-header,
+    body.dark-mode .corsair-header,
+    body.dark-mode .gundam-header {
+      background: rgba(24,24,24,0.92);
+    }
+
+    body.dark-mode .close-modal,
+    body.dark-mode .mini-card a,
+    body.dark-mode .project-button,
+    body.dark-mode .resume-button,
+    body.dark-mode .resume-viewer-actions a,
+    body.dark-mode .resume-viewer-actions button,
+    body.dark-mode .sukoon-header button,
+    body.dark-mode .corsair-header button,
+    body.dark-mode .gundam-header button,
+    body.dark-mode .gundam-actions a {
+      background: #181818;
+      color: var(--ink);
+    }
+
+    body.dark-mode .sketch-svg * {
+      stroke: var(--ink);
+    }
+
+    body.dark-mode .custom-sketch,
+    body.dark-mode .focus-icon .custom-sketch {
+      filter: invert(1);
+    }
+
+    body.dark-mode .resume-frame,
+    body.dark-mode .gundam-frame {
+      background: #ffffff;
     }
 
     @keyframes blink {
@@ -554,6 +921,24 @@
       }
     }
 
+    @keyframes sukoonFade {
+      0% {
+        opacity: 0;
+      }
+      4% {
+        opacity: 1;
+      }
+      24% {
+        opacity: 1;
+      }
+      30% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
+
     @media (max-width: 980px) {
       .canvas {
         min-height: 100svh;
@@ -570,26 +955,26 @@
 
       .item-bio {
         top: 17%;
-        left: 4%;
-        --item-width: 160px;
+        left: 5%;
+        --item-width: 190px;
       }
 
       .item-projects {
         top: 18%;
-        right: 3%;
-        --item-width: 205px;
+        right: 4%;
+        --item-width: 245px;
       }
 
       .item-resume {
-        bottom: 13%;
-        left: 8%;
-        --item-width: 145px;
+        bottom: 18%;
+        left: 7%;
+        --item-width: 155px;
       }
 
       .item-statement {
-        bottom: 12%;
-        right: 7%;
-        --item-width: 170px;
+        bottom: 17%;
+        right: 6%;
+        --item-width: 185px;
       }
     }
 
@@ -618,27 +1003,27 @@
       }
 
       .item-bio {
-        top: 12%;
+        top: 11%;
         left: 4%;
-        --item-width: 132px;
+        --item-width: 150px;
       }
 
       .item-projects {
-        top: 14%;
+        top: 13%;
         right: 2%;
-        --item-width: 155px;
+        --item-width: 175px;
       }
 
       .item-resume {
-        bottom: 12%;
-        left: 8%;
-        --item-width: 122px;
+        bottom: 16%;
+        left: 7%;
+        --item-width: 126px;
       }
 
       .item-statement {
-        bottom: 10%;
-        right: 6%;
-        --item-width: 142px;
+        bottom: 15%;
+        right: 5%;
+        --item-width: 145px;
       }
 
       .item-caption {
@@ -654,18 +1039,33 @@
       }
 
       .focus-card {
-        width: min(300px, 88vw);
+        width: min(360px, 88vw);
       }
 
-      .resume-viewer-header {
+      .resume-viewer-header,
+      .sukoon-header,
+      .corsair-header,
+      .gundam-header {
         align-items: flex-start;
         flex-direction: column;
+      }
+
+      .sukoon-grid,
+      .corsair-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .corsair-case-scroll,
+      .gundam-frame-wrap {
+        height: 72vh;
       }
     }
   </style>
 </head>
 <body>
   <main class="canvas" id="canvas">
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Toggle dark mode">Dark Mode</button>
+
     <section class="centerpiece" aria-label="Main title">
       <div class="centerpiece-inner">
         <div class="small-label">designer • ux/ui • creative technology</div>
@@ -709,6 +1109,13 @@
         data-target="modal-projects"
         aria-label="Open Projects section"
       >
+        <img
+          src="portfolio_images/Project_Sketch.png"
+          alt="Sketch representing Michael's projects"
+          class="sketch-svg custom-sketch"
+          onload="this.nextElementSibling.style.display='none'"
+          onerror="this.style.display='none'"
+        />
         <svg class="sketch-svg" viewBox="0 0 210 130" fill="none" xmlns="http://www.w3.org/2000/svg">
           <rect x="20" y="18" width="170" height="82" rx="8" stroke="#111" stroke-width="2.8"/>
           <path d="M72 108H138" stroke="#111" stroke-width="2.8"/>
@@ -729,6 +1136,13 @@
         data-target="modal-resume"
         aria-label="Open Resume section"
       >
+        <img
+          src="portfolio_images/Resume_Sketch.png"
+          alt="Sketch representing Michael's resume"
+          class="sketch-svg custom-sketch"
+          onload="this.nextElementSibling.style.display='none'"
+          onerror="this.style.display='none'"
+        />
         <svg class="sketch-svg" viewBox="0 0 165 200" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M35 12H104L130 38V186H35V12Z" stroke="#111" stroke-width="2.8"/>
           <path d="M104 12V38H130" stroke="#111" stroke-width="2.8"/>
@@ -748,6 +1162,13 @@
         data-target="modal-statement"
         aria-label="Open Artist Statement section"
       >
+        <img
+          src="portfolio_images/Statement_Sketch.png"
+          alt="Sketch representing Michael's artist statement"
+          class="sketch-svg custom-sketch"
+          onload="this.nextElementSibling.style.display='none'"
+          onerror="this.style.display='none'"
+        />
         <svg class="sketch-svg" viewBox="0 0 185 150" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M24 18H120L156 48V132H24V18Z" stroke="#111" stroke-width="2.8"/>
           <path d="M120 18V48H156" stroke="#111" stroke-width="2.8"/>
@@ -821,7 +1242,7 @@
             A brand-focused campaign and packaging exploration centered around one
             product across multiple touchpoints.
           </p>
-          <a href="#" target="_blank" rel="noreferrer">Project Link</a>
+          <button class="project-button" type="button" id="openCorsairShowcase">View Case Study</button>
         </div>
 
         <div class="mini-card">
@@ -830,7 +1251,7 @@
             A filterable web app for cataloging model kits, built with HTML, CSS,
             JavaScript, and a custom data structure.
           </p>
-          <a href="#" target="_blank" rel="noreferrer">Project Link</a>
+          <button class="project-button" type="button" id="openGundamShowcase">View Project</button>
         </div>
 
         <div class="mini-card">
@@ -839,7 +1260,7 @@
             Visual content for social media, newsletters, and web materials created
             for a mental wellness startup.
           </p>
-          <a href="#" target="_blank" rel="noreferrer">Project Link</a>
+          <button class="project-button" type="button" id="openSukoonShowcase">View Showcase</button>
         </div>
       </div>
     </div>
@@ -886,6 +1307,162 @@
     ></iframe>
   </div>
 
+  <div class="gundam-showcase" id="gundamShowcase" aria-hidden="true">
+    <div class="gundam-header">
+      <span>Gundam Collection App Showcase</span>
+      <button type="button" id="closeGundamShowcase" aria-label="Close Gundam showcase">✕</button>
+    </div>
+
+    <div class="gundam-content">
+      <section class="gundam-intro" aria-label="Gundam project introduction">
+        <h2>Gundam Collection App</h2>
+        <p>
+          This Gundam Collection App was created as my final project for CT120, serving as the culmination of the coding concepts learned throughout the quarter. The project uses HTML, CSS, JavaScript, and structured data to create an interactive model kit catalog with search, filtering, featured models, and a visual cost graph.
+        </p>
+      </section>
+
+      <div class="gundam-frame-wrap">
+        <iframe
+          src="gundam/index.html"
+          title="Gundam Collection App"
+          class="gundam-frame"
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <div class="gundam-actions">
+        <a href="gundam/index.html" target="_blank" rel="noreferrer">Open Full Site</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="corsair-showcase" id="corsairShowcase" aria-hidden="true">
+    <div class="corsair-header">
+      <span>Corsair Case Study Showcase</span>
+      <button type="button" id="closeCorsairShowcase" aria-label="Close Corsair showcase">✕</button>
+    </div>
+
+    <div class="corsair-content">
+      <section class="corsair-intro" aria-label="Corsair case study introduction">
+        <h2>Corsair Case Study</h2>
+        <p>
+          A brand-focused portfolio case study exploring the Corsair Vanguard Pro 96 across presentation, web banner, packaging, and social media touchpoints. The work focuses on product hierarchy, dark visual styling, brand consistency, and adapting one product into multiple polished design contexts.
+        </p>
+      </section>
+
+      <div class="corsair-case-scroll" aria-label="Scrollable Corsair case study">
+        <img
+          src="corsairpics/cspec.png"
+          alt="Scrollable Corsair case study presentation"
+          class="corsair-case-image"
+        />
+      </div>
+
+      <h3 class="corsair-gallery-title">Product Mockups</h3>
+      <section class="corsair-grid" aria-label="Corsair product mockups">
+        <article class="corsair-item wide">
+          <img src="corsairpics/cbanner.png" alt="Corsair Vanguard Pro 96 web banner mockup" />
+          <div class="corsair-overlay">
+            <div>
+              <h3>Web Banner Mockup</h3>
+              <p>A web banner concept for the Corsair Vanguard Pro 96, focusing on product hierarchy, dark brand styling, and a direct value line: “Compact Design. Elite Speed. Hall Effect Precision.”</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="corsair-item wide">
+          <img src="corsairpics/cpkg.png" alt="Corsair Vanguard Pro 96 packaging mockup" />
+          <div class="corsair-overlay">
+            <div>
+              <h3>Packaging Mockup</h3>
+              <p>A packaging concept for the Corsair Vanguard Pro 96, using Corsair’s high-contrast black and yellow brand language with a simplified product-focused layout.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="corsair-item square">
+          <img src="corsairpics/csocial.png" alt="Corsair Vanguard Pro 96 social media mockup" />
+          <div class="corsair-overlay">
+            <div>
+              <h3>Social Media Mockup</h3>
+              <p>A social media post mockup designed to match the visual tone of Corsair’s social presence after studying the brand’s existing product-focused content.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </div>
+
+  <div class="sukoon-showcase" id="sukoonShowcase" aria-hidden="true">
+    <div class="sukoon-header">
+      <span>Sukoon Visual Design Showcase</span>
+      <button type="button" id="closeSukoonShowcase" aria-label="Close Sukoon showcase">✕</button>
+    </div>
+
+    <div class="sukoon-content">
+      <section class="sukoon-intro" aria-label="Sukoon showcase introduction">
+        <h2>Sukoon Design Work</h2>
+        <p>
+          A selection of visual content created for Sukoon, including social media graphics, newsletter design, and branded communication materials. This work supported Sukoon’s digital presence through warm, minimal, and culturally thoughtful visuals across Instagram, LinkedIn, and email distribution.
+        </p>
+      </section>
+
+      <section class="sukoon-grid" aria-label="Sukoon selected design work">
+        <article class="sukoon-item instagram">
+          <div class="sukoon-carousel" style="--slides: 4;">
+            <img src="sukoonpics/SC1.png" alt="Sukoon Circle Instagram carousel slide 1" style="--i: 0;" />
+            <img src="sukoonpics/SC2.png" alt="Sukoon Circle Instagram carousel slide 2" style="--i: 1;" />
+            <img src="sukoonpics/SC3.png" alt="Sukoon Circle Instagram carousel slide 3" style="--i: 2;" />
+            <img src="sukoonpics/SC4.png" alt="Sukoon Circle Instagram carousel slide 4" style="--i: 3;" />
+          </div>
+          <div class="sukoon-overlay">
+            <div>
+              <h3>Sukoon Circle Instagram Carousel</h3>
+              <p>Instagram post series promoting Sukoon Circle, Sukoon’s inaugural in-person event.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="sukoon-item instagram">
+          <div class="sukoon-carousel" style="--slides: 6;">
+            <img src="sukoonpics/sh1.png" alt="Seasonal reflection Instagram carousel slide 1" style="--i: 0;" />
+            <img src="sukoonpics/sh2.png" alt="Seasonal reflection Instagram carousel slide 2" style="--i: 1;" />
+            <img src="sukoonpics/sh3.png" alt="Seasonal reflection Instagram carousel slide 3" style="--i: 2;" />
+            <img src="sukoonpics/sh4.png" alt="Seasonal reflection Instagram carousel slide 4" style="--i: 3;" />
+            <img src="sukoonpics/sh5.png" alt="Seasonal reflection Instagram carousel slide 5" style="--i: 4;" />
+            <img src="sukoonpics/sh6.png" alt="Seasonal reflection Instagram carousel slide 6" style="--i: 5;" />
+          </div>
+          <div class="sukoon-overlay">
+            <div>
+              <h3>Seasonal Reflection Instagram Carousel</h3>
+              <p>Instagram carousel reflecting on changing seasons and the emotions that can come with those transitions.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="sukoon-item paper">
+          <img src="sukoonpics/sn.png" alt="First Sukoon newsletter opening page" />
+          <div class="sukoon-overlay">
+            <div>
+              <h3>First Sukoon Newsletter</h3>
+              <p>The first newsletter distributed via email by Sukoon, shown through its opening page.</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="sukoon-item instagram">
+          <img src="sukoonpics/first.png" alt="First Sukoon LinkedIn post" />
+          <div class="sukoon-overlay">
+            <div>
+              <h3>First Sukoon LinkedIn Post</h3>
+              <p>The first LinkedIn post created for Sukoon, establishing an early visual direction for the brand’s professional social presence.</p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </div>
+  </div>
+
   <div class="modal" id="modal-statement" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Artist Statement section">✕</button>
@@ -905,6 +1482,7 @@
     const titleEl = document.getElementById("main-title");
     const body = document.body;
     const canvas = document.getElementById("canvas");
+    const themeToggle = document.getElementById("themeToggle");
 
     const focusPreview = document.getElementById("focusPreview");
     const focusIcon = document.getElementById("focusIcon");
@@ -917,8 +1495,37 @@
     const viewResumeButton = document.getElementById("viewResumeButton");
     const resumeViewer = document.getElementById("resumeViewer");
     const closeResumeViewer = document.getElementById("closeResumeViewer");
+    const openGundamShowcase = document.getElementById("openGundamShowcase");
+    const gundamShowcase = document.getElementById("gundamShowcase");
+    const closeGundamShowcase = document.getElementById("closeGundamShowcase");
+    const openCorsairShowcase = document.getElementById("openCorsairShowcase");
+    const corsairShowcase = document.getElementById("corsairShowcase");
+    const closeCorsairShowcase = document.getElementById("closeCorsairShowcase");
+    const openSukoonShowcase = document.getElementById("openSukoonShowcase");
+    const sukoonShowcase = document.getElementById("sukoonShowcase");
+    const closeSukoonShowcase = document.getElementById("closeSukoonShowcase");
 
     let isHoveringItem = false;
+
+    function updateThemeButton() {
+      const isDark = body.classList.contains("dark-mode");
+      themeToggle.textContent = isDark ? "Light Mode" : "Dark Mode";
+      themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+    }
+
+    function setTheme(mode) {
+      body.classList.toggle("dark-mode", mode === "dark");
+      localStorage.setItem("portfolio-theme", mode);
+      updateThemeButton();
+    }
+
+    function loadSavedTheme() {
+      const savedTheme = localStorage.getItem("portfolio-theme");
+      if (savedTheme === "dark") {
+        body.classList.add("dark-mode");
+      }
+      updateThemeButton();
+    }
 
     function typeTitle() {
       titleEl.textContent = "";
@@ -961,16 +1568,9 @@
 
       requestAnimationFrame(() => {
         const cardRect = focusCard.getBoundingClientRect();
-        const gap = 24;
 
-        let left;
+        let left = rect.left + rect.width / 2;
         let top = rect.top + rect.height / 2;
-
-        if (rect.left + rect.width / 2 < window.innerWidth / 2) {
-          left = rect.right + gap + cardRect.width / 2;
-        } else {
-          left = rect.left - gap - cardRect.width / 2;
-        }
 
         const minLeft = cardRect.width / 2 + 16;
         const maxLeft = window.innerWidth - cardRect.width / 2 - 16;
@@ -1036,6 +1636,47 @@
       body.classList.remove("modal-open");
     }
 
+    function openGundamOverlay() {
+      gundamShowcase.classList.add("open");
+      gundamShowcase.setAttribute("aria-hidden", "false");
+      body.classList.add("modal-open");
+    }
+
+    function closeGundamOverlay() {
+      gundamShowcase.classList.remove("open");
+      gundamShowcase.setAttribute("aria-hidden", "true");
+      body.classList.remove("modal-open");
+    }
+
+    function openCorsairOverlay() {
+      corsairShowcase.classList.add("open");
+      corsairShowcase.setAttribute("aria-hidden", "false");
+      body.classList.add("modal-open");
+    }
+
+    function closeCorsairOverlay() {
+      corsairShowcase.classList.remove("open");
+      corsairShowcase.setAttribute("aria-hidden", "true");
+      body.classList.remove("modal-open");
+    }
+
+    function openSukoonOverlay() {
+      sukoonShowcase.classList.add("open");
+      sukoonShowcase.setAttribute("aria-hidden", "false");
+      body.classList.add("modal-open");
+    }
+
+    function closeSukoonOverlay() {
+      sukoonShowcase.classList.remove("open");
+      sukoonShowcase.setAttribute("aria-hidden", "true");
+      body.classList.remove("modal-open");
+    }
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = body.classList.contains("dark-mode") ? "light" : "dark";
+      setTheme(nextTheme);
+    });
+
     items.forEach(item => {
       item.addEventListener("mouseenter", () => showPreview(item));
       item.addEventListener("focus", () => showPreview(item));
@@ -1046,6 +1687,12 @@
 
     viewResumeButton.addEventListener("click", openResumeViewer);
     closeResumeViewer.addEventListener("click", closeResumeViewerOverlay);
+    openGundamShowcase.addEventListener("click", openGundamOverlay);
+    closeGundamShowcase.addEventListener("click", closeGundamOverlay);
+    openCorsairShowcase.addEventListener("click", openCorsairOverlay);
+    closeCorsairShowcase.addEventListener("click", closeCorsairOverlay);
+    openSukoonShowcase.addEventListener("click", openSukoonOverlay);
+    closeSukoonShowcase.addEventListener("click", closeSukoonOverlay);
 
     closeButtons.forEach(button => {
       button.addEventListener("click", () => {
@@ -1071,10 +1718,23 @@
         if (resumeViewer.classList.contains("open")) {
           closeResumeViewerOverlay();
         }
+
+        if (gundamShowcase.classList.contains("open")) {
+          closeGundamOverlay();
+        }
+
+        if (corsairShowcase.classList.contains("open")) {
+          closeCorsairOverlay();
+        }
+
+        if (sukoonShowcase.classList.contains("open")) {
+          closeSukoonOverlay();
+        }
       }
     });
 
     window.addEventListener("DOMContentLoaded", () => {
+      loadSavedTheme();
       typeTitle();
     });
   </script>
