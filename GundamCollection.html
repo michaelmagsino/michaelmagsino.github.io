@@ -54,6 +54,21 @@
       font-size: 1rem;
     }
 
+    button {
+      background-color: #1f1f1f;
+      color: var(--accent);
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid #444;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+      color: #fff;
+    }
+
     .autocomplete-list {
       position: absolute;
       top: 100%;
@@ -177,8 +192,10 @@
 <body>
   <header>
     <h1>My Gundam Collection</h1>
+
     <div class="filter-controls">
-      <a class="doc-link" href="GundamCostGraph.html" target="_blank">Cost Graph</a>
+      <a class="doc-link" href="GundamCostGraph.html">Cost Graph</a>
+
       <select id="filterGrade">
         <option value="All">All Grades</option>
         <option value="HG">HG (1/144)</option>
@@ -186,16 +203,19 @@
         <option value="MG">MG (1/100)</option>
         <option value="PG">PG (1/60)</option>
       </select>
+
       <select id="sortOption">
         <option value="default">Sort By</option>
         <option value="priceLow">Price: Low to High</option>
         <option value="priceHigh">Price: High to Low</option>
         <option value="alpha">Alphabetical (A-Z)</option>
       </select>
+
       <div style="position: relative;">
         <input type="text" id="searchInput" placeholder="Search by name...">
         <div id="autocomplete" class="autocomplete-list"></div>
       </div>
+
       <button id="resetFilters">Reset</button>
     </div>
   </header>
@@ -220,6 +240,7 @@
     function showFeatured() {
       const featured = allKits[featuredIndex % allKits.length];
       const featuredDiv = document.getElementById('featuredGundam');
+
       featuredDiv.innerHTML = `
         <div class="featured">
           <img src="${featured.img}" alt="${featured.name}">
@@ -228,7 +249,9 @@
           <p><strong>Scale:</strong> ${featured.scale}</p>
           <p><strong>Price:</strong> $${featured.price.toFixed(2)}</p>
           <p><strong>Completed:</strong> ${featured.completion || 'WIP'}</p>
-        </div>`;
+        </div>
+      `;
+
       featuredIndex++;
       setTimeout(showFeatured, 5000);
     }
@@ -236,8 +259,10 @@
     function displayKits() {
       const kitsDiv = document.getElementById('kits');
       kitsDiv.innerHTML = '';
+
       const totalDiv = document.getElementById('total');
       let total = 0;
+
       const featured = allKits[(featuredIndex - 1 + allKits.length) % allKits.length];
 
       const gradeFilter = document.getElementById('filterGrade').value;
@@ -259,53 +284,77 @@
 
       displayed.forEach(kit => {
         total += kit.price;
+
         const kitDiv = document.createElement('div');
         kitDiv.className = 'kit';
         kitDiv.setAttribute('data-name', kit.name.toLowerCase());
+
         kitDiv.innerHTML = `
           <img src="${kit.img}" alt="${kit.name}">
           <h2>${kit.name}</h2>
           <p><strong>Grade:</strong> ${kit.grade}</p>
           <p><strong>Scale:</strong> ${kit.scale}</p>
           <p><strong>Price:</strong> $${kit.price.toFixed(2)}</p>
-          <p><strong>Completed:</strong> ${kit.completion || 'WIP'}</p>`;
+          <p><strong>Completed:</strong> ${kit.completion || 'WIP'}</p>
+        `;
+
         kitsDiv.appendChild(kitDiv);
       });
+
       totalDiv.textContent = `Total Spent: $${total.toFixed(2)}`;
     }
 
     document.getElementById('searchInput').addEventListener('input', function () {
       const val = this.value.toLowerCase();
       const list = document.getElementById('autocomplete');
+
       list.innerHTML = '';
-      if (!val) return;
+
+      if (!val) {
+        return;
+      }
 
       allKits.forEach(kit => {
         if (kit.name.toLowerCase().includes(val)) {
           const item = document.createElement('div');
           item.className = 'autocomplete-item';
-          item.innerHTML = `<img src="${kit.img}" alt="" /><span>${kit.name}</span>`;
+
+          item.innerHTML = `
+            <img src="${kit.img}" alt="" />
+            <span>${kit.name}</span>
+          `;
+
           item.addEventListener('click', () => {
-            const card = [...document.querySelectorAll('.kit')].find(k => k.dataset.name === kit.name.toLowerCase());
+            const card = [...document.querySelectorAll('.kit')].find(k => {
+              return k.dataset.name === kit.name.toLowerCase();
+            });
+
             if (card) {
               card.scrollIntoView({ behavior: 'smooth', block: 'center' });
               card.classList.add('highlight');
-              setTimeout(() => card.classList.remove('highlight'), 2000);
+
+              setTimeout(() => {
+                card.classList.remove('highlight');
+              }, 2000);
             }
+
             document.getElementById('autocomplete').innerHTML = '';
             document.getElementById('searchInput').value = '';
           });
+
           list.appendChild(item);
         }
       });
     });
-  document.getElementById('filterGrade').addEventListener('change', displayKits);
-  document.getElementById('sortOption').addEventListener('change', displayKits);
-  document.getElementById('resetFilters').addEventListener('click', () => {
-    document.getElementById('filterGrade').value = 'All';
-    document.getElementById('sortOption').value = 'default';
-    displayKits();
-  });
+
+    document.getElementById('filterGrade').addEventListener('change', displayKits);
+    document.getElementById('sortOption').addEventListener('change', displayKits);
+
+    document.getElementById('resetFilters').addEventListener('click', () => {
+      document.getElementById('filterGrade').value = 'All';
+      document.getElementById('sortOption').value = 'default';
+      displayKits();
+    });
   </script>
 </body>
 </html>

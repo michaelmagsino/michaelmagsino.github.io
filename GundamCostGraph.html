@@ -13,6 +13,11 @@
       --panel-light: #222;
       --text: #eee;
       --muted: #ccc;
+
+      --hg-blue: #3aa7ff;
+      --rg-green: #46d369;
+      --mg-red: #ff4d5a;
+      --pg-yellow: #ffd84d;
     }
 
     body {
@@ -78,6 +83,53 @@
       padding: 1rem;
       box-shadow: 0 0 20px rgba(156, 107, 255, 0.08);
       box-sizing: border-box;
+      position: relative;
+    }
+
+    .legend {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      background-color: rgba(17, 17, 17, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 0.5rem 0.75rem;
+      z-index: 2;
+      backdrop-filter: blur(8px);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+      color: #ddd;
+    }
+
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-dot.hg {
+      background-color: var(--hg-blue);
+    }
+
+    .legend-dot.rg {
+      background-color: var(--rg-green);
+    }
+
+    .legend-dot.mg {
+      background-color: var(--mg-red);
+    }
+
+    .legend-dot.pg {
+      background-color: var(--pg-yellow);
     }
 
     canvas {
@@ -109,6 +161,16 @@
       color: var(--accent);
       display: block;
       margin-bottom: 0.25rem;
+    }
+
+    .tooltip-grade {
+      display: inline-block;
+      margin: 0.2rem 0;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      color: #111;
+      font-size: 0.8rem;
+      font-weight: 700;
     }
 
     #tooltip img {
@@ -156,6 +218,14 @@
         height: 75vh;
         padding: 0 1rem 1rem;
       }
+
+      .legend {
+        top: 1.25rem;
+        right: 1.25rem;
+        left: 1.25rem;
+        justify-content: center;
+        border-radius: 14px;
+      }
     }
   </style>
 </head>
@@ -169,6 +239,28 @@
 
   <main>
     <div class="chart-card">
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot hg"></span>
+          <span>HG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot rg"></span>
+          <span>RG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot mg"></span>
+          <span>MG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot pg"></span>
+          <span>PG</span>
+        </div>
+      </div>
+
       <canvas id="costChart"></canvas>
     </div>
 
@@ -190,6 +282,13 @@
       october: 9,
       november: 10,
       december: 11
+    };
+
+    const gradeColors = {
+      HG: "#3aa7ff",
+      RG: "#46d369",
+      MG: "#ff4d5a",
+      PG: "#ffd84d"
     };
 
     function parsePurchaseDate(purchaseText) {
@@ -304,7 +403,8 @@
             grade: kit.grade,
             scale: kit.scale,
             purchased: kit["Purchased on"],
-            img: kit.img
+            img: kit.img,
+            color: gradeColors[kit.grade] || "#9c6bff"
           };
         });
 
@@ -318,12 +418,13 @@
               {
                 label: "Gundam Kit Cost",
                 data: scatterData,
-                backgroundColor: "rgba(156, 107, 255, 0.9)",
-                borderColor: "#9c6bff",
+                backgroundColor: function(context) {
+                  return context.raw.color;
+                },
+                borderColor: "#ffffff",
                 pointRadius: 9,
                 pointHoverRadius: 14,
-                pointBorderWidth: 2,
-                pointBorderColor: "#ffffff"
+                pointBorderWidth: 2
               }
             ]
           },
@@ -387,7 +488,8 @@
 
                 tooltip.innerHTML = `
                   <strong>${kit.name}</strong>
-                  <span>${kit.grade} | ${kit.scale}</span><br>
+                  <span class="tooltip-grade" style="background-color: ${kit.color};">${kit.grade}</span><br>
+                  <span>${kit.scale}</span><br>
                   <span>${kit.purchased}</span><br>
                   <span>$${kit.y.toFixed(2)}</span>
                   <img src="${kit.img}" alt="${kit.name}">
