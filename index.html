@@ -104,11 +104,63 @@
       top: clamp(16px, 2vw, 26px);
       right: clamp(16px, 2vw, 26px);
       z-index: 40;
-      border-radius: 999px;
-      padding: 9px 13px;
-      font-size: clamp(.68rem, .9vw, .78rem);
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      width: clamp(58px, 7vw, 78px);
+      padding: 7px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
       text-transform: uppercase;
       letter-spacing: .08em;
+    }
+
+    .theme-toggle:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .theme-toggle:hover .theme-toggle-text {
+      transform: translateY(-2px) rotate(2deg);
+      opacity: 1;
+    }
+
+    .theme-icon-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+    }
+
+    .theme-icon {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 420ms ease, filter var(--ease);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .theme-icon-dark { opacity: 0; }
+    .theme-icon-light { opacity: 1; }
+    body.dark-mode .theme-icon-light { opacity: 0; }
+    body.dark-mode .theme-icon-dark { opacity: 1; }
+
+    .theme-toggle-text {
+      font-family: "Special Elite", monospace;
+      font-size: clamp(.55rem, .8vw, .68rem);
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      opacity: .75;
+      transition: transform 300ms cubic-bezier(.18,.89,.32,1.1), opacity var(--ease);
+    }
+
+    body.dark-mode .theme-toggle-text {
+      transform: translateY(1px);
     }
 
     .canvas {
@@ -430,7 +482,13 @@
 </head>
 <body>
   <main class="canvas" id="canvas">
-    <button class="theme-toggle font-sketch" type="button" id="themeToggle" aria-label="Toggle dark mode">Dark Mode</button>
+    <button class="theme-toggle font-sketch" type="button" id="themeToggle" aria-label="Switch to dark mode">
+      <span class="theme-icon-wrap" aria-hidden="true">
+        <img class="theme-icon theme-icon-light" src="portfolio_images/Light.png" alt="" />
+        <img class="theme-icon theme-icon-dark" src="portfolio_images/Dark.png" alt="" />
+      </span>
+      <span class="theme-toggle-text" id="themeToggleText">Turn Off</span>
+    </button>
 
     <section class="centerpiece" aria-label="Main title">
       <div class="centerpiece-inner">
@@ -640,7 +698,7 @@
     function setTheme(mode) {
       body.classList.toggle("dark-mode", mode === "dark");
       localStorage.setItem("portfolio-theme", mode);
-      themeToggle.textContent = mode === "dark" ? "Light Mode" : "Dark Mode";
+      document.getElementById("themeToggleText").textContent = mode === "dark" ? "Turn On" : "Turn Off";
       themeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
     }
 
