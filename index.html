@@ -165,7 +165,7 @@
 
     .canvas {
       position: relative;
-      width: 100vw;
+      width: 100%;
       min-height: 100vh;
       padding: clamp(18px, 2vw, 32px);
       overflow: hidden;
@@ -765,8 +765,20 @@
       const rect = item.getBoundingClientRect();
       requestAnimationFrame(() => {
         const cr = card.getBoundingClientRect();
-        card.style.left = `${Math.max(cr.width / 2 + 16, Math.min(rect.left + rect.width / 2, innerWidth - cr.width / 2 - 16))}px`;
-        card.style.top = `${Math.max(cr.height / 2 + 16, Math.min(rect.top + rect.height / 2, innerHeight - cr.height / 2 - 16))}px`;
+        const margin = 32;
+        const pageWidth = document.documentElement.clientWidth;
+        const pageHeight = document.documentElement.clientHeight;
+        const cardWidth = card.offsetWidth;
+        const cardHeight = card.offsetHeight;
+        const minLeft = cardWidth / 2 + margin;
+        const maxLeft = pageWidth - cardWidth / 2 - margin;
+        const minTop = cardHeight / 2 + margin;
+        const maxTop = pageHeight - cardHeight / 2 - margin;
+        const preferredLeft = rect.left + rect.width / 2;
+        const preferredTop = rect.top + rect.height / 2;
+
+        card.style.left = `${Math.max(minLeft, Math.min(preferredLeft, maxLeft))}px`;
+        card.style.top = `${Math.max(minTop, Math.min(preferredTop, maxTop))}px`;
       });
     }
 
