@@ -142,7 +142,7 @@
       transition: filter var(--ease), opacity var(--ease);
     }
 
-    .centerpiece-inner { max-width: min(760px, 54vw); }
+    .centerpiece-inner { max-width: min(860px, 48vw); }
     .small-label { font-size: clamp(.7rem, 1vw, .9rem); text-transform: uppercase; letter-spacing: .16em; opacity: .72; margin-bottom: 14px; }
 
     #main-title {
@@ -150,11 +150,12 @@
       display: inline-block;
       min-height: 1.1em;
       font-family: Caveat, cursive;
-      font-size: clamp(3.6rem, 7.8vw, 8.4rem);
+      font-size: clamp(3.5rem, 7.1vw, 7.8rem);
       font-weight: 700;
       line-height: .92;
       letter-spacing: -.02em;
       text-wrap: balance;
+      white-space: pre-line;
     }
 
     #main-title.typing::after {
@@ -205,8 +206,8 @@
       transform: rotate(calc(var(--r, 0deg) * -.25));
     }
 
-    .item-bio { top: 18%; left: clamp(8%, 16vw, 23%); --w: clamp(230px, 19vw, 360px); --r: -9deg; --hr: -4deg; --d: 120ms; }
-    .item-projects { top: 16%; right: clamp(8%, 16vw, 22%); --w: clamp(270px, 24vw, 440px); --r: 7deg; --hr: 3deg; --d: 220ms; }
+    .item-bio { top: 18%; left: clamp(4%, 10vw, 14%); --w: clamp(220px, 18vw, 340px); --r: -9deg; --hr: -4deg; --d: 120ms; }
+    .item-projects { top: 15%; right: clamp(3%, 8vw, 12%); --w: clamp(245px, 20vw, 380px); --r: 7deg; --hr: 3deg; --d: 220ms; }
     .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(170px, 14vw, 260px); --r: 8deg; --hr: 4deg; --d: 320ms; }
     .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(195px, 16vw, 300px); --r: -7deg; --hr: -3deg; --d: 420ms; }
 
@@ -224,17 +225,66 @@
       border: 2px solid var(--ink);
       border-radius: 22px;
       box-shadow: 11px 11px 0 var(--ink);
-      transform: translate(-50%, -50%) scale(.96) rotate(-1deg);
-      transition: transform var(--ease), left var(--ease), top var(--ease);
+      transform: translate(-50%, -50%) scale(.18) rotate(var(--r, -1deg));
+      transform-origin: center;
+      transition: transform 320ms cubic-bezier(.2,.85,.22,1.15), left var(--ease), top var(--ease);
     }
 
-    .focus-preview.visible .focus-card { transform: translate(-50%, -50%) scale(1) rotate(-1deg); }
+    .focus-preview.visible .focus-card {
+      transform: translate(-50%, -50%) scale(1) rotate(var(--r, -1deg));
+    }
+    .focus-card.compact-hover { width: clamp(260px, 26vw, 420px); }
+    .focus-card.compact-hover .focus-icon { max-width: 340px; }
     .focus-icon { width: 100%; max-width: 520px; }
     .focus-text { text-align: center; }
     .focus-label-wrap { display: inline-block; max-width: 100%; overflow: hidden; white-space: nowrap; }
-    .focus-label { display: inline-block; font-family: Caveat, cursive; font-size: clamp(1.8rem, 3vw, 2.35rem); line-height: 1; white-space: nowrap; transform: translateX(-105%); opacity: 0; }
-    .focus-label.write-in { animation: revealText .58s steps(18, end) forwards; }
+    .focus-label {
+      display: inline-block;
+      font-family: Caveat, cursive;
+      font-size: clamp(1.8rem, 3vw, 2.35rem);
+      line-height: 1;
+      white-space: nowrap;
+      opacity: 1;
+    }
     .focus-hint { margin-top: 6px; font-size: clamp(.66rem, 1vw, .78rem); opacity: .65; }
+    .bio-id-flip {
+      position: relative;
+      width: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .bio-id-face {
+      width: 100%;
+      height: auto;
+      display: block;
+      backface-visibility: hidden;
+    }
+    .bio-id-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+    }
+
+    .bio-id-stage {
+      display: grid;
+      gap: 16px;
+      justify-items: center;
+      padding: 6px 0 2px;
+      perspective: 1200px;
+    }
+
+    .bio-id-flip {
+      max-width: 620px;
+      transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .bio-id-flip.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .bio-id-button {
+      margin-top: 4px;
+    }
 
     .layer { position: fixed; inset: 0; opacity: 0; pointer-events: none; transition: opacity var(--ease); }
     .layer.open { opacity: 1; pointer-events: auto; }
@@ -344,7 +394,6 @@
     .scribble-list { margin: 8px 0 16px 18px; line-height: 1.8; }
 
     @keyframes blink { 50% { opacity: 0; } }
-    @keyframes revealText { from { transform: translateX(-105%); opacity: 1; } to { transform: translateX(0); opacity: 1; } }
     @keyframes carouselFade { 0% { opacity: 0; } 4% { opacity: 1; } 24% { opacity: 1; } 30% { opacity: 0; } 100% { opacity: 0; } }
 
     @media (max-width: 980px) {
@@ -352,7 +401,7 @@
       .centerpiece { min-height: 100svh; }
       .canvas-items { min-height: calc(100svh - 60px); }
       .item-bio { top: 17%; left: 5%; --w: 190px; }
-      .item-projects { top: 18%; right: 4%; --w: 245px; }
+      .item-projects { top: 17%; right: 2%; --w: 225px; }
       .item-resume { bottom: 18%; left: 7%; --w: 155px; }
       .item-statement { bottom: 17%; right: 6%; --w: 185px; }
     }
@@ -364,7 +413,7 @@
       #main-title { font-size: clamp(3.2rem, 15vw, 5rem); }
       .subcopy { font-size: .9rem; }
       .item-bio { top: 11%; left: 4%; --w: 150px; }
-      .item-projects { top: 13%; right: 2%; --w: 175px; }
+      .item-projects { top: 13%; right: 1%; --w: 160px; }
       .item-resume { bottom: 16%; left: 7%; --w: 126px; }
       .item-statement { bottom: 15%; right: 5%; --w: 145px; }
       .item-caption { font-size: .62rem; }
@@ -416,7 +465,7 @@
       <div class="focus-icon" id="focusIcon"></div>
       <div class="focus-text">
         <span class="focus-label-wrap"><span class="focus-label" id="focusLabel"></span></span>
-        <div class="focus-hint">click to open</div>
+        <div class="focus-hint" id="focusHint">click to open</div>
       </div>
     </div>
   </div>
@@ -424,15 +473,13 @@
   <div class="layer modal" id="modal-bio" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Bio section">✕</button>
-      <div class="modal-kicker">Profile</div>
-      <h2>About Me</h2>
-      <p>I’m Michael Magsino, a multidisciplinary creative focused on graphic design, UX/UI, and creative technology. My work often blends visual polish with interactive thinking, and I’m especially drawn to projects that feel expressive, intentional, and human.</p>
-      <p>I’m interested in how design can shape atmosphere, storytelling, and emotional connection, whether that takes the form of a website, interface, campaign, or interactive experience.</p>
-      <ul class="scribble-list">
-        <li>Creative Technologies student at UC Santa Cruz</li>
-        <li>Focus areas: graphic design, UX/UI, web design, and sound-based experimentation</li>
-        <li>Interested in portfolio-building, visual systems, and thoughtful digital experiences</li>
-      </ul>
+      <div class="bio-id-stage">
+        <div class="bio-id-flip" id="bioFlipCard" aria-label="Flippable ID card with Michael Magsino's bio information">
+          <img class="bio-id-face bio-id-front" src="portfolio_images/Michael_ID.png" alt="Front of Michael Magsino ID card" />
+          <img class="bio-id-face bio-id-back" src="portfolio_images/IDB_Sketch.png" alt="Back of Michael Magsino ID card with bio information" />
+        </div>
+        <button class="btn bio-id-button" type="button" id="bioFlipButton">Click to flip over</button>
+      </div>
     </div>
   </div>
 
@@ -572,7 +619,10 @@
     const focusPreview = document.getElementById("focusPreview");
     const focusIcon = document.getElementById("focusIcon");
     const focusLabel = document.getElementById("focusLabel");
+    const focusHint = document.getElementById("focusHint");
     const items = document.querySelectorAll(".sketch-item");
+    const bioFlipCard = document.getElementById("bioFlipCard");
+    const bioFlipButton = document.getElementById("bioFlipButton");
     let isHoveringItem = false;
 
     function setTheme(mode) {
@@ -583,7 +633,7 @@
     }
 
     function typeTitle() {
-      const title = "Michael Magsino's Portfolio";
+      const title = "Michael Magsino's Sketchbook";
       let i = 0;
       titleEl.textContent = "";
       titleEl.classList.add("typing");
@@ -626,15 +676,21 @@
       canvas.classList.add("has-focus");
       items.forEach(el => el.classList.remove("is-origin"));
       item.classList.add("is-origin");
-      const icon = item.querySelector("img").cloneNode(true);
-      focusIcon.replaceChildren(icon);
+      if (item.dataset.label === "Bio") {
+        const icon = item.querySelector("img").cloneNode(true);
+        focusIcon.replaceChildren(icon);
+        focusHint.textContent = "click to inspect";
+      } else {
+        const icon = item.querySelector("img").cloneNode(true);
+        focusIcon.replaceChildren(icon);
+        focusHint.textContent = "click to open";
+      }
       focusLabel.textContent = item.dataset.label;
-      focusLabel.classList.remove("write-in");
-      void focusLabel.offsetWidth;
-      focusLabel.classList.add("write-in");
+      
       focusPreview.classList.add("visible");
       focusPreview.setAttribute("aria-hidden", "false");
       const card = focusPreview.querySelector(".focus-card");
+      card.classList.toggle("compact-hover", item.dataset.label === "Resume" || item.dataset.label === "Artist Statement");
       const rect = item.getBoundingClientRect();
       requestAnimationFrame(() => {
         const cr = card.getBoundingClientRect();
@@ -655,6 +711,11 @@
     }
 
     themeToggle.addEventListener("click", () => setTheme(body.classList.contains("dark-mode") ? "light" : "dark"));
+
+    bioFlipButton.addEventListener("click", () => {
+      bioFlipCard.classList.toggle("is-flipped");
+      bioFlipButton.textContent = bioFlipCard.classList.contains("is-flipped") ? "Flip to front" : "Click to flip over";
+    });
 
     items.forEach(item => {
       item.addEventListener("mouseenter", () => showPreview(item));
