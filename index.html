@@ -962,94 +962,65 @@
       };
     }
 
-    function randomNearTitle(width, height) {
+    function getQuadrantSlots() {
       const title = getTitleBounds();
-      const side = ["top", "right", "bottom", "left"][Math.floor(Math.random() * 4)];
-      const gap = imageGap + 46 + Math.random() * 90;
-      let left = boundaryMargin;
-      let top = boundaryMargin;
-
-      if (side === "top") {
-        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
-        top = title.top - height - gap;
-      } else if (side === "right") {
-        left = title.right + gap;
-        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
-      } else if (side === "bottom") {
-        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
-        top = title.bottom + gap;
-      } else {
-        left = title.left - width - gap;
-        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
-      }
-
-      return clampPosition(left, top, width, height);
-    }
-
-    function randomAnywhere(width, height) {
-      return clampPosition(
-        boundaryMargin + Math.random() * Math.max(0, canvas.clientWidth - width - boundaryMargin * 2),
-        boundaryMargin + Math.random() * Math.max(0, canvas.clientHeight - height - boundaryMargin * 2),
-        width,
-        height
-      );
-    }
-
-    function getPresetSlots(width, height) {
-      const title = getTitleBounds();
-      const gap = imageGap + 70;
       return [
-        { left: title.left - width - gap, top: title.top - height * 0.2 },
-        { left: title.right + gap, top: title.top - height * 0.2 },
-        { left: title.left - width * 0.55, top: title.top - height - gap },
-        { left: title.right - width * 0.45, top: title.top - height - gap },
-        { left: title.left - width * 0.55, top: title.bottom + gap },
-        { left: title.right - width * 0.45, top: title.bottom + gap },
-        { left: title.left - width - gap, top: title.bottom - height * 0.8 },
-        { left: title.right + gap, top: title.bottom - height * 0.8 }
-      ].map(pos => clampPosition(pos.left, pos.top, width, height));
+        {
+          name: "top-left",
+          left: boundaryMargin,
+          top: boundaryMargin,
+          right: Math.max(boundaryMargin, title.left - imageGap),
+          bottom: Math.max(boundaryMargin, title.top - imageGap)
+        },
+        {
+          name: "top-right",
+          left: Math.min(canvas.clientWidth - boundaryMargin, title.right + imageGap),
+          top: boundaryMargin,
+          right: canvas.clientWidth - boundaryMargin,
+          bottom: Math.max(boundaryMargin, title.top - imageGap)
+        },
+        {
+          name: "bottom-left",
+          left: boundaryMargin,
+          top: Math.min(canvas.clientHeight - boundaryMargin, title.bottom + imageGap),
+          right: Math.max(boundaryMargin, title.left - imageGap),
+          bottom: canvas.clientHeight - boundaryMargin
+        },
+        {
+          name: "bottom-right",
+          left: Math.min(canvas.clientWidth - boundaryMargin, title.right + imageGap),
+          top: Math.min(canvas.clientHeight - boundaryMargin, title.bottom + imageGap),
+          right: canvas.clientWidth - boundaryMargin,
+          bottom: canvas.clientHeight - boundaryMargin
+        }
+      ];
     }
 
-    function findCleanSpawn(item, placedBoxes) {
+    function placeItemInSlot(item, slot) {
       const { width, height } = getItemSize(item);
-      const isClean = position => {
-        const box = makeBox(position.left, position.top, width, height);
-        return !rectsOverlap(box, getTitleBounds()) && !placedBoxes.some(placed => rectsOverlap(box, placed));
-      };
+      const slotWidth = Math.max(0, slot.right - slot.left);
+      const slotHeight = Math.max(0, slot.bottom - slot.top);
 
-      for (let tries = 0; tries < 320; tries++) {
-        const position = tries < 220 ? randomNearTitle(width, height) : randomAnywhere(width, height);
-        if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
-      }
+      let left = slot.left + (slotWidth - width) / 2;
+      let top = slot.top + (slotHeight - height) / 2;
 
-      const slots = getPresetSlots(width, height).sort(() => Math.random() - 0.5);
-      for (const position of slots) {
-        if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
-      }
+      left += (Math.random() - 0.5) * Math.min(42, Math.max(0, slotWidth - width));
+      top += (Math.random() - 0.5) * Math.min(42, Math.max(0, slotHeight - height));
 
-      for (let top = boundaryMargin; top < canvas.clientHeight - height - boundaryMargin; top += 38) {
-        for (let left = boundaryMargin; left < canvas.clientWidth - width - boundaryMargin; left += 38) {
-          const position = clampPosition(left, top, width, height);
-          if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
-        }
-      }
-
-      const position = randomAnywhere(width, height);
-      return { position, box: makeBox(position.left, position.top, width, height) };
+      const position = clampPosition(left, top, width, height);
+      item.style.left = `${position.left}px`;
+      item.style.top = `${position.top}px`;
+      item.style.right = "auto";
+      item.style.bottom = "auto";
+      lastSafePositions.set(item, position);
     }
 
     function randomizeItems() {
-      const placedBoxes = [];
       const shuffledItems = [...items].sort(() => Math.random() - 0.5);
+      const shuffledSlots = getQuadrantSlots().sort(() => Math.random() - 0.5);
 
-      shuffledItems.forEach(item => {
-        const spawn = findCleanSpawn(item, placedBoxes);
-        placedBoxes.push(spawn.box);
-        item.style.left = `${spawn.position.left}px`;
-        item.style.top = `${spawn.position.top}px`;
-        item.style.right = "auto";
-        item.style.bottom = "auto";
-        lastSafePositions.set(item, spawn.position);
+      shuffledItems.forEach((item, index) => {
+        placeItemInSlot(item, shuffledSlots[index]);
       });
     }
 
