@@ -261,10 +261,10 @@
       transform: rotate(calc(var(--r, 0deg) * -.25));
     }
 
-    .item-bio { top: 18%; left: clamp(4%, 10vw, 14%); --w: clamp(220px, 18vw, 340px); --r: -9deg; --hr: -4deg; --d: 120ms; }
-    .item-projects { top: 15%; right: clamp(3%, 8vw, 12%); --w: clamp(245px, 20vw, 380px); --r: 7deg; --hr: 3deg; --d: 220ms; }
-    .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(170px, 14vw, 260px); --r: 8deg; --hr: 4deg; --d: 320ms; }
-    .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(195px, 16vw, 300px); --r: -7deg; --hr: -3deg; --d: 420ms; }
+    .item-bio { top: 18%; left: clamp(4%, 10vw, 14%); --w: clamp(255px, 21vw, 390px); --r: -9deg; --hr: -4deg; --d: 120ms; }
+    .item-projects { top: 15%; right: clamp(3%, 8vw, 12%); --w: clamp(280px, 23vw, 430px); --r: 7deg; --hr: 3deg; --d: 220ms; }
+    .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(200px, 16.5vw, 300px); --r: 8deg; --hr: 4deg; --d: 320ms; }
+    .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(230px, 18.5vw, 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
 
     .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
     .focus-preview.visible { opacity: 1; }
@@ -442,6 +442,39 @@
       box-shadow: 10px 10px 0 var(--ink);
     }
 
+    .wide-frame {
+      height: auto;
+      max-width: 980px;
+      padding: 0;
+      background: transparent;
+    }
+
+    .hiraeth-image-card {
+      width: 100%;
+      min-height: 0;
+      border: 0;
+      border-radius: 20px;
+      box-shadow: none;
+    }
+
+    .project-writeup {
+      width: min(900px, 100%);
+      margin: 0 auto;
+      padding: clamp(18px, 3vw, 28px);
+      background: var(--card);
+      border: 2px solid var(--ink);
+      border-radius: 22px;
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .project-writeup p {
+      margin-bottom: 16px;
+      font-size: clamp(.94rem, 1.25vw, 1.05rem);
+      line-height: 1.75;
+    }
+
+    .project-writeup p:last-child { margin-bottom: 0; }
+
     .scroll-frame { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
     .scroll-frame img { display: block; width: 100%; height: auto; }
     .gallery-title { width: min(1180px, 100%); margin: 0 auto 18px; text-transform: uppercase; letter-spacing: .08em; font-size: .86rem; opacity: .72; }
@@ -455,10 +488,10 @@
       .canvas { min-height: 100svh; }
       .centerpiece { min-height: 100svh; }
       .canvas-items { min-height: calc(100svh - 60px); }
-      .item-bio { top: 17%; left: 5%; --w: 190px; }
-      .item-projects { top: 17%; right: 2%; --w: 225px; }
-      .item-resume { bottom: 18%; left: 7%; --w: 155px; }
-      .item-statement { bottom: 17%; right: 6%; --w: 185px; }
+      .item-bio { top: 17%; left: 5%; --w: 215px; }
+      .item-projects { top: 17%; right: 2%; --w: 250px; }
+      .item-resume { bottom: 18%; left: 7%; --w: 178px; }
+      .item-statement { bottom: 17%; right: 6%; --w: 210px; }
     }
 
     @media (max-width: 700px) {
@@ -467,10 +500,10 @@
       .canvas-items { min-height: 105svh; }
       #main-title { font-size: clamp(3.2rem, 15vw, 5rem); }
       .subcopy { font-size: .9rem; }
-      .item-bio { top: 11%; left: 4%; --w: 150px; }
-      .item-projects { top: 13%; right: 1%; --w: 160px; }
-      .item-resume { bottom: 16%; left: 7%; --w: 126px; }
-      .item-statement { bottom: 15%; right: 5%; --w: 145px; }
+      .item-bio { top: 11%; left: 4%; --w: 160px; }
+      .item-projects { top: 13%; right: 1%; --w: 172px; }
+      .item-resume { bottom: 16%; left: 7%; --w: 136px; }
+      .item-statement { bottom: 15%; right: 5%; --w: 156px; }
       .item-caption { font-size: .62rem; }
       .sketch-grid, .showcase-grid { grid-template-columns: 1fr; }
       .modal-card { padding: 20px; }
@@ -554,7 +587,7 @@
         <div class="mini-card">
           <h3>Hiraeth UI</h3>
           <p>A diegetic UI concept for a narrative game exploring memory, surveillance, and climate collapse.</p>
-          <a class="btn" href="#" target="_blank" rel="noreferrer">Project Link</a>
+          <button class="btn" type="button" data-open="hiraethShowcase">View Concept</button>
         </div>
 
         <div class="mini-card">
@@ -606,6 +639,41 @@
       </div>
     </div>
     <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
+  </div>
+
+  <div class="layer showcase" id="hiraethShowcase" aria-hidden="true">
+    <div class="bar">
+      <span>Hiraeth UI Showcase</span>
+      <button type="button" data-close="hiraethShowcase" aria-label="Close Hiraeth showcase">✕</button>
+    </div>
+    <div class="showcase-content">
+      <section class="showcase-intro" aria-label="Hiraeth UI project introduction">
+        <h2>Hiraeth UI</h2>
+        <p>A diegetic UX/UI system concept for a student game set in a future flooded Chicago, where interface design becomes part of the world, the player’s perception, and the story itself.</p>
+      </section>
+
+      <div class="frame wide-frame" aria-label="Hiraeth UI concept sketch">
+        <article class="showcase-item wide hiraeth-image-card">
+          <img src="portfolio_images/HUI.png" alt="Hiraeth diegetic UI concept sketch" loading="lazy" />
+          <div class="item-overlay">
+            <div>
+              <h3>First Concept Sketch</h3>
+              <p>An early visual direction for Hiraeth’s diegetic interface, exploring how Gwyn’s neural implant might reveal echoes, environmental data, and memory fragments within the game world.</p>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <section class="project-writeup" aria-label="Hiraeth project description">
+        <p>For this project, I will be designing the UX/UI system for a student game titled “Hiraeth”, a primarily environmental narrative experience set in a future version of a flooded Chicago. The game will follow a girl named Gwyn, who wakes up after twenty years of government-mandated cryo sleep. She then emerges into a city that is transformed by the collapse of climate, where streets have become canals, architecture has fallen into ruin, and the silence of a once thriving population that seems to linger throughout the environment.</p>
+
+        <p>The project’s UX/UI design will be based around a diegetic UI, meaning, rather than having menus appearing as an external overlay, the interface exists naturally within the game world. This adds to the game with grounding the player within the environment to better intertwine themselves in this cataclysmic world. Instead of a traditional HUD, information will be revealed through the environment, visual distortions and lighting that feel embedded within the world.</p>
+
+        <p>One central mechanic incorporates Gwyn’s government-mandated neural implant, that allows her to access these “echoes” of the past. This is one of the key tools Gwyn and the player will use to uncover hidden memories, remnants of what once was, and traces of what happened before the collapse. Because the intention of incorporating a diegetic UI is central to the game, it is not treated as a separate interface, instead becoming an extension of Gwyn’s perception. The information itself is gathered from direct interactions from the world.</p>
+
+        <p>The aim of my goal in the part of the group project is to delve into how UX/UI can contribute to both storytelling and immersion. The use of a diegetic design in the interface becomes this additional narrative tool that pushes players to explore and discover what this calamity within Chicago holds. As of this moment, we are still figuring out the overall vibe of what these neural-based interfaces will look like within the context of the game. At the very least, I am working on ideas for the title screen and inventory system.</p>
+      </section>
+    </div>
   </div>
 
   <div class="layer showcase" id="gundamShowcase" aria-hidden="true">
@@ -684,6 +752,7 @@
     const items = document.querySelectorAll(".sketch-item");
     const bioFlipCard = document.getElementById("bioFlipCard");
     const bioFlipButton = document.getElementById("bioFlipButton");
+
     let isHoveringItem = false;
     let hoverTimer = null;
     let dragItem = null;
@@ -692,8 +761,10 @@
     let dragStartY = 0;
     let itemStartX = 0;
     let itemStartY = 0;
+
     const lastSafePositions = new WeakMap();
     const imageGap = 20;
+    const boundaryMargin = 64;
 
     function setTheme(mode) {
       body.classList.toggle("dark-mode", mode === "dark");
@@ -707,11 +778,13 @@
       let i = 0;
       titleEl.textContent = "";
       titleEl.classList.add("typing");
+
       const interval = setInterval(() => {
         titleEl.textContent += title[i++];
         if (i >= title.length) {
           clearInterval(interval);
           titleEl.classList.remove("typing");
+          randomizeItems();
           setTimeout(() => body.classList.add("loaded"), 180);
         }
       }, 62);
@@ -747,24 +820,19 @@
       canvas.classList.add("has-focus");
       items.forEach(el => el.classList.remove("is-origin"));
       item.classList.add("is-origin");
-      if (item.dataset.label === "Bio") {
-        const icon = item.querySelector("img").cloneNode(true);
-        focusIcon.replaceChildren(icon);
-        focusHint.textContent = "click to inspect";
-      } else {
-        const icon = item.querySelector("img").cloneNode(true);
-        focusIcon.replaceChildren(icon);
-        focusHint.textContent = "click to open";
-      }
+
+      const icon = item.querySelector("img").cloneNode(true);
+      focusIcon.replaceChildren(icon);
+      focusHint.textContent = item.dataset.label === "Bio" ? "click to inspect" : "click to open";
       focusLabel.textContent = item.dataset.label;
-      
       focusPreview.classList.add("visible");
       focusPreview.setAttribute("aria-hidden", "false");
+
       const card = focusPreview.querySelector(".focus-card");
       card.classList.toggle("compact-hover", item.dataset.label === "Resume" || item.dataset.label === "Artist Statement");
       const rect = item.getBoundingClientRect();
+
       requestAnimationFrame(() => {
-        const cr = card.getBoundingClientRect();
         const margin = 32;
         const pageWidth = document.documentElement.clientWidth;
         const pageHeight = document.documentElement.clientHeight;
@@ -794,6 +862,197 @@
       }, 80);
     }
 
+    function getTitleBounds() {
+      const canvasRect = canvas.getBoundingClientRect();
+      const titleRect = document.querySelector(".centerpiece-inner").getBoundingClientRect();
+      const padding = 36;
+      return {
+        left: titleRect.left - canvasRect.left - padding,
+        top: titleRect.top - canvasRect.top - padding,
+        right: titleRect.right - canvasRect.left + padding,
+        bottom: titleRect.bottom - canvasRect.top + padding
+      };
+    }
+
+    function rectsOverlap(a, b) {
+      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    }
+
+    function makeBox(left, top, width, height, gap = imageGap) {
+      return {
+        left: left - gap,
+        top: top - gap,
+        right: left + width + gap,
+        bottom: top + height + gap
+      };
+    }
+
+    function pushAwayFromTitle(left, top, width, height) {
+      const title = getTitleBounds();
+      const box = makeBox(left, top, width, height, 0);
+      if (!rectsOverlap(box, title)) return { left, top };
+
+      const options = [
+        { left: title.left - width - imageGap, top },
+        { left: title.right + imageGap, top },
+        { left, top: title.top - height - imageGap },
+        { left, top: title.bottom + imageGap }
+      ];
+
+      return options
+        .map(pos => ({ ...pos, distance: Math.hypot(pos.left - left, pos.top - top) }))
+        .sort((a, b) => a.distance - b.distance)[0];
+    }
+
+    function clampPosition(left, top, width, height) {
+      let pushed = pushAwayFromTitle(left, top, width, height);
+      const maxLeft = Math.max(boundaryMargin, canvas.clientWidth - width - boundaryMargin);
+      const maxTop = Math.max(boundaryMargin, canvas.clientHeight - height - boundaryMargin);
+      let boundedLeft = Math.max(boundaryMargin, Math.min(pushed.left, maxLeft));
+      let boundedTop = Math.max(boundaryMargin, Math.min(pushed.top, maxTop));
+
+      pushed = pushAwayFromTitle(boundedLeft, boundedTop, width, height);
+      boundedLeft = Math.max(boundaryMargin, Math.min(pushed.left, maxLeft));
+      boundedTop = Math.max(boundaryMargin, Math.min(pushed.top, maxTop));
+
+      return { left: boundedLeft, top: boundedTop };
+    }
+
+    function getItemCollision(currentItem, left, top, width, height) {
+      const currentBox = makeBox(left, top, width, height);
+      const canvasRect = canvas.getBoundingClientRect();
+
+      for (const item of items) {
+        if (item === currentItem) continue;
+        const rect = item.getBoundingClientRect();
+        const itemLeft = parseFloat(item.style.left) || rect.left - canvasRect.left;
+        const itemTop = parseFloat(item.style.top) || rect.top - canvasRect.top;
+        const otherBox = makeBox(itemLeft, itemTop, rect.width, rect.height, 0);
+
+        if (rectsOverlap(currentBox, otherBox)) {
+          return { item, rect, left: itemLeft, top: itemTop };
+        }
+      }
+      return null;
+    }
+
+    function nudgeAwayFromItem(left, top, width, height, collision) {
+      const otherCenterX = collision.left + collision.rect.width / 2;
+      const otherCenterY = collision.top + collision.rect.height / 2;
+      const itemCenterX = left + width / 2;
+      const itemCenterY = top + height / 2;
+      const dx = itemCenterX - otherCenterX;
+      const dy = itemCenterY - otherCenterY;
+      const nudge = imageGap + 28;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        left = dx >= 0 ? collision.left + collision.rect.width + nudge : collision.left - width - nudge;
+      } else {
+        top = dy >= 0 ? collision.top + collision.rect.height + nudge : collision.top - height - nudge;
+      }
+
+      return clampPosition(left, top, width, height);
+    }
+
+    function getItemSize(item) {
+      const rect = item.getBoundingClientRect();
+      return {
+        width: Math.ceil(Math.max(rect.width, item.offsetWidth)) + 18,
+        height: Math.ceil(Math.max(rect.height, item.offsetHeight)) + 26
+      };
+    }
+
+    function randomNearTitle(width, height) {
+      const title = getTitleBounds();
+      const side = ["top", "right", "bottom", "left"][Math.floor(Math.random() * 4)];
+      const gap = imageGap + 46 + Math.random() * 90;
+      let left = boundaryMargin;
+      let top = boundaryMargin;
+
+      if (side === "top") {
+        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
+        top = title.top - height - gap;
+      } else if (side === "right") {
+        left = title.right + gap;
+        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
+      } else if (side === "bottom") {
+        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
+        top = title.bottom + gap;
+      } else {
+        left = title.left - width - gap;
+        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
+      }
+
+      return clampPosition(left, top, width, height);
+    }
+
+    function randomAnywhere(width, height) {
+      return clampPosition(
+        boundaryMargin + Math.random() * Math.max(0, canvas.clientWidth - width - boundaryMargin * 2),
+        boundaryMargin + Math.random() * Math.max(0, canvas.clientHeight - height - boundaryMargin * 2),
+        width,
+        height
+      );
+    }
+
+    function getPresetSlots(width, height) {
+      const title = getTitleBounds();
+      const gap = imageGap + 70;
+      return [
+        { left: title.left - width - gap, top: title.top - height * 0.2 },
+        { left: title.right + gap, top: title.top - height * 0.2 },
+        { left: title.left - width * 0.55, top: title.top - height - gap },
+        { left: title.right - width * 0.45, top: title.top - height - gap },
+        { left: title.left - width * 0.55, top: title.bottom + gap },
+        { left: title.right - width * 0.45, top: title.bottom + gap },
+        { left: title.left - width - gap, top: title.bottom - height * 0.8 },
+        { left: title.right + gap, top: title.bottom - height * 0.8 }
+      ].map(pos => clampPosition(pos.left, pos.top, width, height));
+    }
+
+    function findCleanSpawn(item, placedBoxes) {
+      const { width, height } = getItemSize(item);
+      const isClean = position => {
+        const box = makeBox(position.left, position.top, width, height);
+        return !rectsOverlap(box, getTitleBounds()) && !placedBoxes.some(placed => rectsOverlap(box, placed));
+      };
+
+      for (let tries = 0; tries < 320; tries++) {
+        const position = tries < 220 ? randomNearTitle(width, height) : randomAnywhere(width, height);
+        if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
+      }
+
+      const slots = getPresetSlots(width, height).sort(() => Math.random() - 0.5);
+      for (const position of slots) {
+        if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
+      }
+
+      for (let top = boundaryMargin; top < canvas.clientHeight - height - boundaryMargin; top += 38) {
+        for (let left = boundaryMargin; left < canvas.clientWidth - width - boundaryMargin; left += 38) {
+          const position = clampPosition(left, top, width, height);
+          if (isClean(position)) return { position, box: makeBox(position.left, position.top, width, height) };
+        }
+      }
+
+      const position = randomAnywhere(width, height);
+      return { position, box: makeBox(position.left, position.top, width, height) };
+    }
+
+    function randomizeItems() {
+      const placedBoxes = [];
+      const shuffledItems = [...items].sort(() => Math.random() - 0.5);
+
+      shuffledItems.forEach(item => {
+        const spawn = findCleanSpawn(item, placedBoxes);
+        placedBoxes.push(spawn.box);
+        item.style.left = `${spawn.position.left}px`;
+        item.style.top = `${spawn.position.top}px`;
+        item.style.right = "auto";
+        item.style.bottom = "auto";
+        lastSafePositions.set(item, spawn.position);
+      });
+    }
+
     function startDrag(e, item) {
       if (e.button !== 0) return;
       clearTimeout(hoverTimer);
@@ -801,14 +1060,17 @@
       focusPreview.setAttribute("aria-hidden", "true");
       item.classList.remove("is-bouncing");
       item.classList.add("is-dragging");
+
       dragItem = item;
       didDrag = false;
       dragStartX = e.clientX;
       dragStartY = e.clientY;
+
       const itemRect = item.getBoundingClientRect();
       const canvasRect = canvas.getBoundingClientRect();
       itemStartX = itemRect.left - canvasRect.left;
       itemStartY = itemRect.top - canvasRect.top;
+
       item.style.left = `${itemStartX}px`;
       item.style.top = `${itemStartY}px`;
       item.style.right = "auto";
@@ -826,95 +1088,6 @@
       dragItem.style.top = `${itemStartY + moveY}px`;
     }
 
-    function getTitleBounds() {
-      const canvasRect = canvas.getBoundingClientRect();
-      const titleRect = document.querySelector(".centerpiece-inner").getBoundingClientRect();
-      const padding = 28;
-      return {
-        left: titleRect.left - canvasRect.left - padding,
-        top: titleRect.top - canvasRect.top - padding,
-        right: titleRect.right - canvasRect.left + padding,
-        bottom: titleRect.bottom - canvasRect.top + padding
-      };
-    }
-
-    function rectsOverlap(a, b) {
-      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
-    }
-
-    function itemBox(left, top, width, height, gap = imageGap) {
-      return {
-        left: left - gap,
-        top: top - gap,
-        right: left + width + gap,
-        bottom: top + height + gap
-      };
-    }
-
-    function getItemCollision(currentItem, left, top, width, height) {
-      const currentBox = itemBox(left, top, width, height);
-      const canvasRect = canvas.getBoundingClientRect();
-
-      for (const item of items) {
-        if (item === currentItem) continue;
-        const rect = item.getBoundingClientRect();
-        const itemLeft = parseFloat(item.style.left) || rect.left - canvasRect.left;
-        const itemTop = parseFloat(item.style.top) || rect.top - canvasRect.top;
-        const otherBox = itemBox(itemLeft, itemTop, rect.width, rect.height, 0);
-
-        if (rectsOverlap(currentBox, otherBox)) {
-          return { item, rect, left: itemLeft, top: itemTop };
-        }
-      }
-      return null;
-    }
-
-    function nudgeAwayFromItem(left, top, width, height, collision) {
-      const otherCenterX = collision.left + collision.rect.width / 2;
-      const otherCenterY = collision.top + collision.rect.height / 2;
-      const itemCenterX = left + width / 2;
-      const itemCenterY = top + height / 2;
-      const dx = itemCenterX - otherCenterX;
-      const dy = itemCenterY - otherCenterY;
-      const nudge = imageGap + 18;
-
-      let nudgedLeft = left;
-      let nudgedTop = top;
-
-      if (Math.abs(dx) > Math.abs(dy)) {
-        nudgedLeft = dx >= 0 ? collision.left + collision.rect.width + nudge : collision.left - width - nudge;
-      } else {
-        nudgedTop = dy >= 0 ? collision.top + collision.rect.height + nudge : collision.top - height - nudge;
-      }
-
-      return clampPosition(nudgedLeft, nudgedTop, width, height);
-    }
-
-    function pushAwayFromTitle(left, top, width, height) {
-      const title = getTitleBounds();
-      const item = { left, top, right: left + width, bottom: top + height };
-      if (!rectsOverlap(item, title)) return { left, top, moved: false };
-
-      const pushes = [
-        { left: title.left - width, top, distance: Math.abs(item.right - title.left) },
-        { left: title.right, top, distance: Math.abs(title.right - item.left) },
-        { left, top: title.top - height, distance: Math.abs(item.bottom - title.top) },
-        { left, top: title.bottom, distance: Math.abs(title.bottom - item.top) }
-      ].sort((a, b) => a.distance - b.distance);
-
-      return { left: pushes[0].left, top: pushes[0].top, moved: true };
-    }
-
-    function clampPosition(left, top, width, height) {
-      let pushed = pushAwayFromTitle(left, top, width, height);
-      let boundedLeft = Math.max(0, Math.min(pushed.left, canvas.clientWidth - width));
-      let boundedTop = Math.max(0, Math.min(pushed.top, canvas.clientHeight - height));
-      pushed = pushAwayFromTitle(boundedLeft, boundedTop, width, height);
-      boundedLeft = Math.max(0, Math.min(pushed.left, canvas.clientWidth - width));
-      boundedTop = Math.max(0, Math.min(pushed.top, canvas.clientHeight - height));
-      return { left: boundedLeft, top: boundedTop };
-    }
-
     function clampItemToCanvas(item) {
       const canvasRect = canvas.getBoundingClientRect();
       const itemRect = item.getBoundingClientRect();
@@ -925,8 +1098,9 @@
 
       if (collision) {
         bounded = nudgeAwayFromItem(bounded.left, bounded.top, itemRect.width, itemRect.height, collision);
-        const secondCollision = getItemCollision(item, bounded.left, bounded.top, itemRect.width, itemRect.height);
-        if (secondCollision) bounded = lastSafePositions.get(item) || clampPosition(itemStartX, itemStartY, itemRect.width, itemRect.height);
+        if (getItemCollision(item, bounded.left, bounded.top, itemRect.width, itemRect.height)) {
+          bounded = lastSafePositions.get(item) || clampPosition(itemStartX, itemStartY, itemRect.width, itemRect.height);
+        }
       }
 
       item.classList.remove("is-dragging");
@@ -941,77 +1115,6 @@
       }
     }
 
-    function randomNearTitle(width, height) {
-      const title = getTitleBounds();
-      const canvasWidth = canvas.clientWidth;
-      const canvasHeight = canvas.clientHeight;
-      const side = ["top", "right", "bottom", "left"][Math.floor(Math.random() * 4)];
-      const gap = imageGap + 24 + Math.random() * 80;
-      let left;
-      let top;
-
-      if (side === "top") {
-        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
-        top = title.top - height - gap;
-      }
-
-      if (side === "right") {
-        left = title.right + gap;
-        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
-      }
-
-      if (side === "bottom") {
-        left = title.left + Math.random() * Math.max(1, title.right - title.left) - width / 2;
-        top = title.bottom + gap;
-      }
-
-      if (side === "left") {
-        left = title.left - width - gap;
-        top = title.top + Math.random() * Math.max(1, title.bottom - title.top) - height / 2;
-      }
-
-      return clampPosition(left, top, width, height);
-    }
-
-    function randomizeItems() {
-      const canvasWidth = canvas.clientWidth;
-      const canvasHeight = canvas.clientHeight;
-      const placedBoxes = [];
-
-      items.forEach(item => {
-        const rect = item.getBoundingClientRect();
-        let position;
-
-        for (let tries = 0; tries < 160; tries++) {
-          const nearTitle = tries < 120;
-          const candidate = nearTitle
-            ? randomNearTitle(rect.width, rect.height)
-            : clampPosition(Math.random() * canvasWidth, Math.random() * canvasHeight, rect.width, rect.height);
-
-          const box = itemBox(candidate.left, candidate.top, rect.width, rect.height);
-          const hitsTitle = rectsOverlap(box, getTitleBounds());
-          const hitsImage = placedBoxes.some(placed => rectsOverlap(box, placed));
-
-          if (!hitsTitle && !hitsImage) {
-            position = candidate;
-            placedBoxes.push(box);
-            break;
-          }
-        }
-
-        if (!position) {
-          position = clampPosition(Math.random() * canvasWidth, Math.random() * canvasHeight, rect.width, rect.height);
-          placedBoxes.push(itemBox(position.left, position.top, rect.width, rect.height, 0));
-        }
-
-        item.style.left = `${position.left}px`;
-        item.style.top = `${position.top}px`;
-        item.style.right = "auto";
-        item.style.bottom = "auto";
-        lastSafePositions.set(item, position);
-      });
-    }
-
     function endDrag(e) {
       if (!dragItem) return;
       dragItem.releasePointerCapture(e.pointerId);
@@ -1020,6 +1123,7 @@
       clampItemToCanvas(releasedItem);
       dragItem = null;
       setTimeout(() => didDrag = false, 0);
+
       if (isHoveringItem) {
         clearTimeout(hoverTimer);
         hoverTimer = setTimeout(() => showPreview(releasedItem), 500);
@@ -1080,10 +1184,7 @@
       setTheme(localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light");
     });
 
-    window.addEventListener("load", () => {
-      randomizeItems();
-      typeTitle();
-    });
+    window.addEventListener("load", typeTitle);
   </script>
 </body>
 </html>
