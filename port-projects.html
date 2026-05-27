@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Magsino - Projects Desktop</title>
+  <meta name="description" content="Michael Magsino's project archive presented as a retro desktop interface." />
+
+  <style>
+    :root {
+      --desktop: #008080;
+      --window-gray: #c0c0c0;
+      --window-light: #ffffff;
+      --window-mid: #dfdfdf;
+      --window-dark: #808080;
+      --window-black: #000000;
+      --title-blue: #000080;
+      --title-blue-light: #1084d0;
+      --text: #000000;
+      --shadow: #404040;
+      --taskbar: #c0c0c0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255,255,255,.12), transparent 24%),
+        linear-gradient(135deg, rgba(255,255,255,.08), transparent 36%),
+        var(--desktop);
+      image-rendering: pixelated;
+      user-select: none;
+    }
+
+    button,
+    a {
+      font: inherit;
+      color: inherit;
+    }
+
+    .desktop {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      padding: 22px 22px 54px;
+      overflow: hidden;
+    }
+
+    .desktop-header {
+      position: absolute;
+      top: 22px;
+      right: 24px;
+      max-width: 420px;
+      padding: 12px;
+      background: rgba(192,192,192,.92);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      box-shadow: 2px 2px 0 rgba(0,0,0,.25);
+    }
+
+    .desktop-header h1 {
+      margin-bottom: 6px;
+      font-size: clamp(1.15rem, 2vw, 1.6rem);
+      font-weight: 700;
+    }
+
+    .desktop-header p {
+      font-size: .85rem;
+      line-height: 1.45;
+    }
+
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 96px);
+      gap: 26px 24px;
+      width: max-content;
+    }
+
+    .desktop-icon {
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+      width: 96px;
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      color: white;
+      text-shadow: 1px 1px 0 #000;
+    }
+
+    .desktop-icon:focus-visible,
+    .desktop-icon:hover {
+      outline: 1px dotted white;
+      outline-offset: 4px;
+    }
+
+    .desktop-icon:active .folder-icon {
+      transform: translate(1px, 1px);
+    }
+
+    .folder-icon {
+      position: relative;
+      width: 52px;
+      height: 38px;
+      background: #f4d35e;
+      border: 2px solid #000;
+      box-shadow: inset -4px -4px 0 rgba(0,0,0,.22), inset 4px 4px 0 rgba(255,255,255,.4);
+    }
+
+    .desktop-logo-icon {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      image-rendering: auto;
+      filter: drop-shadow(1px 1px 0 #000);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .folder-icon::before {
+      content: "";
+      position: absolute;
+      left: -2px;
+      top: -12px;
+      width: 26px;
+      height: 12px;
+      background: #f4d35e;
+      border: 2px solid #000;
+      border-bottom: 0;
+      box-shadow: inset 3px 3px 0 rgba(255,255,255,.45);
+    }
+
+    .icon-label {
+      display: inline-block;
+      max-width: 92px;
+      padding: 2px 4px;
+      font-size: .78rem;
+      line-height: 1.15;
+      text-align: center;
+    }
+
+    .desktop-icon:hover .icon-label,
+    .desktop-icon.is-selected .icon-label {
+      background: #000080;
+      color: white;
+    }
+
+    .window {
+      position: absolute;
+      width: min(720px, calc(100vw - 44px));
+      background: var(--window-gray);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      box-shadow: 3px 3px 0 rgba(0,0,0,.38);
+      opacity: 0;
+      transform: translateY(12px) scale(.98);
+      pointer-events: none;
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .window.is-open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .window[data-window="hiraeth"] { left: 10%; top: 10%; z-index: 4; width: min(1040px, calc(100vw - 44px)); }
+    .window[data-window="hiraeth"].hiraeth-window-concept { width: min(880px, calc(100vw - 44px)); }
+    .window[data-window="hiraeth"].hiraeth-window-navigation { width: min(1040px, calc(100vw - 44px)); }
+    .window[data-window="hiraeth"].hiraeth-window-echo { width: min(1180px, calc(100vw - 44px)); }
+    .window[data-window="corsair"] { left: 14%; top: 10%; z-index: 5; width: min(980px, calc(100vw - 44px)); }
+    .window[data-window="corsair"].corsair-window-case { width: min(1220px, calc(100vw - 44px)); }
+    .window[data-window="corsair"].corsair-window-wide { width: min(980px, calc(100vw - 44px)); }
+    .window[data-window="corsair"].corsair-window-square { width: min(720px, calc(100vw - 44px)); }
+    .window[data-window="gundam"] { left: 0; top: 0; z-index: 6; width: 100vw; height: calc(100vh - 36px); }
+    .window[data-window="sukoon"] { left: 18%; top: 16%; z-index: 7; width: min(780px, calc(100vw - 44px)); }
+    .window[data-window="sukoon"].sukoon-window-square { width: min(620px, calc(100vw - 44px)); }
+    .window[data-window="sukoon"].sukoon-window-portrait { width: min(560px, calc(100vw - 44px)); }
+    .window[data-window="sukoon"].sukoon-window-paper { width: min(560px, calc(100vw - 44px)); }
+
+    .title-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: 28px;
+      margin: 3px;
+      padding: 3px 4px 3px 8px;
+      background: linear-gradient(90deg, var(--title-blue), var(--title-blue-light));
+      color: white;
+      font-weight: 700;
+      font-size: .86rem;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .title-bar:active {
+      cursor: grabbing;
+    }
+
+    .window-controls {
+      display: flex;
+      gap: 3px;
+    }
+
+    .window-button {
+      display: grid;
+      place-items: center;
+      width: 20px;
+      height: 20px;
+      background: var(--window-gray);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .window-button:active,
+    .start-button:active,
+    .project-action:active {
+      border-color: var(--window-black) var(--window-light) var(--window-light) var(--window-black);
+      transform: translate(1px, 1px);
+    }
+
+    .window-body {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+
+    .window[data-window="gundam"] .window-body {
+      height: calc(100% - 34px);
+      grid-template-rows: 1fr auto;
+    }
+
+    .window-preview {
+      display: grid;
+      place-items: center;
+      min-height: 190px;
+      background: #fff;
+      border: 2px solid;
+      border-color: var(--window-dark) var(--window-light) var(--window-light) var(--window-dark);
+      overflow: hidden;
+    }
+
+    .window-preview img,
+    .window-preview iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .gundam-window-preview {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+    }
+
+    .hiraeth-window-preview {
+      min-height: 0;
+    }
+
+    .hiraeth-window-preview {
+      overflow: hidden;
+    }
+
+    .hiraeth-window-preview img,
+    .hiraeth-window-preview iframe {
+      display: none;
+    }
+
+    .hiraeth-window-preview.show-image img,
+    .hiraeth-window-preview.show-frame iframe {
+      display: block;
+    }
+
+    .hiraeth-window-preview.show-frame iframe {
+      width: 100%;
+      height: 100%;
+      transform: none;
+      max-width: none;
+      max-height: none;
+    }
+
+    .hiraeth-desktop-concept {
+      aspect-ratio: 2048 / 1152;
+    }
+
+    .hiraeth-desktop-navigation {
+      aspect-ratio: 1873 / 969;
+    }
+
+    .hiraeth-desktop-echo {
+      aspect-ratio: 2048 / 923;
+    }
+
+    .hiraeth-window-tabs,
+    .sukoon-window-tabs,
+    .corsair-window-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .sukoon-window-preview {
+      position: relative;
+      min-height: 0;
+    }
+
+    .sukoon-window-preview img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sukoon-arrow {
+      position: absolute;
+      top: 50%;
+      z-index: 2;
+      display: none;
+      place-items: center;
+      width: 34px;
+      height: 44px;
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      background: var(--window-gray);
+      cursor: pointer;
+      font-size: 1.8rem;
+      line-height: 1;
+      transform: translateY(-50%);
+    }
+
+    .sukoon-arrow-left { left: 10px; }
+    .sukoon-arrow-right { right: 10px; }
+    .sukoon-arrow.is-visible { display: grid; }
+    .sukoon-arrow:active { border-color: var(--window-black) var(--window-light) var(--window-light) var(--window-black); transform: translateY(-50%) translate(1px, 1px); }
+
+    .sukoon-square-preview {
+      aspect-ratio: 1 / 1;
+    }
+
+    .sukoon-portrait-preview {
+      aspect-ratio: 1080 / 1350;
+    }
+
+    .sukoon-paper-preview {
+      aspect-ratio: 8.5 / 11;
+    }
+
+    .corsair-window-preview {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .corsair-case-preview {
+      aspect-ratio: 1743 / 968;
+    }
+
+    .corsair-wide-preview {
+      aspect-ratio: 16 / 9;
+    }
+
+    .corsair-square-preview {
+      aspect-ratio: 1 / 1;
+    }
+
+    .corsair-scroll-frame {
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      background: #000;
+    }
+
+    .corsair-scroll-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: initial;
+    }
+
+    .corsair-window-preview:not(.corsair-case-preview) .corsair-scroll-frame {
+      overflow: hidden;
+    }
+
+    .corsair-window-preview:not(.corsair-case-preview) .corsair-scroll-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hiraeth-preview-button.is-active,
+    .sukoon-preview-button.is-active,
+    .corsair-preview-button.is-active {
+      border-color: var(--window-black) var(--window-light) var(--window-light) var(--window-black);
+      background: var(--window-mid);
+      transform: translate(1px, 1px);
+    }
+
+    .window-copy {
+      padding: 10px;
+      background: var(--window-mid);
+      border: 2px solid;
+      border-color: var(--window-dark) var(--window-light) var(--window-light) var(--window-dark);
+    }
+
+    .window-copy h2 {
+      margin-bottom: 7px;
+      font-size: 1rem;
+    }
+
+    .window-copy p {
+      font-size: .86rem;
+      line-height: 1.45;
+    }
+
+    .window-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-action {
+      display: inline-block;
+      padding: 7px 10px;
+      background: var(--window-gray);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      text-decoration: none;
+      cursor: pointer;
+      font-size: .82rem;
+    }
+
+    .disabled-action {
+      cursor: default;
+      color: #333;
+    }
+
+    .start-menu {
+      position: fixed;
+      left: 5px;
+      bottom: 36px;
+      z-index: 120;
+      display: none;
+      width: 210px;
+      background: var(--window-gray);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      box-shadow: 3px 3px 0 rgba(0,0,0,.38);
+    }
+
+    .start-menu.is-open {
+      display: block;
+    }
+
+    .start-menu-header {
+      padding: 8px 10px;
+      background: linear-gradient(180deg, var(--title-blue), var(--title-blue-light));
+      color: white;
+      font-weight: 700;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 34px;
+      text-align: end;
+      letter-spacing: .08em;
+    }
+
+    .start-menu-items {
+      margin-left: 34px;
+      padding: 4px;
+    }
+
+    .start-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 36px;
+      padding: 7px 9px;
+      border: 0;
+      background: transparent;
+      text-align: left;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: .86rem;
+    }
+
+    .start-menu-item:hover,
+    .start-menu-item:focus-visible {
+      background: var(--title-blue);
+      color: white;
+      outline: none;
+    }
+
+    .start-menu-icon {
+      display: grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      background: var(--window-mid);
+      border: 1px solid var(--window-black);
+      color: black;
+      flex: 0 0 auto;
+    }
+
+    .start-menu-item:hover .start-menu-icon,
+    .start-menu-item:focus-visible .start-menu-icon {
+      background: white;
+      color: black;
+    }
+
+    .taskbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 99;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      height: 36px;
+      padding: 3px 5px;
+      background: var(--taskbar);
+      border-top: 2px solid var(--window-light);
+      box-shadow: inset 0 1px 0 #fff;
+    }
+
+    .taskbar-left,
+    .taskbar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .start-button,
+    .taskbar-item,
+    .clock {
+      min-height: 28px;
+      padding: 5px 9px;
+      background: var(--window-gray);
+      border: 2px solid;
+      border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
+      font-size: .82rem;
+      white-space: nowrap;
+    }
+
+    .start-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .start-glyph {
+      width: 15px;
+      height: 15px;
+      background:
+        linear-gradient(90deg, #f00 0 50%, #0f0 50%),
+        linear-gradient(#00f 0 50%, #ff0 50%);
+      border: 1px solid #000;
+    }
+
+    .taskbar-items {
+      display: flex;
+      gap: 4px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .taskbar-item {
+      display: none;
+      min-width: 120px;
+      max-width: 180px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+    }
+
+    .taskbar-item.is-visible {
+      display: block;
+    }
+
+    .clock {
+      min-width: 86px;
+      text-align: center;
+      border-color: var(--window-dark) var(--window-light) var(--window-light) var(--window-dark);
+    }
+
+    @media (max-width: 760px) {
+      body { overflow: auto; }
+      .desktop { min-height: 100svh; height: auto; padding-bottom: 70px; overflow: visible; }
+      .desktop-header { position: static; max-width: 100%; margin-bottom: 24px; }
+      .icon-grid { grid-template-columns: repeat(2, 96px); }
+      .window { position: static; width: 100%; margin-top: 22px; display: none; }
+      .window.is-open { display: block; }
+      .taskbar-item { min-width: 86px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="desktop" aria-label="Projects desktop">
+    <section class="desktop-header" aria-label="Desktop introduction">
+      <h1>Michael Projects Desktop</h1>
+      <p>Michael's archive of works... all done on the computer!</p>
+    </section>
+
+    <section class="icon-grid" aria-label="Project folders">
+      <button class="desktop-icon" type="button" data-open-window="hiraeth">
+        <span class="folder-icon" aria-hidden="true"></span>
+        <span class="icon-label">Hiraeth UI</span>
+      </button>
+
+      <button class="desktop-icon" type="button" data-open-window="corsair">
+        <span class="folder-icon" aria-hidden="true"></span>
+        <span class="icon-label">Corsair Case Study</span>
+      </button>
+
+      <button class="desktop-icon" type="button" data-open-window="gundam">
+        <img class="desktop-logo-icon" src="portfolio_images/gundam_logo.png" alt="" aria-hidden="true" />
+        <span class="icon-label">Gundam App</span>
+      </button>
+
+      <button class="desktop-icon" type="button" data-open-window="sukoon">
+        <span class="folder-icon" aria-hidden="true"></span>
+        <span class="icon-label">Sukoon Work</span>
+      </button>
+    </section>
+
+    <article class="window" data-window="hiraeth" aria-hidden="true">
+      <div class="title-bar">
+        <span>HIRAETH_UI.EXE</span>
+        <div class="window-controls"><button class="window-button" type="button" data-close-window="hiraeth">×</button></div>
+      </div>
+      <div class="window-body">
+        <div class="window-preview hiraeth-window-preview hiraeth-desktop-concept" id="hiraethDesktopPreview">
+          <img id="hiraethDesktopImage" src="portfolio_images/HUI.png" alt="Hiraeth UI concept sketch" />
+          <iframe id="hiraethDesktopFrame" src="hiraethui-navi.html" title="Hiraeth UI preview"></iframe>
+        </div>
+        <div class="hiraeth-window-tabs" aria-label="Hiraeth preview controls">
+          <button class="project-action hiraeth-preview-button is-active" type="button" data-hiraeth-view="concept">Concept Sketch</button>
+          <button class="project-action hiraeth-preview-button" type="button" data-hiraeth-view="navigation" data-hiraeth-src="hiraethui-navi.html" data-frame-width="1873" data-frame-height="969" data-frame-scale="1">Navigation UI</button>
+          <button class="project-action hiraeth-preview-button" type="button" data-hiraeth-view="echo" data-hiraeth-src="hiraethui-memory.html" data-frame-width="2048" data-frame-height="923" data-frame-scale="1">Echo UI</button>
+        </div>
+        <div class="window-copy">
+          <h2>Hiraeth UI</h2>
+          <p>A diegetic UX/UI system for an environmental narrative game set in a future flooded Chicago, where neural interfaces, memory echoes and environmental storytelling guide the player.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <article class="window" data-window="corsair" aria-hidden="true">
+      <div class="title-bar">
+        <span>CORSAIR_CASE_STUDY.DOC</span>
+        <div class="window-controls"><button class="window-button" type="button" data-close-window="corsair">×</button></div>
+      </div>
+      <div class="window-body">
+        <div class="window-preview corsair-window-preview corsair-case-preview" id="corsairDesktopPreview">
+          <div class="corsair-scroll-frame" id="corsairScrollFrame">
+            <img id="corsairDesktopImage" src="corsairpics/cspec.png" alt="Corsair case study presentation" />
+          </div>
+        </div>
+        <div class="corsair-window-tabs" aria-label="Corsair preview controls">
+          <button class="project-action corsair-preview-button is-active" type="button" data-corsair-view="case" data-corsair-src="corsairpics/cspec.png">Case Study</button>
+          <button class="project-action corsair-preview-button" type="button" data-corsair-view="banner" data-corsair-src="corsairpics/cbanner.png">Web Banner</button>
+          <button class="project-action corsair-preview-button" type="button" data-corsair-view="package" data-corsair-src="corsairpics/cpkg.png">Packaging</button>
+          <button class="project-action corsair-preview-button" type="button" data-corsair-view="social" data-corsair-src="corsairpics/csocial.png">Social Post</button>
+        </div>
+        <div class="window-copy">
+          <h2>Corsair Case Study</h2>
+          <p>A brand-focused campaign and packaging exploration built around one product across multiple visual touchpoints, including banner, packaging and social media mockups.</p>
+        </div>
+
+      </div>
+    </article>
+
+    <article class="window" data-window="gundam" aria-hidden="true">
+      <div class="title-bar">
+        <span>GUNDAM_COLLECTION.APP</span>
+        <div class="window-controls"><button class="window-button" type="button" data-close-window="gundam">×</button></div>
+      </div>
+      <div class="window-body">
+        <div class="window-preview gundam-window-preview">
+          <iframe src="GundamCollection.html" title="Gundam Collection App preview"></iframe>
+        </div>
+        <div class="window-copy">
+          <h2>Gundam Collection App</h2>
+          <p><strong>Type:</strong> Interactive Web App &nbsp; <strong>Status:</strong> Complete &nbsp; <strong>Built With:</strong> HTML / CSS / JavaScript / JSON</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="window" data-window="sukoon" aria-hidden="true">
+      <div class="title-bar">
+        <span>SUKOON_DESIGN_WORK.FOLDER</span>
+        <div class="window-controls"><button class="window-button" type="button" data-close-window="sukoon">×</button></div>
+      </div>
+      <div class="window-body">
+        <div class="window-preview sukoon-window-preview sukoon-square-preview" id="sukoonDesktopPreview">
+          <img id="sukoonDesktopImage" src="sukoonpics/SC1.png" alt="Sukoon Circle Instagram carousel preview" />
+          <button class="sukoon-arrow sukoon-arrow-left" type="button" id="sukoonPrev" aria-label="Previous Sukoon slide">‹</button>
+          <button class="sukoon-arrow sukoon-arrow-right" type="button" id="sukoonNext" aria-label="Next Sukoon slide">›</button>
+        </div>
+        <div class="sukoon-window-tabs" aria-label="Sukoon preview controls">
+          <button class="project-action sukoon-preview-button is-active" type="button" data-sukoon-view="circle" data-sukoon-shape="square">Sukoon Circle</button>
+          <button class="project-action sukoon-preview-button" type="button" data-sukoon-view="seasonal" data-sukoon-shape="portrait">Seasonal Reflection</button>
+          <button class="project-action sukoon-preview-button" type="button" data-sukoon-view="newsletter" data-sukoon-shape="paper">Newsletter</button>
+          <button class="project-action sukoon-preview-button" type="button" data-sukoon-view="linkedin" data-sukoon-shape="portrait">LinkedIn Post</button>
+        </div>
+        <div class="window-copy">
+          <h2>Sukoon Design Work</h2>
+          <p>Visual content for social media, newsletters and branded communication materials supporting Sukoon’s warm, minimal and culturally thoughtful digital presence.</p>
+        </div>
+
+      </div>
+    </article>
+  </main>
+
+  <nav class="start-menu" id="startMenu" aria-label="Start menu">
+    <div class="start-menu-header">Projects</div>
+    <div class="start-menu-items">
+      <a class="start-menu-item" href="index.html">
+        <span class="start-menu-icon" aria-hidden="true">⌂</span>
+        <span>Go Home</span>
+      </a>
+      <button class="start-menu-item" type="button" id="surpriseButton">
+        <span class="start-menu-icon" aria-hidden="true">?</span>
+        <span>Surprise Me</span>
+      </button>
+    </div>
+  </nav>
+
+  <footer class="taskbar" aria-label="Retro taskbar">
+    <div class="taskbar-left">
+      <button class="start-button" type="button" id="startButton" aria-expanded="false" aria-controls="startMenu"><span class="start-glyph" aria-hidden="true"></span>Start</button>
+      <div class="taskbar-items" aria-label="Open project windows">
+        <button class="taskbar-item" type="button" data-focus-window="hiraeth">Hiraeth UI</button>
+        <button class="taskbar-item" type="button" data-focus-window="corsair">Corsair</button>
+        <button class="taskbar-item" type="button" data-focus-window="gundam">Gundam App</button>
+        <button class="taskbar-item" type="button" data-focus-window="sukoon">Sukoon</button>
+      </div>
+    </div>
+    <div class="taskbar-right">
+      <div class="clock" id="clock" aria-label="Current local time">--:-- --</div>
+    </div>
+  </footer>
+
+  <script>
+    const windows = document.querySelectorAll(".window");
+    const icons = document.querySelectorAll(".desktop-icon");
+    const taskbarItems = document.querySelectorAll(".taskbar-item");
+    const clock = document.getElementById("clock");
+    const startButton = document.getElementById("startButton");
+    const startMenu = document.getElementById("startMenu");
+    const surpriseButton = document.getElementById("surpriseButton");
+    let topZ = 20;
+    let activeDragWindow = null;
+    let dragOffsetX = 0;
+    let dragOffsetY = 0;
+
+    function updateClock() {
+      const now = new Date();
+      clock.textContent = now.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function focusWindow(name) {
+      const win = document.querySelector(`[data-window="${name}"]`);
+      if (!win) return;
+      win.style.zIndex = ++topZ;
+    }
+
+    function openWindow(name) {
+      const win = document.querySelector(`[data-window="${name}"]`);
+      const taskbarItem = document.querySelector(`[data-focus-window="${name}"]`);
+      if (!win) return;
+      win.classList.add("is-open");
+      win.setAttribute("aria-hidden", "false");
+      if (taskbarItem) taskbarItem.classList.add("is-visible");
+      focusWindow(name);
+    }
+
+    function closeWindow(name) {
+      const win = document.querySelector(`[data-window="${name}"]`);
+      const taskbarItem = document.querySelector(`[data-focus-window="${name}"]`);
+      if (!win) return;
+      win.classList.remove("is-open");
+      win.setAttribute("aria-hidden", "true");
+      if (taskbarItem) taskbarItem.classList.remove("is-visible");
+    }
+
+    startButton.addEventListener("click", e => {
+      e.stopPropagation();
+      const isOpen = startMenu.classList.toggle("is-open");
+      startButton.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    surpriseButton.addEventListener("click", () => {
+      startMenu.classList.remove("is-open");
+      startButton.setAttribute("aria-expanded", "false");
+    });
+
+    document.addEventListener("click", e => {
+      if (!e.target.closest("#startMenu") && !e.target.closest("#startButton")) {
+        startMenu.classList.remove("is-open");
+        startButton.setAttribute("aria-expanded", "false");
+      }
+    });
+
+    icons.forEach(icon => {
+      icon.addEventListener("click", () => {
+        icons.forEach(item => item.classList.remove("is-selected"));
+        icon.classList.add("is-selected");
+        openWindow(icon.dataset.openWindow);
+      });
+    });
+
+    document.querySelectorAll("[data-close-window]").forEach(button => {
+      button.addEventListener("click", () => closeWindow(button.dataset.closeWindow));
+    });
+
+    taskbarItems.forEach(item => {
+      item.addEventListener("click", () => focusWindow(item.dataset.focusWindow));
+    });
+
+    function fitHiraethDesktopFrame(button) {
+      const frame = document.getElementById("hiraethDesktopFrame");
+      if (!frame) return;
+      frame.style.width = "100%";
+      frame.style.height = "100%";
+      frame.style.transform = "none";
+    }
+
+    function setHiraethDesktopView(button) {
+      const preview = document.getElementById("hiraethDesktopPreview");
+      const frame = document.getElementById("hiraethDesktopFrame");
+      const hiraethWindow = document.querySelector('[data-window="hiraeth"]');
+      const view = button.dataset.hiraethView;
+
+      preview.classList.remove(
+        "hiraeth-desktop-concept",
+        "hiraeth-desktop-navigation",
+        "hiraeth-desktop-echo",
+        "show-image",
+        "show-frame"
+      );
+      hiraethWindow.classList.remove(
+        "hiraeth-window-concept",
+        "hiraeth-window-navigation",
+        "hiraeth-window-echo"
+      );
+
+      if (view === "concept") {
+        hiraethWindow.classList.add("hiraeth-window-concept");
+        preview.classList.add("hiraeth-desktop-concept", "show-image");
+      }
+
+      if (view === "navigation") {
+        hiraethWindow.classList.add("hiraeth-window-navigation");
+        preview.classList.add("hiraeth-desktop-navigation", "show-frame");
+        frame.src = button.dataset.hiraethSrc;
+        requestAnimationFrame(() => fitHiraethDesktopFrame(button));
+      }
+
+      if (view === "echo") {
+        hiraethWindow.classList.add("hiraeth-window-echo");
+        preview.classList.add("hiraeth-desktop-echo", "show-frame");
+        frame.src = button.dataset.hiraethSrc;
+        requestAnimationFrame(() => fitHiraethDesktopFrame(button));
+      }
+
+      document.querySelectorAll(".hiraeth-preview-button").forEach(tab => {
+        tab.classList.toggle("is-active", tab === button);
+      });
+    }
+
+    document.querySelectorAll(".hiraeth-preview-button").forEach(button => {
+      button.addEventListener("click", () => setHiraethDesktopView(button));
+    });
+
+    const sukoonSlides = {
+      circle: {
+        alt: "Sukoon Circle Instagram carousel preview",
+        slides: ["sukoonpics/SC1.png", "sukoonpics/SC2.png", "sukoonpics/SC3.png", "sukoonpics/SC4.png"]
+      },
+      seasonal: {
+        alt: "Seasonal Reflection Instagram carousel preview",
+        slides: ["sukoonpics/sh1.png", "sukoonpics/sh2.png", "sukoonpics/sh3.png", "sukoonpics/sh4.png", "sukoonpics/sh5.png", "sukoonpics/sh6.png"]
+      },
+      newsletter: {
+        alt: "First Sukoon newsletter preview",
+        slides: ["sukoonpics/sn.png"]
+      },
+      linkedin: {
+        alt: "First Sukoon LinkedIn post preview",
+        slides: ["sukoonpics/first.png"]
+      }
+    };
+
+    let currentSukoonView = "circle";
+    let currentSukoonIndex = 0;
+
+    function updateSukoonPreview() {
+      const image = document.getElementById("sukoonDesktopImage");
+      const prev = document.getElementById("sukoonPrev");
+      const next = document.getElementById("sukoonNext");
+      const current = sukoonSlides[currentSukoonView];
+
+      image.src = current.slides[currentSukoonIndex];
+      image.alt = current.alt;
+
+      prev.classList.toggle("is-visible", current.slides.length > 1 && currentSukoonIndex > 0);
+      next.classList.toggle("is-visible", current.slides.length > 1 && currentSukoonIndex < current.slides.length - 1);
+    }
+
+    function setSukoonDesktopView(button) {
+      const preview = document.getElementById("sukoonDesktopPreview");
+      const sukoonWindow = document.querySelector('[data-window="sukoon"]');
+      const shape = button.dataset.sukoonShape;
+
+      currentSukoonView = button.dataset.sukoonView;
+      currentSukoonIndex = 0;
+
+      preview.classList.toggle("sukoon-square-preview", shape === "square");
+      preview.classList.toggle("sukoon-portrait-preview", shape === "portrait");
+      preview.classList.toggle("sukoon-paper-preview", shape === "paper");
+      sukoonWindow.classList.toggle("sukoon-window-square", shape === "square");
+      sukoonWindow.classList.toggle("sukoon-window-portrait", shape === "portrait");
+      sukoonWindow.classList.toggle("sukoon-window-paper", shape === "paper");
+
+      document.querySelectorAll(".sukoon-preview-button").forEach(tab => {
+        tab.classList.toggle("is-active", tab === button);
+      });
+
+      updateSukoonPreview();
+    }
+
+    document.querySelectorAll(".sukoon-preview-button").forEach(button => {
+      button.addEventListener("click", () => setSukoonDesktopView(button));
+    });
+
+    document.getElementById("sukoonPrev").addEventListener("click", () => {
+      if (currentSukoonIndex > 0) {
+        currentSukoonIndex--;
+        updateSukoonPreview();
+      }
+    });
+
+    document.getElementById("sukoonNext").addEventListener("click", () => {
+      const maxIndex = sukoonSlides[currentSukoonView].slides.length - 1;
+      if (currentSukoonIndex < maxIndex) {
+        currentSukoonIndex++;
+        updateSukoonPreview();
+      }
+    });
+
+    function setCorsairDesktopView(button) {
+      const preview = document.getElementById("corsairDesktopPreview");
+      const image = document.getElementById("corsairDesktopImage");
+      const scrollFrame = document.getElementById("corsairScrollFrame");
+      const corsairWindow = document.querySelector('[data-window="corsair"]');
+      const view = button.dataset.corsairView;
+
+      preview.classList.remove("corsair-case-preview", "corsair-wide-preview", "corsair-square-preview");
+      corsairWindow.classList.remove("corsair-window-case", "corsair-window-wide", "corsair-window-square");
+
+      if (view === "case") {
+        preview.classList.add("corsair-case-preview");
+        corsairWindow.classList.add("corsair-window-case");
+      } else if (view === "social") {
+        preview.classList.add("corsair-square-preview");
+        corsairWindow.classList.add("corsair-window-square");
+      } else {
+        preview.classList.add("corsair-wide-preview");
+        corsairWindow.classList.add("corsair-window-wide");
+      }
+
+      image.src = button.dataset.corsairSrc;
+      image.alt = button.textContent;
+      scrollFrame.scrollTop = 0;
+
+      document.querySelectorAll(".corsair-preview-button").forEach(tab => {
+        tab.classList.toggle("is-active", tab === button);
+      });
+    }
+
+    document.querySelectorAll(".corsair-preview-button").forEach(button => {
+      button.addEventListener("click", () => setCorsairDesktopView(button));
+    });
+
+    const corsairScrollFrame = document.getElementById("corsairScrollFrame");
+    let corsairScrollLock = false;
+
+    corsairScrollFrame.addEventListener("wheel", e => {
+      if (!document.getElementById("corsairDesktopPreview").classList.contains("corsair-case-preview")) return;
+      e.preventDefault();
+      if (corsairScrollLock) return;
+
+      corsairScrollLock = true;
+      const step = corsairScrollFrame.clientHeight;
+      const direction = e.deltaY > 0 ? 1 : -1;
+      const currentSection = Math.round(corsairScrollFrame.scrollTop / step);
+      const maxSection = Math.ceil((corsairScrollFrame.scrollHeight - corsairScrollFrame.clientHeight) / step);
+      const nextSection = Math.max(0, Math.min(currentSection + direction, maxSection));
+
+      corsairScrollFrame.scrollTo({
+        top: nextSection * step,
+        behavior: "smooth"
+      });
+
+      setTimeout(() => corsairScrollLock = false, 520);
+    }, { passive: false });
+
+    document.getElementById("hiraethDesktopPreview").classList.add("show-image");
+    document.querySelector('[data-window="hiraeth"]').classList.add("hiraeth-window-concept");
+    document.querySelector('[data-window="sukoon"]').classList.add("sukoon-window-square");
+    document.querySelector('[data-window="corsair"]').classList.add("corsair-window-case");
+
+    window.addEventListener("resize", () => {
+      const activeHiraethButton = document.querySelector(".hiraeth-preview-button.is-active");
+      fitHiraethDesktopFrame(activeHiraethButton);
+    });
+
+    windows.forEach(win => {
+      win.addEventListener("pointerdown", () => focusWindow(win.dataset.window));
+    });
+
+    document.querySelectorAll(".title-bar").forEach(titleBar => {
+      titleBar.addEventListener("pointerdown", e => {
+        if (e.target.closest(".window-button")) return;
+        const win = titleBar.closest(".window");
+        const rect = win.getBoundingClientRect();
+        activeDragWindow = win;
+        dragOffsetX = e.clientX - rect.left;
+        dragOffsetY = e.clientY - rect.top;
+        win.style.left = `${rect.left}px`;
+        win.style.top = `${rect.top}px`;
+        win.style.right = "auto";
+        win.style.bottom = "auto";
+        focusWindow(win.dataset.window);
+        titleBar.setPointerCapture(e.pointerId);
+      });
+    });
+
+    window.addEventListener("pointermove", e => {
+      if (!activeDragWindow) return;
+      const margin = 8;
+      const taskbarHeight = 40;
+      const rect = activeDragWindow.getBoundingClientRect();
+      const maxLeft = window.innerWidth - rect.width - margin;
+      const maxTop = window.innerHeight - rect.height - taskbarHeight;
+      const left = Math.max(margin, Math.min(e.clientX - dragOffsetX, maxLeft));
+      const top = Math.max(margin, Math.min(e.clientY - dragOffsetY, maxTop));
+      activeDragWindow.style.left = `${left}px`;
+      activeDragWindow.style.top = `${top}px`;
+    });
+
+    window.addEventListener("pointerup", () => {
+      activeDragWindow = null;
+    });
+
+    window.addEventListener("pointercancel", () => {
+      activeDragWindow = null;
+    });
+
+    updateClock();
+    setInterval(updateClock, 1000);
+  </script>
+</body>
+</html>

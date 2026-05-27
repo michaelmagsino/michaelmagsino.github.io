@@ -457,6 +457,109 @@
       box-shadow: none;
     }
 
+    .hiraeth-tabs {
+      width: min(1180px, 100%);
+      margin: 0 auto clamp(26px, 4vw, 46px);
+    }
+
+    .hiraeth-tab-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: clamp(18px, 3vw, 28px);
+    }
+
+    .hiraeth-tab {
+      margin-top: 0;
+    }
+
+    .hiraeth-tab.is-active {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .hiraeth-tab-panel {
+      display: none;
+    }
+
+    .hiraeth-tab-panel.is-active {
+      display: block;
+    }
+
+    .hiraeth-tab-panel .wide-frame,
+    .hiraeth-tab-panel .hiraeth-demo-frame {
+      margin-bottom: 0;
+    }
+
+    .hiraeth-demo-block .gallery-title,
+    .hiraeth-tab-panel .gallery-title {
+      width: 100%;
+      margin: 0 auto 16px;
+      text-align: center;
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      opacity: .9;
+    }
+
+    .hiraeth-demo-frame {
+      height: auto;
+      max-height: none;
+    }
+
+    .hiraeth-navi-frame {
+      aspect-ratio: 1873 / 969;
+    }
+
+    .hiraeth-echo-frame {
+      aspect-ratio: 1766 / 796;
+    }
+
+    .hiraeth-frame {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #000;
+    }
+
+    .hiraeth-interact-caption {
+      margin-top: 20px;
+      font-family: "Special Elite", monospace;
+      font-size: clamp(.75rem, 1vw, .9rem);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      opacity: .68;
+    }
+
+    .project-context-toggle {
+      width: min(900px, 100%);
+      margin: 0 auto;
+    }
+
+    .project-context-toggle summary {
+      list-style: none;
+      width: max-content;
+      max-width: 100%;
+      margin: 0 auto clamp(18px, 3vw, 26px);
+      padding: 10px 14px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: var(--card);
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+      font-family: "Special Elite", monospace;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: clamp(.75rem, 1vw, .9rem);
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .project-context-toggle summary::-webkit-details-marker { display: none; }
+    .project-context-toggle summary:hover { transform: translateY(-2px); box-shadow: 6px 6px 0 var(--ink); }
+
     .project-writeup {
       width: min(900px, 100%);
       margin: 0 auto;
@@ -477,6 +580,21 @@
 
     .scroll-frame { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
     .scroll-frame img { display: block; width: 100%; height: auto; }
+
+    .corsair-case-frame {
+      height: auto;
+      aspect-ratio: 1743 / 968;
+      max-height: none;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    .corsair-case-frame img {
+      width: 100%;
+      height: auto;
+      object-fit: initial;
+    }
     .gallery-title { width: min(1180px, 100%); margin: 0 auto 18px; text-transform: uppercase; letter-spacing: .08em; font-size: .86rem; opacity: .72; }
     .center-actions { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: center; }
     .scribble-list { margin: 8px 0 16px 18px; line-height: 1.8; }
@@ -652,19 +770,46 @@
         <p>A diegetic UX/UI system concept for a student game set in a future flooded Chicago, where interface design becomes part of the world, the player’s perception, and the story itself.</p>
       </section>
 
-      <div class="frame wide-frame" aria-label="Hiraeth UI concept sketch">
-        <article class="showcase-item wide hiraeth-image-card">
-          <img src="portfolio_images/HUI.png" alt="Hiraeth diegetic UI concept sketch" loading="lazy" />
-          <div class="item-overlay">
-            <div>
-              <h3>First Concept Sketch</h3>
-              <p>An early visual direction for Hiraeth’s diegetic interface, exploring how Gwyn’s neural implant might reveal echoes, environmental data, and memory fragments within the game world.</p>
-            </div>
-          </div>
-        </article>
-      </div>
+      <section class="hiraeth-tabs" aria-label="Hiraeth showcase tabs">
+        <div class="hiraeth-tab-controls" role="tablist" aria-label="Hiraeth UI views">
+          <button class="btn hiraeth-tab is-active" type="button" data-hiraeth-tab="concept">Concept Sketch</button>
+          <button class="btn hiraeth-tab" type="button" data-hiraeth-tab="navigation">Navigation UI</button>
+          <button class="btn hiraeth-tab" type="button" data-hiraeth-tab="echo">Echo UI</button>
+        </div>
 
-      <section class="project-writeup" aria-label="Hiraeth project description">
+        <div class="hiraeth-tab-panel is-active" data-hiraeth-panel="concept">
+          <div class="frame wide-frame" aria-label="Hiraeth UI concept sketch">
+            <article class="showcase-item wide hiraeth-image-card">
+              <img src="portfolio_images/HUI.png" alt="Hiraeth diegetic UI concept sketch" loading="lazy" />
+              <div class="item-overlay">
+                <div>
+                  <h3>First Concept Sketch</h3>
+                  <p>An early visual direction for Hiraeth’s diegetic interface, exploring how Gwyn’s neural implant might reveal echoes, environmental data, and memory fragments within the game world.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="hiraeth-tab-panel" data-hiraeth-panel="navigation">
+          <h3 class="gallery-title">Hiraeth UI - Navigation</h3>
+          <div class="frame hiraeth-demo-frame hiraeth-navi-frame">
+            <iframe src="hiraethui-navi.html" title="Hiraeth UI - Navigation" class="hiraeth-frame" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <div class="hiraeth-tab-panel" data-hiraeth-panel="echo">
+          <h3 class="gallery-title">Hiraeth UI - Echo</h3>
+          <div class="frame hiraeth-demo-frame hiraeth-echo-frame">
+            <iframe src="hiraethui-memory.html" title="Hiraeth UI - Echo" class="hiraeth-frame" loading="lazy"></iframe>
+          </div>
+          <p class="hiraeth-interact-caption">click to interact</p>
+        </div>
+      </section>
+
+      <details class="project-context-toggle">
+        <summary>Read Project Context</summary>
+        <section class="project-writeup" aria-label="Hiraeth project description">
         <p>For this project, I will be designing the UX/UI system for a student game titled “Hiraeth”, a primarily environmental narrative experience set in a future version of a flooded Chicago. The game will follow a girl named Gwyn, who wakes up after twenty years of government-mandated cryo sleep. She then emerges into a city that is transformed by the collapse of climate, where streets have become canals, architecture has fallen into ruin, and the silence of a once thriving population that seems to linger throughout the environment.</p>
 
         <p>The project’s UX/UI design will be based around a diegetic UI, meaning, rather than having menus appearing as an external overlay, the interface exists naturally within the game world. This adds to the game with grounding the player within the environment to better intertwine themselves in this cataclysmic world. Instead of a traditional HUD, information will be revealed through the environment, visual distortions and lighting that feel embedded within the world.</p>
@@ -672,7 +817,8 @@
         <p>One central mechanic incorporates Gwyn’s government-mandated neural implant, that allows her to access these “echoes” of the past. This is one of the key tools Gwyn and the player will use to uncover hidden memories, remnants of what once was, and traces of what happened before the collapse. Because the intention of incorporating a diegetic UI is central to the game, it is not treated as a separate interface, instead becoming an extension of Gwyn’s perception. The information itself is gathered from direct interactions from the world.</p>
 
         <p>The aim of my goal in the part of the group project is to delve into how UX/UI can contribute to both storytelling and immersion. The use of a diegetic design in the interface becomes this additional narrative tool that pushes players to explore and discover what this calamity within Chicago holds. As of this moment, we are still figuring out the overall vibe of what these neural-based interfaces will look like within the context of the game. At the very least, I am working on ideas for the title screen and inventory system.</p>
-      </section>
+        </section>
+      </details>
     </div>
   </div>
 
@@ -701,7 +847,7 @@
         <h2>Corsair Case Study</h2>
         <p>A brand-focused portfolio case study exploring the Corsair Vanguard Pro 96 across presentation, web banner, packaging, and social media touchpoints. The work focuses on product hierarchy, dark visual styling, brand consistency, and adapting one product into multiple polished design contexts.</p>
       </section>
-      <div class="frame scroll-frame" aria-label="Scrollable Corsair case study"><img src="corsairpics/cspec.png" alt="Scrollable Corsair case study presentation" loading="lazy" /></div>
+      <div class="frame scroll-frame corsair-case-frame" aria-label="Corsair case study presentation"><img src="corsairpics/cspec.png" alt="Corsair case study presentation" loading="lazy" /></div>
       <h3 class="gallery-title">Product Mockups</h3>
       <section class="showcase-grid" aria-label="Corsair product mockups">
         <article class="showcase-item wide"><img src="corsairpics/cbanner.png" alt="Corsair Vanguard Pro 96 web banner mockup" loading="lazy" /><div class="item-overlay"><div><h3>Web Banner Mockup</h3><p>A web banner concept for the Corsair Vanguard Pro 96, focusing on product hierarchy, dark brand styling, and a direct value line: “Compact Design. Elite Speed. Hall Effect Precision.”</p></div></div></article>
@@ -823,7 +969,11 @@
 
       const icon = item.querySelector("img").cloneNode(true);
       focusIcon.replaceChildren(icon);
-      focusHint.textContent = item.dataset.label === "Bio" ? "click to inspect" : "click to open";
+      focusHint.textContent = item.dataset.label === "Bio"
+        ? "click to inspect"
+        : item.dataset.label === "Projects"
+          ? "Boot Up Computer"
+          : "click to open";
       focusLabel.textContent = item.dataset.label;
       focusPreview.classList.add("visible");
       focusPreview.setAttribute("aria-hidden", "false");
@@ -1129,6 +1279,10 @@
           e.stopPropagation();
           return;
         }
+        if (item.dataset.label === "Projects") {
+          window.location.href = "port-projects.html";
+          return;
+        }
         document.querySelectorAll(".modal.open").forEach(closeLayer);
         openLayer(document.getElementById(item.dataset.target));
       });
@@ -1138,6 +1292,39 @@
     window.addEventListener("pointerup", endDrag);
     window.addEventListener("pointercancel", endDrag);
     window.addEventListener("resize", () => items.forEach(clampItemToCanvas));
+
+    document.querySelectorAll(".hiraeth-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.hiraethTab;
+        document.querySelectorAll(".hiraeth-tab").forEach(button => button.classList.toggle("is-active", button === tab));
+        document.querySelectorAll(".hiraeth-tab-panel").forEach(panel => {
+          panel.classList.toggle("is-active", panel.dataset.hiraethPanel === target);
+        });
+      });
+    });
+
+    const corsairFrame = document.querySelector(".corsair-case-frame");
+    let corsairScrollLock = false;
+
+    if (corsairFrame) {
+      corsairFrame.addEventListener("wheel", e => {
+        e.preventDefault();
+        if (corsairScrollLock) return;
+
+        corsairScrollLock = true;
+        const step = corsairFrame.clientHeight;
+        const direction = e.deltaY > 0 ? 1 : -1;
+        const currentSection = Math.round(corsairFrame.scrollTop / step);
+        const nextSection = Math.max(0, currentSection + direction);
+
+        corsairFrame.scrollTo({
+          top: nextSection * step,
+          behavior: "smooth"
+        });
+
+        setTimeout(() => corsairScrollLock = false, 520);
+      }, { passive: false });
+    }
 
     document.addEventListener("click", e => {
       const openTarget = e.target.closest("[data-open]");

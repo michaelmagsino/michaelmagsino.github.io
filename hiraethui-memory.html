@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hiraeth Memory Hologram Prototype</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --cyan: #23c7ff;
+      --cyan-soft: rgba(35, 199, 255, 0.72);
+      --cyan-faint: rgba(35, 199, 255, 0.24);
+      --blue: #006bff;
+      --deep-blue: rgba(0, 22, 62, 0.74);
+    }
+
+    body {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background: #05070a;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+      color: white;
+    }
+
+    .prototype-shell {
+      width: min(100vw, 1728px);
+      aspect-ratio: 1728 / 777;
+      position: relative;
+      overflow: hidden;
+      background: #111;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.75);
+      cursor: default;
+      isolation: isolate;
+    }
+
+    .prototype-shell.active {
+      cursor: pointer;
+    }
+
+    .scene {
+      position: absolute;
+      inset: 0;
+      background-image: url("hiraeth/Screenshot 2026-05-26 204349.png");
+      background-size: cover;
+      background-position: center;
+      filter: contrast(1.02) brightness(0.96) saturate(0.92);
+      transition: filter 700ms ease;
+    }
+
+    .blue-vision {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 34% 72%, rgba(0, 86, 255, 0.28), transparent 24%),
+        radial-gradient(circle at 63% 53%, rgba(0, 128, 255, 0.42), transparent 28%),
+        linear-gradient(90deg, rgba(0, 22, 92, 0.34), rgba(0, 126, 255, 0.32), rgba(0, 18, 78, 0.3));
+      mix-blend-mode: screen;
+      transition: opacity 700ms ease;
+    }
+
+    .scan-pulse {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(90, 229, 255, 0.02) 38%,
+        rgba(105, 237, 255, 0.36) 50%,
+        rgba(0, 105, 255, 0.08) 57%,
+        transparent 72%
+      );
+      mix-blend-mode: screen;
+      transform: translateX(-115%);
+      z-index: 3;
+    }
+
+    .player-aura {
+      position: absolute;
+      left: 7.5%;
+      bottom: -6%;
+      width: 38%;
+      height: 68%;
+      opacity: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 42% 65%, rgba(0, 111, 255, 0.38), transparent 58%),
+        radial-gradient(ellipse at 42% 42%, rgba(0, 168, 255, 0.3), transparent 45%);
+      filter: blur(8px);
+      mix-blend-mode: screen;
+      transition: opacity 700ms ease;
+    }
+
+    .floor-glow {
+      position: absolute;
+      left: 41%;
+      top: 51%;
+      width: 33%;
+      height: 26%;
+      border-radius: 50%;
+      opacity: 0.55;
+      background: radial-gradient(ellipse, rgba(0, 121, 255, 0.34), transparent 68%);
+      filter: blur(8px);
+      animation: idleBreath 2600ms ease-in-out infinite;
+      transition: opacity 500ms ease, transform 700ms ease;
+    }
+
+    .memory-anchor {
+      position: absolute;
+      left: 57%;
+      top: 53%;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #86ddff;
+      border: 1px solid rgba(166, 236, 255, 1);
+      box-shadow:
+        0 0 10px rgba(86, 212, 255, 1),
+        0 0 28px rgba(0, 135, 255, 1),
+        0 0 68px rgba(0, 72, 255, 0.9);
+      transform: translate(-50%, -50%);
+      transition: opacity 350ms ease, transform 500ms ease;
+      z-index: 5;
+      cursor: pointer;
+      animation: anchorCorePulse 1800ms ease-in-out infinite;
+    }
+
+    .memory-anchor::before,
+    .memory-anchor::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 82px;
+      height: 82px;
+      border-radius: 50%;
+      border: 1px solid rgba(112, 238, 255, 0.52);
+      box-shadow:
+        0 0 12px rgba(77, 217, 255, 0.38),
+        inset 0 0 12px rgba(77, 217, 255, 0.12);
+      transform: translate(-50%, -50%) scale(0.55);
+      animation: anchorPulse 2200ms ease-out infinite;
+    }
+
+    .memory-anchor::after {
+      width: 126px;
+      height: 126px;
+      opacity: 0.35;
+      animation-delay: 800ms;
+    }
+
+    .prompt {
+      position: absolute;
+      left: 57%;
+      top: calc(53% + 44px);
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background:
+        repeating-linear-gradient(to bottom, rgba(181, 245, 255, 0.08) 0 1px, transparent 1px 6px),
+        radial-gradient(ellipse at center, rgba(0, 125, 255, 0.16), rgba(0, 32, 76, 0.18) 62%, transparent 100%);
+      border: 1px solid rgba(85, 218, 255, 0.36);
+      box-shadow:
+        0 0 12px rgba(0, 135, 255, 0.22),
+        0 0 26px rgba(0, 84, 255, 0.14),
+        inset 0 0 14px rgba(65, 215, 255, 0.08);
+      backdrop-filter: blur(3px);
+      color: rgba(217, 250, 255, 0.84);
+      font-size: clamp(0.55rem, 0.9vw, 0.78rem);
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      z-index: 6;
+      overflow: hidden;
+      text-shadow: 0 0 6px rgba(95, 227, 255, 0.52), 0 0 12px rgba(0, 119, 255, 0.34);
+      transition: opacity 240ms ease, transform 240ms ease, visibility 240ms ease;
+      animation:
+        promptPulse 2100ms ease-in-out infinite,
+        promptFlicker 3600ms steps(2, end) infinite;
+      cursor: pointer;
+    }
+
+    .prompt::before,
+    .prompt::after {
+      content: "";
+      position: absolute;
+      left: 14%;
+      right: 14%;
+      height: 1px;
+      background: rgba(194, 250, 255, 0.42);
+      box-shadow: 0 0 7px rgba(90, 225, 255, 0.48);
+      opacity: 0.42;
+      pointer-events: none;
+    }
+
+    .prompt::before {
+      top: 6px;
+    }
+
+    .prompt::after {
+      bottom: 6px;
+    }
+
+    .prompt-glow {
+      position: absolute;
+      inset: -20px;
+      background: radial-gradient(circle at 50% 50%, rgba(0, 140, 255, 0.28), transparent 68%);
+      filter: blur(8px);
+      opacity: 0.58;
+      pointer-events: none;
+      animation: promptGlowPulse 2100ms ease-in-out infinite;
+    }
+
+    .prompt-text {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      color: rgba(217, 250, 255, 0.84);
+      font-weight: 400;
+    }
+
+    .prompt-text strong {
+      color: rgba(238, 253, 255, 0.96);
+      font-weight: 700;
+      text-shadow: 0 0 8px rgba(103, 231, 255, 0.72);
+    }
+
+    .hologram-wrap {
+      position: absolute;
+      left: 57%;
+      top: 53%;
+      width: 300px;
+      height: 500px;
+      transform: translate(-50%, -73%) scale(0.18);
+      opacity: 0;
+      pointer-events: none;
+      transform-origin: 50% 88%;
+      transition: opacity 650ms ease, transform 800ms cubic-bezier(.18,.89,.28,1.12);
+      z-index: 7;
+    }
+
+    .hologram-glow {
+      position: absolute;
+      left: 50%;
+      bottom: 4px;
+      width: 285px;
+      height: 92px;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(0, 139, 255, 0.72), rgba(0, 95, 255, 0.25) 44%, transparent 72%);
+      filter: blur(8px);
+      animation: glowPulse 2100ms ease-in-out infinite;
+    }
+
+    .hologram-figure {
+      position: absolute;
+      inset: 0;
+      filter:
+        drop-shadow(0 0 10px rgba(120, 240, 255, 0.92))
+        drop-shadow(0 0 28px rgba(46, 201, 255, 0.68));
+      animation: hologramFlicker 1800ms steps(2, end) infinite;
+    }
+
+    .hologram-layer {
+      position: absolute;
+      inset: 0;
+      background-image: url("hiraeth/hologram.png");
+      background-repeat: no-repeat;
+      background-size: contain;
+      background-position: center bottom;
+      mix-blend-mode: screen;
+      opacity: 0.88;
+    }
+
+    .hologram-layer.main {
+      filter: brightness(1.18) contrast(1.16) saturate(1.28);
+      animation: humanDrift 3600ms ease-in-out infinite;
+    }
+
+    .hologram-layer.ghost-a {
+      opacity: 0.28;
+      filter: brightness(1.4) hue-rotate(12deg) blur(0.8px);
+      transform: translateX(-4px);
+      animation: glitchGhostA 1300ms steps(2, end) infinite;
+    }
+
+    .hologram-layer.ghost-b {
+      opacity: 0.2;
+      filter: brightness(1.25) hue-rotate(-18deg) blur(1px);
+      transform: translateX(4px);
+      animation: glitchGhostB 1700ms steps(2, end) infinite;
+    }
+
+    .hologram-lines {
+      position: absolute;
+      inset: 18px 28px;
+      background:
+        repeating-linear-gradient(to bottom, transparent 0 7px, rgba(178, 248, 255, 0.26) 7px 8px),
+        repeating-linear-gradient(to right, transparent 0 29px, rgba(115, 232, 255, 0.1) 29px 30px);
+      mix-blend-mode: screen;
+      opacity: 0.62;
+      mask-image: radial-gradient(ellipse at center, black 46%, transparent 75%);
+      animation: scanDrift 2200ms linear infinite;
+      pointer-events: none;
+    }
+
+    .glitch-slice {
+      position: absolute;
+      left: 18%;
+      right: 18%;
+      height: 9px;
+      opacity: 0;
+      background:
+        linear-gradient(90deg, transparent, rgba(174, 249, 255, 0.75), rgba(0, 119, 255, 0.22), transparent);
+      box-shadow: 0 0 12px rgba(102, 232, 255, 0.42);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .slice-one {
+      top: 24%;
+      animation: glitchSliceOne 2400ms steps(2, end) infinite;
+    }
+
+    .slice-two {
+      top: 47%;
+      animation: glitchSliceTwo 3100ms steps(2, end) infinite;
+    }
+
+    .slice-three {
+      top: 68%;
+      animation: glitchSliceThree 2700ms steps(2, end) infinite;
+    }
+
+    .data-ring {
+      position: absolute;
+      left: 50%;
+      border: 1px solid rgba(162, 245, 255, 0.38);
+      border-radius: 50%;
+      transform: translateX(-50%) rotateX(68deg);
+      box-shadow: 0 0 12px rgba(80, 218, 255, 0.35);
+      opacity: 0.62;
+      animation: ringSpin 4200ms linear infinite;
+      pointer-events: none;
+    }
+
+    .ring-one {
+      top: 118px;
+      width: 164px;
+      height: 42px;
+    }
+
+    .ring-two {
+      top: 250px;
+      width: 224px;
+      height: 58px;
+      animation-duration: 5600ms;
+      animation-direction: reverse;
+    }
+
+    .ring-three {
+      bottom: 54px;
+      width: 270px;
+      height: 74px;
+      opacity: 0.46;
+      animation-duration: 7200ms;
+    }
+
+    .particle-field {
+      position: absolute;
+      left: 57%;
+      top: 53%;
+      width: 340px;
+      height: 470px;
+      transform: translate(-50%, -72%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 8;
+      transition: opacity 650ms ease;
+    }
+
+    .particle-field span {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: rgba(225, 253, 255, 0.92);
+      box-shadow: 0 0 10px rgba(112, 235, 255, 0.92);
+      animation: particleFloat 3000ms ease-in-out infinite;
+    }
+
+    .particle-field span:nth-child(1) { left: 12%; top: 22%; animation-delay: 0ms; }
+    .particle-field span:nth-child(2) { left: 84%; top: 31%; animation-delay: 350ms; }
+    .particle-field span:nth-child(3) { left: 23%; top: 66%; animation-delay: 700ms; }
+    .particle-field span:nth-child(4) { left: 72%; top: 71%; animation-delay: 150ms; }
+    .particle-field span:nth-child(5) { left: 48%; top: 12%; animation-delay: 900ms; }
+    .particle-field span:nth-child(6) { left: 38%; top: 82%; animation-delay: 1200ms; }
+    .particle-field span:nth-child(7) { left: 63%; top: 42%; animation-delay: 500ms; }
+    .particle-field span:nth-child(8) { left: 18%; top: 45%; animation-delay: 1100ms; }
+
+    .memory-caption {
+      position: absolute;
+      left: 50%;
+      bottom: 6.5%;
+      width: min(700px, 68%);
+      transform: translateX(-50%) translateY(14px);
+      padding: 13px 20px 15px;
+      border-radius: 16px;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 12;
+      background:
+        repeating-linear-gradient(to bottom, rgba(174, 244, 255, 0.07) 0 1px, transparent 1px 7px),
+        radial-gradient(ellipse at center, rgba(0, 92, 170, 0.32), rgba(0, 17, 42, 0.36) 65%, transparent 100%);
+      border: 1px solid rgba(87, 218, 255, 0.32);
+      box-shadow:
+        0 0 18px rgba(0, 116, 255, 0.2),
+        inset 0 0 20px rgba(73, 219, 255, 0.06);
+      backdrop-filter: blur(5px);
+      color: rgba(232, 252, 255, 0.86);
+      text-align: center;
+      transition: opacity 500ms ease 220ms, transform 500ms ease 220ms;
+    }
+
+    .memory-caption::before {
+      content: "";
+      position: absolute;
+      left: 32px;
+      right: 32px;
+      top: 7px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(177, 247, 255, 0.42), transparent);
+      box-shadow: 0 0 8px rgba(80, 225, 255, 0.42);
+    }
+
+    .caption-label {
+      display: block;
+      margin-bottom: 6px;
+      color: rgba(118, 223, 255, 0.72);
+      font-size: clamp(0.56rem, 0.82vw, 0.72rem);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(0, 157, 255, 0.46);
+    }
+
+    .caption-line {
+      display: block;
+      min-height: 1.45em;
+      font-size: clamp(0.82rem, 1.18vw, 1.02rem);
+      line-height: 1.42;
+      letter-spacing: 0.03em;
+      text-shadow: 0 0 7px rgba(114, 231, 255, 0.38);
+    }
+
+    .type-text {
+      display: inline;
+      vertical-align: bottom;
+    }
+
+    .type-text.typing::after {
+      content: "";
+      display: inline-block;
+      width: 8px;
+      height: 1em;
+      margin-left: 3px;
+      vertical-align: -0.14em;
+      background: rgba(171, 244, 255, 0.82);
+      box-shadow: 0 0 8px rgba(83, 222, 255, 0.72);
+      animation: cursorBlink 760ms steps(2, end) infinite;
+    }
+
+    .active .scene {
+      filter: contrast(1.16) brightness(0.68) saturate(0.55) hue-rotate(12deg);
+    }
+
+    .active .blue-vision,
+    .active .player-aura {
+      opacity: 1;
+    }
+
+    .active .scan-pulse {
+      animation: scanSweep 900ms ease-out forwards;
+    }
+
+    .active .floor-glow {
+      opacity: 1;
+      transform: scale(1.45);
+    }
+
+    .active .memory-anchor {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.55);
+      pointer-events: none;
+    }
+
+    .active .prompt {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(-50%) translateY(12px) scale(0.92);
+      pointer-events: none;
+      animation: none;
+    }
+
+    .active .hologram-wrap {
+      opacity: 1;
+      transform: translate(-50%, -73%) scale(1);
+    }
+
+    .active .particle-field {
+      opacity: 1;
+    }
+
+    .active .memory-caption {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes scanSweep {
+      0% {
+        opacity: 0;
+        transform: translateX(-115%);
+      }
+
+      14% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateX(115%);
+      }
+    }
+
+    @keyframes promptPulse {
+      0%, 100% {
+        transform: translateX(-50%) scale(1);
+        box-shadow:
+          0 0 12px rgba(0, 135, 255, 0.22),
+          0 0 26px rgba(0, 84, 255, 0.14),
+          inset 0 0 14px rgba(65, 215, 255, 0.08);
+        border-color: rgba(85, 218, 255, 0.36);
+      }
+
+      50% {
+        transform: translateX(-50%) scale(1.045);
+        box-shadow:
+          0 0 18px rgba(74, 224, 255, 0.46),
+          0 0 42px rgba(0, 115, 255, 0.32),
+          inset 0 0 22px rgba(112, 234, 255, 0.18);
+        border-color: rgba(165, 243, 255, 0.72);
+      }
+    }
+
+    @keyframes promptGlowPulse {
+      0%, 100% {
+        opacity: 0.38;
+        transform: scale(0.92);
+      }
+
+      50% {
+        opacity: 0.82;
+        transform: scale(1.12);
+      }
+    }
+
+    @keyframes anchorCorePulse {
+      0%, 100% {
+        box-shadow:
+          0 0 10px rgba(86, 212, 255, 1),
+          0 0 28px rgba(0, 135, 255, 1),
+          0 0 68px rgba(0, 72, 255, 0.9);
+      }
+
+      50% {
+        box-shadow:
+          0 0 16px rgba(180, 247, 255, 1),
+          0 0 42px rgba(0, 166, 255, 1),
+          0 0 92px rgba(0, 89, 255, 1);
+      }
+    }
+
+    @keyframes anchorPulse {
+      0% {
+        opacity: 0.7;
+        transform: translate(-50%, -50%) scale(0.48);
+      }
+
+      72% {
+        opacity: 0.18;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.28);
+      }
+    }
+
+    @keyframes ringSpin {
+      from { transform: translateX(-50%) rotateX(68deg) rotateZ(0deg); }
+      to { transform: translateX(-50%) rotateX(68deg) rotateZ(360deg); }
+    }
+
+    @keyframes promptFlicker {
+      0%, 100% { opacity: 0.96; }
+      48% { opacity: 0.84; }
+      50% { opacity: 1; }
+      76% { opacity: 0.9; }
+    }
+
+    @keyframes idleBreath {
+      0%, 100% { opacity: 0.38; }
+      50% { opacity: 0.65; }
+    }
+
+    @keyframes hologramFlicker {
+      0%, 100% { opacity: 0.86; }
+      48% { opacity: 0.72; }
+      50% { opacity: 0.95; }
+      78% { opacity: 0.8; }
+    }
+
+    @keyframes humanDrift {
+      0%, 100% { transform: translateX(0) translateY(0); }
+      50% { transform: translateX(1px) translateY(-3px); }
+    }
+
+    @keyframes glitchGhostA {
+      0%, 82%, 100% {
+        opacity: 0.12;
+        transform: translateX(-2px);
+      }
+
+      84%, 88% {
+        opacity: 0.36;
+        transform: translateX(-10px);
+      }
+
+      90% {
+        opacity: 0.18;
+        transform: translateX(4px);
+      }
+    }
+
+    @keyframes glitchGhostB {
+      0%, 68%, 100% {
+        opacity: 0.1;
+        transform: translateX(2px);
+      }
+
+      70%, 74% {
+        opacity: 0.3;
+        transform: translateX(9px);
+      }
+
+      76% {
+        opacity: 0.16;
+        transform: translateX(-5px);
+      }
+    }
+
+    @keyframes glitchSliceOne {
+      0%, 76%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+      }
+
+      78%, 82% {
+        opacity: 0.8;
+        transform: translateX(-18px);
+      }
+
+      84% {
+        opacity: 0;
+        transform: translateX(10px);
+      }
+    }
+
+    @keyframes glitchSliceTwo {
+      0%, 54%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+      }
+
+      56%, 59% {
+        opacity: 0.72;
+        transform: translateX(16px);
+      }
+
+      61% {
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+    }
+
+    @keyframes glitchSliceThree {
+      0%, 88%, 100% {
+        opacity: 0;
+        transform: translateX(0);
+      }
+
+      90%, 94% {
+        opacity: 0.68;
+        transform: translateX(-14px);
+      }
+
+      96% {
+        opacity: 0;
+        transform: translateX(6px);
+      }
+    }
+
+    @keyframes glowPulse {
+      0%, 100% {
+        opacity: 0.72;
+        transform: translateX(-50%) scale(0.96);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.08);
+      }
+    }
+
+    @keyframes scanDrift {
+      from { transform: translateY(-16px); }
+      to { transform: translateY(16px); }
+    }
+
+    @keyframes particleFloat {
+      0%, 100% {
+        opacity: 0.2;
+        transform: translateY(12px) scale(0.7);
+      }
+
+      50% {
+        opacity: 1;
+        transform: translateY(-16px) scale(1.2);
+      }
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .hologram-wrap {
+        width: 230px;
+        height: 390px;
+      }
+
+      .particle-field {
+        width: 250px;
+        height: 360px;
+      }
+
+      .memory-caption {
+        width: min(760px, 82%);
+        bottom: 5%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .floor-glow,
+      .hologram-figure,
+      .hologram-layer,
+      .data-ring,
+      .hologram-lines,
+      .glitch-slice,
+      .particle-field span,
+      .prompt,
+      .prompt-glow {
+        animation: none;
+      }
+
+      .active .scan-pulse {
+        animation: none;
+        opacity: 0.32;
+        transform: translateX(0);
+      }
+
+      .type-text.typing::after {
+        animation: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype-shell" id="prototype">
+    <div class="scene" aria-hidden="true"></div>
+    <div class="blue-vision" aria-hidden="true"></div>
+    <div class="scan-pulse" aria-hidden="true"></div>
+    <div class="player-aura" aria-hidden="true"></div>
+    <div class="floor-glow" aria-hidden="true"></div>
+
+    <div class="memory-anchor" id="memoryAnchor" aria-hidden="true"></div>
+
+    <div class="prompt" id="memoryPrompt" aria-label="Neural Echo Detected, E to Sync">
+      <span class="prompt-glow"></span>
+      <span class="prompt-text">NEURAL ECHO DETECTED // <strong>E</strong> TO SYNC</span>
+    </div>
+
+    <div class="hologram-wrap" aria-hidden="true">
+      <div class="hologram-glow"></div>
+
+      <div class="hologram-figure">
+        <div class="hologram-layer ghost-a"></div>
+        <div class="hologram-layer ghost-b"></div>
+        <div class="hologram-layer main"></div>
+        <div class="hologram-lines"></div>
+        <div class="glitch-slice slice-one"></div>
+        <div class="glitch-slice slice-two"></div>
+        <div class="glitch-slice slice-three"></div>
+      </div>
+
+      <div class="data-ring ring-one"></div>
+      <div class="data-ring ring-two"></div>
+      <div class="data-ring ring-three"></div>
+    </div>
+
+    <div class="particle-field" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="memory-caption" aria-live="polite">
+      <span class="caption-label">Echo Fragment</span>
+      <span class="caption-line">
+        <span class="type-text" id="typeText" data-text="We have to keep going, there is nothing left down here..."></span>
+      </span>
+    </div>
+  </main>
+
+  <script>
+    const prototype = document.getElementById("prototype");
+    const memoryAnchor = document.getElementById("memoryAnchor");
+    const memoryPrompt = document.getElementById("memoryPrompt");
+    const typeText = document.getElementById("typeText");
+
+    let typingTimer = null;
+
+    function startCaptionTyping() {
+      const fullText = typeText.dataset.text;
+      let index = 0;
+
+      clearInterval(typingTimer);
+      typeText.textContent = "";
+      typeText.classList.add("typing");
+
+      typingTimer = setInterval(() => {
+        typeText.textContent += fullText.charAt(index);
+        index += 1;
+
+        if (index >= fullText.length) {
+          clearInterval(typingTimer);
+
+          setTimeout(() => {
+            typeText.classList.remove("typing");
+          }, 500);
+        }
+      }, 42);
+    }
+
+    function resetCaptionTyping() {
+      clearInterval(typingTimer);
+      typeText.textContent = "";
+      typeText.classList.remove("typing");
+    }
+
+    function openMemoryView() {
+      prototype.classList.add("active");
+      startCaptionTyping();
+    }
+
+    function closeMemoryView() {
+      prototype.classList.remove("active");
+      resetCaptionTyping();
+    }
+
+    function toggleMemoryView() {
+      if (prototype.classList.contains("active")) {
+        closeMemoryView();
+      } else {
+        openMemoryView();
+      }
+    }
+
+    document.addEventListener("keydown", (event) => {
+      const key = event.key.toLowerCase();
+
+      if (key === "e") {
+        toggleMemoryView();
+      }
+
+      if (key === "escape") {
+        closeMemoryView();
+      }
+    });
+
+    memoryAnchor.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openMemoryView();
+    });
+
+    memoryPrompt.addEventListener("click", (event) => {
+      event.stopPropagation();
+      openMemoryView();
+    });
+
+    prototype.addEventListener("click", () => {
+      if (prototype.classList.contains("active")) {
+        closeMemoryView();
+      }
+    });
+  </script>
+</body>
+</html>
