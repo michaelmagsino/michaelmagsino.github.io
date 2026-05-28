@@ -7,6 +7,7 @@
   <meta name="description" content="Michael Magsino's project archive presented as a retro desktop interface." />
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&family=Press+Start+2P&display=swap');
     :root {
       --desktop: #008080;
       --window-gray: #c0c0c0;
@@ -35,7 +36,7 @@
     }
 
     body {
-      font-family: "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      font-family: "Pixelify Sans", "MS Sans Serif", Tahoma, Geneva, sans-serif;
       color: var(--text);
       background:
         radial-gradient(circle at 18% 16%, rgba(255,255,255,.12), transparent 24%),
@@ -50,6 +51,93 @@
       font: inherit;
       color: inherit;
     }
+
+    .boot-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      display: grid;
+      place-items: center;
+      background: #000;
+      color: #c0c0c0;
+      font-family: "Pixelify Sans", "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      transition: opacity 420ms ease, visibility 420ms ease;
+    }
+
+    .boot-screen.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .boot-box {
+      width: min(620px, calc(100vw - 38px));
+      padding: 24px;
+      background: #000;
+      border: 2px solid #c0c0c0;
+      box-shadow: 0 0 0 2px #000, 6px 6px 0 rgba(255,255,255,.18);
+    }
+
+    .boot-brand {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 12px;
+    }
+
+    .boot-penguin {
+      width: 156px;
+      height: 156px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      image-rendering: pixelated;
+      flex: 0 0 auto;
+    }
+
+    .boot-brand-copy {
+      min-width: 0;
+    }
+
+    .boot-title {
+      margin-bottom: 14px;
+      color: #fff;
+      font-size: clamp(1.7rem, 5vw, 3rem);
+      font-family: "Press Start 2P", "Pixelify Sans", "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      font-weight: 400;
+      letter-spacing: .04em;
+    }
+
+    .boot-line {
+      margin-bottom: 7px;
+      font-size: .92rem;
+      line-height: 1.45;
+    }
+
+    .boot-progress {
+      position: relative;
+      height: 18px;
+      margin-top: 18px;
+      border: 2px solid #c0c0c0;
+      overflow: hidden;
+    }
+
+    .boot-progress::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      width: 0;
+      background: #c0c0c0;
+      animation: bootLoad 2.4s steps(12) forwards;
+    }
+
+    .boot-skip {
+      margin-top: 14px;
+      color: #808080;
+      font-size: .78rem;
+    }
+
+    @keyframes bootLoad { to { width: calc(100% - 4px); } }
 
     .desktop {
       position: relative;
@@ -462,7 +550,7 @@
       bottom: 36px;
       z-index: 120;
       display: none;
-      width: 210px;
+      width: 224px;
       background: var(--window-gray);
       border: 2px solid;
       border-color: var(--window-light) var(--window-black) var(--window-black) var(--window-light);
@@ -474,7 +562,7 @@
     }
 
     .start-menu-header {
-      padding: 8px 10px;
+      padding: 8px 4px;
       background: linear-gradient(180deg, var(--title-blue), var(--title-blue-light));
       color: white;
       font-weight: 700;
@@ -484,13 +572,19 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 34px;
-      text-align: end;
-      letter-spacing: .08em;
+      width: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      letter-spacing: .02em;
+      font-size: .9rem;
+      line-height: 1;
+      overflow: hidden;
     }
 
     .start-menu-items {
-      margin-left: 34px;
+      margin-left: 40px;
       padding: 4px;
     }
 
@@ -578,13 +672,17 @@
       cursor: pointer;
     }
 
-    .start-glyph {
-      width: 15px;
-      height: 15px;
-      background:
-        linear-gradient(90deg, #f00 0 50%, #0f0 50%),
-        linear-gradient(#00f 0 50%, #ff0 50%);
-      border: 1px solid #000;
+    .start-penguin {
+      width: 24px;
+      height: 24px;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      image-rendering: pixelated;
+      flex: 0 0 auto;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     .taskbar-items {
@@ -613,6 +711,22 @@
       border-color: var(--window-dark) var(--window-light) var(--window-light) var(--window-dark);
     }
 
+    @media (max-width: 520px) {
+      .boot-brand {
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .boot-penguin {
+        width: 104px;
+        height: 104px;
+      }
+
+      .boot-title {
+        font-size: 1.15rem;
+      }
+    }
+
     @media (max-width: 760px) {
       body { overflow: auto; }
       .desktop { min-height: 100svh; height: auto; padding-bottom: 70px; overflow: visible; }
@@ -625,6 +739,21 @@
   </style>
 </head>
 <body>
+  <div class="boot-screen" id="bootScreen" role="status" aria-live="polite">
+    <div class="boot-box">
+      <div class="boot-brand">
+        <img class="boot-penguin" src="portfolio_images/penguin_logo.png" alt="" aria-hidden="true" />
+        <div class="boot-brand-copy">
+          <div class="boot-title">Michael 99&rsquo;</div>
+          <div class="boot-line">Starting project desktop...</div>
+          <div class="boot-line">Loading folders, windows, and tiny computer magic.</div>
+        </div>
+      </div>
+      <div class="boot-progress" aria-hidden="true"></div>
+      <div class="boot-skip">click anywhere to skip</div>
+    </div>
+  </div>
+
   <main class="desktop" aria-label="Projects desktop">
     <section class="desktop-header" aria-label="Desktop introduction">
       <h1>Michael Projects Desktop</h1>
@@ -759,7 +888,7 @@
 
   <footer class="taskbar" aria-label="Retro taskbar">
     <div class="taskbar-left">
-      <button class="start-button" type="button" id="startButton" aria-expanded="false" aria-controls="startMenu"><span class="start-glyph" aria-hidden="true"></span>Start</button>
+      <button class="start-button" type="button" id="startButton" aria-expanded="false" aria-controls="startMenu"><img class="start-penguin" src="portfolio_images/penguin_logo.png" alt="" aria-hidden="true" />Start</button>
       <div class="taskbar-items" aria-label="Open project windows">
         <button class="taskbar-item" type="button" data-focus-window="hiraeth">Hiraeth UI</button>
         <button class="taskbar-item" type="button" data-focus-window="corsair">Corsair</button>
@@ -773,6 +902,7 @@
   </footer>
 
   <script>
+    const bootScreen = document.getElementById("bootScreen");
     const windows = document.querySelectorAll(".window");
     const icons = document.querySelectorAll(".desktop-icon");
     const taskbarItems = document.querySelectorAll(".taskbar-item");
@@ -784,6 +914,16 @@
     let activeDragWindow = null;
     let dragOffsetX = 0;
     let dragOffsetY = 0;
+
+    function hideBootScreen() {
+      bootScreen.classList.add("is-hidden");
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(hideBootScreen, 2700);
+    });
+
+    bootScreen.addEventListener("click", hideBootScreen);
 
     function updateClock() {
       const now = new Date();
@@ -1043,6 +1183,7 @@
     document.getElementById("hiraethDesktopPreview").classList.add("show-image");
     document.querySelector('[data-window="hiraeth"]').classList.add("hiraeth-window-concept");
     document.querySelector('[data-window="sukoon"]').classList.add("sukoon-window-square");
+    updateSukoonPreview();
     document.querySelector('[data-window="corsair"]').classList.add("corsair-window-case");
 
     window.addEventListener("resize", () => {

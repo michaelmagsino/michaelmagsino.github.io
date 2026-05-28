@@ -48,7 +48,6 @@
 
     body.dark-mode {
       background:
-        repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(255,255,255,.018) 28px),
         linear-gradient(180deg, var(--paper), var(--paper-dark));
     }
 
@@ -302,6 +301,21 @@
       opacity: 1;
     }
     .focus-hint { margin-top: 6px; font-size: clamp(.66rem, 1vw, .78rem); opacity: .65; }
+    .focus-card .bio-id-stage {
+      width: 100%;
+      max-width: 520px;
+      perspective: 1200px;
+    }
+
+    .focus-card .bio-id-flip {
+      max-width: 520px;
+      transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .focus-card .bio-id-flip.is-preview-flipped {
+      transform: rotateY(180deg);
+    }
+
     .bio-id-flip {
       position: relative;
       width: 100%;
@@ -655,7 +669,7 @@
         <div class="item-caption">Bio</div>
       </button>
 
-      <button class="sketch-item item-projects" data-label="Projects" data-target="modal-projects" aria-label="Open Projects section">
+      <button class="sketch-item item-projects" data-label="Projects" data-target="modal-projects" aria-label="Boot up Projects desktop">
         <img class="sketch-img" src="portfolio_images/Project_Sketch.png" alt="Sketch representing Michael's projects" />
         <div class="item-caption">Projects</div>
       </button>
@@ -901,6 +915,7 @@
 
     let isHoveringItem = false;
     let hoverTimer = null;
+    let bioPreviewTimer = null;
     let dragItem = null;
     let didDrag = false;
     let dragStartX = 0;
@@ -967,8 +982,38 @@
       items.forEach(el => el.classList.remove("is-origin"));
       item.classList.add("is-origin");
 
-      const icon = item.querySelector("img").cloneNode(true);
-      focusIcon.replaceChildren(icon);
+      clearTimeout(bioPreviewTimer);
+
+      if (item.dataset.label === "Bio") {
+        const bioStage = document.createElement("div");
+        bioStage.className = "bio-id-stage";
+
+        const bioFlip = document.createElement("div");
+        bioFlip.className = "bio-id-flip";
+        bioFlip.id = "bioPreviewFlip";
+
+        const front = document.createElement("img");
+        front.className = "bio-id-face bio-id-front";
+        front.src = "portfolio_images/Michael_ID.png";
+        front.alt = "Front of Michael Magsino ID card";
+
+        const back = document.createElement("img");
+        back.className = "bio-id-face bio-id-back";
+        back.src = "portfolio_images/IDB_Sketch.png";
+        back.alt = "Back of Michael Magsino ID card";
+
+        bioFlip.append(front, back);
+        bioStage.append(bioFlip);
+        focusIcon.replaceChildren(bioStage);
+
+        bioPreviewTimer = setTimeout(() => {
+          bioFlip.classList.add("is-preview-flipped");
+        }, 750);
+      } else {
+        const icon = item.querySelector("img").cloneNode(true);
+        focusIcon.replaceChildren(icon);
+      }
+
       focusHint.textContent = item.dataset.label === "Bio"
         ? "click to inspect"
         : item.dataset.label === "Projects"
@@ -1002,6 +1047,7 @@
 
     function hidePreview() {
       clearTimeout(hoverTimer);
+      clearTimeout(bioPreviewTimer);
       isHoveringItem = false;
       setTimeout(() => {
         if (isHoveringItem || dragItem || document.querySelector(".modal.open")) return;
