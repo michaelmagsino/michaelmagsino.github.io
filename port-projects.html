@@ -364,8 +364,8 @@
     }
     .contact-window-preview {
       width: 100%;
-      height: min(72vh, 640px);
-      min-height: 480px;
+      height: min(72vh, 610px);
+      min-height: 500px;
       background: var(--window-gray);
     }
 
@@ -742,15 +742,221 @@
       }
     }
 
+
     @media (max-width: 760px) {
-      body { overflow: auto; }
-      .desktop { min-height: 100svh; height: auto; padding-bottom: 70px; overflow: visible; }
-      .desktop-header { position: static; max-width: 100%; margin-bottom: 24px; }
-      .icon-grid { grid-template-columns: repeat(2, 96px); }
-      .window { position: static; width: 100%; margin-top: 22px; display: none; }
-      .window.is-open { display: block; }
-      .taskbar-item { min-width: 86px; }
+      html,
+      body {
+        overflow: auto;
+      }
+
+      body {
+        min-height: 100svh;
+      }
+
+      .desktop {
+        min-height: 100svh;
+        height: auto;
+        padding: 16px 14px 78px;
+        overflow: visible;
+      }
+
+      .desktop-header {
+        position: static;
+        max-width: 100%;
+        margin-bottom: 22px;
+      }
+
+      .icon-grid {
+        grid-template-columns: repeat(2, minmax(92px, 1fr));
+        gap: 22px 14px;
+        width: 100%;
+        justify-items: center;
+      }
+
+      .desktop-icon {
+        width: 100%;
+        max-width: 132px;
+        min-height: 98px;
+        padding: 8px 4px;
+        justify-content: start;
+      }
+
+      .folder-icon {
+        width: 58px;
+        height: 42px;
+      }
+
+      .desktop-logo-icon {
+        width: 64px;
+        height: 64px;
+      }
+
+      .icon-label {
+        max-width: 120px;
+        font-size: .86rem;
+      }
+
+      .window {
+        position: static;
+        display: none;
+        width: 100% !important;
+        max-width: 100%;
+        margin-top: 22px;
+        opacity: 1;
+        transform: none;
+        pointer-events: auto;
+      }
+
+      .window.is-open {
+        display: block;
+      }
+
+      .window[data-window="gundam"] {
+        height: 82svh;
+      }
+
+      .window[data-window="gundam"] .window-body {
+        height: calc(100% - 34px);
+      }
+
+      .window-body {
+        padding: 10px;
+      }
+
+      .title-bar {
+        min-height: 34px;
+        font-size: .9rem;
+      }
+
+      .window-button {
+        width: 28px;
+        height: 28px;
+      }
+
+      .project-action,
+      .start-menu-item,
+      .taskbar-item,
+      .clock,
+      .start-button {
+        font-size: .9rem;
+      }
+
+      .hiraeth-window-tabs,
+      .sukoon-window-tabs,
+      .corsair-window-tabs,
+      .window-actions {
+        gap: 8px;
+      }
+
+      .project-action {
+        padding: 9px 11px;
+      }
+
+      .contact-window-preview {
+        height: 74svh;
+        min-height: 520px;
+      }
+
+      .taskbar {
+        height: 46px;
+        align-items: center;
+      }
+
+      .start-button {
+        min-height: 36px;
+        padding: 5px 10px;
+      }
+
+      .start-penguin {
+        width: 28px;
+        height: 28px;
+      }
+
+      .taskbar-items {
+        display: none;
+      }
+
+      .clock {
+        min-height: 34px;
+      }
+
+      .start-menu {
+        bottom: 46px;
+        width: min(250px, calc(100vw - 10px));
+      }
     }
+
+    @media (max-width: 480px) {
+      .desktop {
+        padding: 14px 12px 76px;
+      }
+
+      .desktop-header h1 {
+        font-size: 1.35rem;
+      }
+
+      .desktop-header p {
+        font-size: .95rem;
+      }
+
+      .icon-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .desktop-icon {
+        grid-template-columns: 64px 1fr;
+        align-items: center;
+        justify-items: start;
+        max-width: 100%;
+        min-height: 74px;
+        text-align: left;
+      }
+
+      .desktop-icon .icon-label {
+        text-align: left;
+        max-width: 100%;
+      }
+
+      .folder-icon {
+        justify-self: center;
+      }
+
+      .desktop-logo-icon {
+        justify-self: center;
+      }
+
+      .window-copy p {
+        font-size: .92rem;
+      }
+
+      .hiraeth-window-tabs,
+      .sukoon-window-tabs,
+      .corsair-window-tabs {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .project-action {
+        width: 100%;
+        text-align: center;
+      }
+
+      .contact-window-preview {
+        height: 78svh;
+        min-height: 560px;
+      }
+
+      .start-menu-header {
+        width: 36px;
+        font-size: .82rem;
+      }
+
+      .start-menu-items {
+        margin-left: 36px;
+      }
+    }
+
   </style>
 </head>
 <body>
