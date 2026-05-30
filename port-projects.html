@@ -797,14 +797,21 @@
       }
 
       .window {
-        position: static;
+        position: fixed;
+        left: 10px !important;
+        right: 10px;
+        top: 10px !important;
+        bottom: 56px;
+        z-index: 150;
         display: none;
-        width: 100% !important;
-        max-width: 100%;
-        margin-top: 22px;
+        width: auto !important;
+        max-width: none;
+        max-height: calc(100svh - 66px);
+        margin-top: 0;
         opacity: 1;
         transform: none;
         pointer-events: auto;
+        overflow: auto;
       }
 
       .window.is-open {
@@ -812,15 +819,19 @@
       }
 
       .window[data-window="gundam"] {
-        height: 82svh;
+        height: auto;
       }
 
       .window[data-window="gundam"] .window-body {
-        height: calc(100% - 34px);
+        height: calc(100svh - 118px);
       }
 
       .window-body {
         padding: 10px;
+      }
+
+      .window-preview {
+        min-height: 0;
       }
 
       .title-bar {
@@ -853,8 +864,8 @@
       }
 
       .contact-window-preview {
-        height: 74svh;
-        min-height: 520px;
+        height: calc(100svh - 140px);
+        min-height: 0;
       }
 
       .taskbar {
@@ -943,8 +954,8 @@
       }
 
       .contact-window-preview {
-        height: 78svh;
-        min-height: 560px;
+        height: calc(100svh - 140px);
+        min-height: 0;
       }
 
       .start-menu-header {

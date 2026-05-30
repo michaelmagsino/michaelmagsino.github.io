@@ -277,6 +277,11 @@
     .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(200px, 16.5vw, 300px); --r: 8deg; --hr: 4deg; --d: 320ms; }
     .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(230px, 18.5vw, 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
 
+
+    .mobile-menu {
+      display: none;
+    }
+
     .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
     .focus-preview.visible { opacity: 1; }
 
@@ -638,23 +643,167 @@
       .item-statement { bottom: 17%; right: 6%; --w: 210px; }
     }
 
+
     @media (max-width: 700px) {
-      .canvas { height: 100svh; min-height: 100svh; padding: 20px 16px 40px; }
-      .centerpiece { min-height: 100svh; padding: 90px 22px 220px; }
-      .canvas-items { height: 100%; min-height: 0; }
-      #main-title { font-size: clamp(3.2rem, 15vw, 5rem); }
-      .subcopy { font-size: .9rem; }
-      .item-bio { top: 11%; left: 4%; --w: 160px; }
-      .item-projects { top: 13%; right: 1%; --w: 172px; }
-      .item-resume { bottom: 16%; left: 7%; --w: 136px; }
-      .item-statement { bottom: 15%; right: 5%; --w: 156px; }
-      .item-caption { font-size: .62rem; }
-      .sketch-grid, .showcase-grid { grid-template-columns: 1fr; }
-      .modal-card { padding: 20px; }
-      .focus-card { width: min(360px, 88vw); }
-      .bar { align-items: flex-start; flex-direction: column; }
-      .frame { height: 72vh; }
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        height: auto;
+        overflow: auto;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .canvas {
+        min-height: 100svh;
+        height: auto;
+        padding: 18px 16px 92px;
+        overflow: visible;
+      }
+
+      .canvas::after {
+        inset: 10px;
+        border-radius: 18px;
+      }
+
+      .centerpiece {
+        position: relative;
+        min-height: 0;
+        display: block;
+        padding: 86px 10px 24px;
+      }
+
+      .centerpiece-inner {
+        max-width: 100%;
+      }
+
+      #main-title {
+        font-size: clamp(3rem, 16vw, 4.8rem);
+      }
+
+      .subcopy {
+        max-width: 290px;
+        margin-top: 14px;
+      }
+
+      .canvas-items {
+        display: none;
+      }
+
+      .mobile-menu {
+        position: relative;
+        z-index: 12;
+        display: grid;
+        gap: 14px;
+        width: min(420px, 100%);
+        margin: 0 auto;
+      }
+
+      .mobile-menu-button {
+        width: 100%;
+        padding: 16px 16px;
+        background: var(--card);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 6px 6px 0 var(--ink);
+        font-family: "Special Elite", monospace;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+      }
+
+      .mobile-menu-button strong {
+        display: block;
+        margin-bottom: 5px;
+        font-family: Caveat, cursive;
+        font-size: 2rem;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+
+      .mobile-menu-button span {
+        display: block;
+        font-size: .72rem;
+        line-height: 1.4;
+        opacity: .72;
+      }
+
+      .mobile-menu-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .theme-toggle {
+        top: 14px;
+        right: 14px;
+        width: 62px;
+      }
+
+      .focus-preview {
+        display: none;
+      }
+
+      .modal,
+      .viewer,
+      .showcase {
+        position: fixed;
+        inset: 0;
+      }
+
+      .modal {
+        padding: 14px;
+      }
+
+      .modal-card {
+        width: min(100%, 460px);
+        max-height: calc(100svh - 28px);
+        border-radius: 18px;
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+
+      .showcase-content {
+        padding: 18px 14px 32px;
+      }
+
+      .showcase-grid,
+      .sketch-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .bar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .frame {
+        width: 100%;
+        height: auto;
+        max-height: none;
+        border-radius: 18px;
+        box-shadow: 7px 7px 0 var(--ink);
+      }
+
+      .gundam-frame,
+      .resume-frame {
+        min-height: 72svh;
+      }
+
+      .paper {
+        max-height: none;
+      }
     }
+
   </style>
 </head>
 <body>
@@ -696,6 +845,29 @@
         <div class="item-caption">Artist Statement</div>
       </button>
     </section>
+
+    <section class="mobile-menu" aria-label="Mobile portfolio navigation">
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-bio">
+        <strong>Bio</strong>
+        <span>View Michael's ID card and short bio.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-link="port-projects.html">
+        <strong>Projects</strong>
+        <span>Boot up the Michael 99’ projects desktop.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-resume">
+        <strong>Resume</strong>
+        <span>View or download Michael's resume.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-statement">
+        <strong>Artist Statement</strong>
+        <span>Read Michael's creative statement.</span>
+      </button>
+    </section>
+
   </main>
 
   <div class="focus-preview" id="focusPreview" aria-hidden="true">
@@ -1343,6 +1515,20 @@
         }
         document.querySelectorAll(".modal.open").forEach(closeLayer);
         openLayer(document.getElementById(item.dataset.target));
+      });
+    });
+
+
+    document.querySelectorAll("[data-mobile-open]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".modal.open").forEach(closeLayer);
+        openLayer(document.getElementById(button.dataset.mobileOpen));
+      });
+    });
+
+    document.querySelectorAll("[data-mobile-link]").forEach(button => {
+      button.addEventListener("click", () => {
+        window.location.href = button.dataset.mobileLink;
       });
     });
 
