@@ -282,6 +282,10 @@
       display: none;
     }
 
+    .mobile-theme-toggle {
+      display: none;
+    }
+
     .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
     .focus-preview.visible { opacity: 1; }
 
@@ -419,6 +423,7 @@
 
     .bar-actions { display: flex; align-items: center; gap: 10px; }
     .resume-frame, .gundam-frame { width: 100%; height: 100%; border: 0; background: white; }
+    .resume-frame { display: block; }
     .showcase-content { overflow: auto; padding: clamp(22px, 4vw, 46px); }
     .showcase-intro { max-width: 850px; margin: 0 auto clamp(24px, 4vw, 42px); text-align: center; }
     .showcase-intro h2 { margin-bottom: 12px; font-size: clamp(2.6rem, 5vw, 4.4rem); }
@@ -677,7 +682,7 @@
         position: relative;
         min-height: 0;
         display: block;
-        padding: 86px 10px 24px;
+        padding: 86px 14px 24px;
       }
 
       .centerpiece-inner {
@@ -685,12 +690,13 @@
       }
 
       #main-title {
-        font-size: clamp(3rem, 16vw, 4.8rem);
+        max-width: calc(100vw - 56px);
+        font-size: clamp(2.65rem, 13.5vw, 4.25rem);
+        overflow-wrap: anywhere;
       }
 
       .subcopy {
-        max-width: 290px;
-        margin-top: 14px;
+        display: none;
       }
 
       .canvas-items {
@@ -744,9 +750,60 @@
       }
 
       .theme-toggle {
-        top: 14px;
-        right: 14px;
-        width: 62px;
+        display: none;
+      }
+
+      .mobile-theme-toggle {
+        justify-self: center;
+        display: grid;
+        justify-items: center;
+        gap: 5px;
+        width: 58px;
+        margin-top: 8px;
+        padding: 4px;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font-family: "Special Elite", monospace;
+        font-size: .62rem;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+      }
+
+      .mobile-theme-icon-wrap {
+        position: relative;
+        width: 48px;
+        aspect-ratio: 1;
+      }
+
+      .mobile-theme-icon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: opacity 420ms ease;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .mobile-theme-icon-dark {
+        opacity: 0;
+      }
+
+      .mobile-theme-icon-light {
+        opacity: 1;
+      }
+
+      body.dark-mode .mobile-theme-icon-light {
+        opacity: 0;
+      }
+
+      body.dark-mode .mobile-theme-icon-dark {
+        opacity: 1;
       }
 
       .focus-preview {
@@ -794,8 +851,13 @@
         box-shadow: 7px 7px 0 var(--ink);
       }
 
-      .gundam-frame,
       .resume-frame {
+        width: 100%;
+        height: calc(100svh - 96px);
+        min-height: 0;
+      }
+
+      .gundam-frame {
         min-height: 72svh;
       }
 
@@ -865,6 +927,14 @@
       <button class="mobile-menu-button" type="button" data-mobile-open="modal-statement">
         <strong>Artist Statement</strong>
         <span>Read Michael's creative statement.</span>
+      </button>
+
+      <button class="mobile-theme-toggle" type="button" id="mobileThemeToggle" aria-label="Switch to dark mode">
+        <span class="mobile-theme-icon-wrap" aria-hidden="true">
+          <img class="mobile-theme-icon mobile-theme-icon-light" src="portfolio_images/Light.png" alt="" />
+          <img class="mobile-theme-icon mobile-theme-icon-dark" src="portfolio_images/Dark.png" alt="" />
+        </span>
+        <span id="mobileThemeToggleText">Turn Off</span>
       </button>
     </section>
 
@@ -954,7 +1024,7 @@
         <button type="button" data-close="resumeViewer" aria-label="Close resume viewer">✕</button>
       </div>
     </div>
-    <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
+    <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf#view=FitH&zoom=page-fit" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
   </div>
 
   <div class="layer showcase" id="hiraethShowcase" aria-hidden="true">
@@ -1115,7 +1185,11 @@
       body.classList.toggle("dark-mode", mode === "dark");
       localStorage.setItem("portfolio-theme", mode);
       document.getElementById("themeToggleText").textContent = mode === "dark" ? "Turn On" : "Turn Off";
+      const mobileThemeText = document.getElementById("mobileThemeToggleText");
+      const mobileThemeToggle = document.getElementById("mobileThemeToggle");
+      if (mobileThemeText) mobileThemeText.textContent = mode === "dark" ? "Turn On" : "Turn Off";
       themeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      if (mobileThemeToggle) mobileThemeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
     }
 
     function typeTitle() {
@@ -1482,6 +1556,12 @@
     }
 
     themeToggle.addEventListener("click", () => setTheme(body.classList.contains("dark-mode") ? "light" : "dark"));
+
+    document.addEventListener("click", e => {
+      if (e.target.closest("#mobileThemeToggle")) {
+        setTheme(body.classList.contains("dark-mode") ? "light" : "dark");
+      }
+    });
 
     bioFlipButton.addEventListener("click", () => {
       bioFlipCard.classList.toggle("is-flipped");
