@@ -279,6 +279,7 @@
     .window[data-window="sukoon"].sukoon-window-square { width: min(620px, calc(100vw - 44px)); }
     .window[data-window="sukoon"].sukoon-window-portrait { width: min(560px, calc(100vw - 44px)); }
     .window[data-window="sukoon"].sukoon-window-paper { width: min(560px, calc(100vw - 44px)); }
+    .window[data-window="contact"] { left: 26%; top: 18%; z-index: 8; width: min(700px, calc(100vw - 44px)); }
 
     .title-bar {
       display: flex;
@@ -361,6 +362,20 @@
       height: 100%;
       min-height: 0;
     }
+    .contact-window-preview {
+      width: 100%;
+      height: min(72vh, 640px);
+      min-height: 480px;
+      background: var(--window-gray);
+    }
+
+    .contact-window-preview iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: var(--window-gray);
+    }
+
 
     .hiraeth-window-preview {
       min-height: 0;
@@ -870,6 +885,18 @@
 
       </div>
     </article>
+    <article class="window" data-window="contact" aria-hidden="true">
+      <div class="title-bar">
+        <span>CONTACT_ME.EXE</span>
+        <div class="window-controls"><button class="window-button" type="button" data-close-window="contact">×</button></div>
+      </div>
+      <div class="window-body">
+        <div class="window-preview contact-window-preview">
+          <iframe src="contact.html" title="Contact Michael form"></iframe>
+        </div>
+      </div>
+    </article>
+
   </main>
 
   <nav class="start-menu" id="startMenu" aria-label="Start menu">
@@ -879,9 +906,9 @@
         <span class="start-menu-icon" aria-hidden="true">⌂</span>
         <span>Go Home</span>
       </a>
-      <button class="start-menu-item" type="button" id="surpriseButton">
-        <span class="start-menu-icon" aria-hidden="true">?</span>
-        <span>Surprise Me</span>
+      <button class="start-menu-item" type="button" id="contactButton">
+        <span class="start-menu-icon" aria-hidden="true">@</span>
+        <span>Contact Me</span>
       </button>
     </div>
   </nav>
@@ -894,6 +921,7 @@
         <button class="taskbar-item" type="button" data-focus-window="corsair">Corsair</button>
         <button class="taskbar-item" type="button" data-focus-window="gundam">Gundam App</button>
         <button class="taskbar-item" type="button" data-focus-window="sukoon">Sukoon</button>
+        <button class="taskbar-item" type="button" data-focus-window="contact">Contact</button>
       </div>
     </div>
     <div class="taskbar-right">
@@ -909,7 +937,7 @@
     const clock = document.getElementById("clock");
     const startButton = document.getElementById("startButton");
     const startMenu = document.getElementById("startMenu");
-    const surpriseButton = document.getElementById("surpriseButton");
+    const contactButton = document.getElementById("contactButton");
     let topZ = 20;
     let activeDragWindow = null;
     let dragOffsetX = 0;
@@ -964,9 +992,10 @@
       startButton.setAttribute("aria-expanded", String(isOpen));
     });
 
-    surpriseButton.addEventListener("click", () => {
+    contactButton.addEventListener("click", () => {
       startMenu.classList.remove("is-open");
       startButton.setAttribute("aria-expanded", "false");
+      openWindow("contact");
     });
 
     document.addEventListener("click", e => {
