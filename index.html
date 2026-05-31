@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Michael Magsino's Portfolio</title>
-  <meta name="description" content="Michael Magsino's Portfolio." />
+  <title>Michael Magsino's Desk</title>
+  <meta name="description" content="Michael Magsino's interactive desk portfolio." />
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap');
@@ -200,7 +200,37 @@
       transition: filter var(--ease), opacity var(--ease);
     }
 
-    .centerpiece-inner { max-width: min(860px, 48vw); }
+    .centerpiece-inner {
+      position: relative;
+      max-width: min(860px, 48vw);
+      padding: clamp(28px, 4vw, 54px) clamp(30px, 5vw, 70px);
+    }
+
+    .centerpiece-inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.5), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.52), rgba(17,17,17,.035));
+      border: 1px solid rgba(17,17,17,.1);
+      box-shadow:
+        0 22px 60px rgba(17,17,17,.08),
+        inset 0 1px 0 rgba(255,255,255,.55);
+      transform: none;
+    }
+
+    body.dark-mode .centerpiece-inner::before {
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.08), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.018));
+      border-color: rgba(242,242,236,.1);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
     .small-label { font-size: clamp(.7rem, 1vw, .9rem); text-transform: uppercase; letter-spacing: .16em; opacity: .72; margin-bottom: 14px; }
 
     #main-title {
@@ -255,12 +285,32 @@
     .sketch-item.is-dragging { transition: transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--ease); }
     .sketch-item.is-bouncing { transition: left 420ms cubic-bezier(.18,.89,.32,1.25), top 420ms cubic-bezier(.18,.89,.32,1.25), transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--ease); }
     .sketch-item:hover, .sketch-item:focus-visible { transform: translateY(-8px) scale(1.06) rotate(var(--hr, var(--r, 0deg))); }
-    .sketch-item:focus-visible img { outline: 3px dashed var(--ink); outline-offset: 8px; border-radius: 10px; }
+    .sketch-item:focus-visible img {
+      outline: 2px dashed var(--ink);
+      outline-offset: 10px;
+      border-radius: 12px;
+    }
     .canvas.has-focus .centerpiece, .canvas.has-focus .sketch-item { filter: blur(var(--blur)); opacity: .2; }
     .canvas.has-focus .sketch-item.is-origin { filter: none; opacity: 0; }
 
-    .sketch-img { display: block; width: 100%; height: auto; object-fit: contain; pointer-events: none; user-select: none; -webkit-user-drag: none; }
-    body.dark-mode .sketch-img, body.dark-mode .focus-icon .sketch-img, body.dark-mode .bio-id-face { filter: invert(1); }
+    .sketch-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: drop-shadow(8px 12px 10px rgba(17,17,17,.12));
+    }
+    body.dark-mode .sketch-img {
+      filter: invert(1) drop-shadow(8px 12px 10px rgba(0,0,0,.28));
+    }
+
+    body.dark-mode .focus-icon .sketch-img,
+    body.dark-mode .bio-id-face {
+      filter: invert(1);
+    }
 
     .item-caption {
       margin-top: clamp(5px, .8vw, 8px);
@@ -277,7 +327,6 @@
     .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(200px, 16.5vw, 300px); --r: 8deg; --hr: 4deg; --d: 320ms; }
     .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(230px, 18.5vw, 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
 
-
     .mobile-menu {
       display: none;
     }
@@ -289,6 +338,355 @@
     .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
     .focus-preview.visible { opacity: 1; }
 
+    .canvas.corkboard-moving {
+      animation: deskRushLeft 760ms cubic-bezier(.18,.82,.22,1) forwards;
+      transform-origin: center;
+    }
+
+    .canvas.corkboard-moving .sketch-item,
+    .canvas.corkboard-moving .centerpiece {
+      filter: blur(7px);
+    }
+
+    .corkboard-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 118;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      overflow: hidden;
+      background: rgba(246,243,232,0);
+      transition: opacity 180ms ease, background 360ms ease;
+    }
+
+    .corkboard-transition.is-active {
+      opacity: 1;
+      background: rgba(246,243,232,.82);
+    }
+
+    body.dark-mode .corkboard-transition.is-active {
+      background: rgba(12,12,12,.82);
+    }
+
+    .corkboard-transition::before,
+    .corkboard-transition::after {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .corkboard-transition::before {
+      background:
+        linear-gradient(90deg, transparent 0 12%, rgba(17,17,17,.08) 22%, transparent 34%),
+        linear-gradient(90deg, transparent 0 24%, rgba(17,17,17,.06) 42%, transparent 58%),
+        linear-gradient(90deg, transparent 0 46%, rgba(17,17,17,.05) 62%, transparent 78%);
+      transform: translateX(46vw);
+    }
+
+    .corkboard-transition.is-active::before {
+      animation: speedLinesLeft 720ms cubic-bezier(.18,.82,.22,1) forwards;
+      opacity: 1;
+    }
+
+    .corkboard-transition::after {
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,255,255,.38), transparent 22%),
+        radial-gradient(circle at 70% 62%, rgba(255,255,255,.2), transparent 26%);
+      mix-blend-mode: screen;
+    }
+
+    .corkboard-card {
+      position: fixed;
+      left: var(--about-start-left, 50vw);
+      top: var(--about-start-top, 50vh);
+      width: var(--about-start-width, 260px);
+      min-height: 170px;
+      transform: translate(-50%, -50%) rotate(-8deg) scale(.6);
+      transform-origin: center;
+      opacity: 0;
+      border: 3px solid #1b160f;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,.32), transparent 16%),
+        linear-gradient(135deg, #c98b45, #9f642f);
+      box-shadow:
+        12px 12px 0 #1b160f,
+        0 22px 60px rgba(17,17,17,.26);
+      transition:
+        left 780ms cubic-bezier(.18,.82,.22,1),
+        top 780ms cubic-bezier(.18,.82,.22,1),
+        width 780ms cubic-bezier(.18,.82,.22,1),
+        transform 780ms cubic-bezier(.18,.82,.22,1),
+        opacity 160ms ease;
+      overflow: hidden;
+    }
+
+    .corkboard-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 8px, transparent 8px 18px),
+        repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 6px, transparent 6px 17px);
+      opacity: .7;
+    }
+
+    .corkboard-card::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 2px dashed rgba(27,22,15,.42);
+      border-radius: 12px;
+    }
+
+    .corkboard-note {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 58%;
+      min-height: 42%;
+      padding: 14px;
+      transform: translate(-50%, -50%) rotate(2deg);
+      border: 2px solid #1b160f;
+      background: #fff4aa;
+      box-shadow: 5px 5px 0 #1b160f;
+      font-family: "Special Elite", monospace;
+      font-size: clamp(.68rem, 1.5vw, 1.05rem);
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .corkboard-pin {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      z-index: 3;
+      width: 20px;
+      height: 20px;
+      transform: translateX(-50%);
+      border: 2px solid #1b160f;
+      border-radius: 50%;
+      background: #e64b45;
+      box-shadow: 2px 2px 0 #1b160f;
+    }
+
+    .corkboard-transition.is-active .corkboard-card {
+      left: 50%;
+      top: 50%;
+      width: min(74vw, 720px);
+      transform: translate(-50%, -50%) rotate(-1deg) scale(1);
+      opacity: 1;
+    }
+
+    .corkboard-transition.is-fading .corkboard-card {
+      transform: translate(-68%, -50%) rotate(-2deg) scale(1.08);
+      filter: blur(9px);
+      opacity: 0;
+    }
+
+    @keyframes deskRushLeft {
+      0% { transform: translateX(0) scale(1); opacity: 1; }
+      60% { transform: translateX(-22vw) scale(.985); opacity: .72; }
+      100% { transform: translateX(-54vw) scale(.96); opacity: 0; }
+    }
+
+    @keyframes speedLinesLeft {
+      0% { transform: translateX(52vw); opacity: 0; filter: blur(12px); }
+      18% { opacity: 1; }
+      100% { transform: translateX(-34vw); opacity: 0; filter: blur(2px); }
+    }
+    .computer-boot-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(246,246,242,0);
+      transition: background 880ms ease, opacity 180ms ease;
+    }
+
+    .computer-boot-transition.is-active {
+      opacity: 1;
+      background: rgba(246,246,242,.82);
+    }
+
+    body.dark-mode .computer-boot-transition.is-active {
+      background: rgba(12,12,12,.86);
+    }
+
+    .crt-computer {
+      position: fixed;
+      left: var(--start-left, 50vw);
+      top: var(--start-top, 50vh);
+      width: var(--start-width, 300px);
+      transform: translate(-50%, -50%) scale(.92);
+      transform-origin: center;
+      opacity: 0;
+      transition:
+        left 850ms cubic-bezier(.2,.78,.2,1),
+        top 850ms cubic-bezier(.2,.78,.2,1),
+        width 850ms cubic-bezier(.2,.78,.2,1),
+        transform 850ms cubic-bezier(.2,.78,.2,1),
+        opacity 220ms ease;
+    }
+
+    .computer-boot-transition.is-active .crt-computer {
+      left: 50%;
+      top: 50%;
+      width: min(118vw, 118vh);
+      transform: translate(-50%, -50%) scale(1.08);
+      opacity: 1;
+    }
+
+    .crt-monitor {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.18 / 1;
+      background: #c9c3ad;
+      border: 3px solid #2b2b2b;
+      border-radius: 9% 9% 6% 6%;
+      box-shadow:
+        0 28px 70px rgba(17,17,17,.22),
+        inset 10px 10px 0 rgba(255,255,255,.32),
+        inset -10px -12px 0 rgba(0,0,0,.16);
+      overflow: hidden;
+    }
+
+    .crt-monitor::before {
+      content: "";
+      position: absolute;
+      inset: 6% 7% 22%;
+      border-radius: 6%;
+      background: #111;
+      border: 4px solid #383838;
+      box-shadow:
+        inset 0 0 22px rgba(16,132,208,.22),
+        inset 0 0 0 3px rgba(255,255,255,.06);
+    }
+
+    .crt-monitor::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 8%;
+      width: 12%;
+      height: 4%;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: #8b866f;
+      border: 2px solid rgba(0,0,0,.45);
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.22);
+    }
+
+    .crt-screen-glow {
+      position: absolute;
+      inset: 8% 9% 24%;
+      border-radius: 5%;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.08) 0 1px,
+          transparent 1px 4px
+        ),
+        radial-gradient(circle at 50% 42%, rgba(16,132,208,.5), rgba(0,0,0,.92) 58%);
+      opacity: .78;
+      animation: crtFlicker 780ms steps(2) infinite;
+    }
+
+    .crt-boot-screen {
+      position: absolute;
+      inset: 9% 10% 25%;
+      display: grid;
+      align-content: center;
+      gap: .45em;
+      padding: 7%;
+      color: #76d8ff;
+      font-family: "Pixelify Sans", "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(118,216,255,.72);
+      opacity: .95;
+    }
+
+    .crt-boot-title {
+      color: #f2fbff;
+      font-family: "Press Start 2P", "Pixelify Sans", monospace;
+      font-size: clamp(.38rem, 1.15vw, .78rem);
+      line-height: 1.35;
+      letter-spacing: .04em;
+    }
+
+    .crt-boot-line {
+      font-size: clamp(.42rem, 1.35vw, .82rem);
+      line-height: 1.25;
+    }
+
+    .crt-boot-progress {
+      position: relative;
+      height: clamp(5px, .9vw, 12px);
+      margin-top: .35em;
+      border: 1px solid rgba(118,216,255,.9);
+      box-shadow: 0 0 8px rgba(118,216,255,.35);
+      overflow: hidden;
+    }
+
+    .crt-boot-progress::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      width: 0;
+      background: #76d8ff;
+      box-shadow: 0 0 10px rgba(118,216,255,.8);
+      animation: crtBootLoad 1.08s steps(10) forwards;
+    }
+
+    .crt-stand {
+      width: 34%;
+      height: clamp(18px, 5vw, 56px);
+      margin: 0 auto;
+      background: #aaa38c;
+      border: 3px solid #2b2b2b;
+      border-top: 0;
+      box-shadow:
+        inset 6px 0 0 rgba(255,255,255,.24),
+        inset -6px -6px 0 rgba(0,0,0,.16);
+    }
+
+    .crt-base {
+      width: 58%;
+      height: clamp(16px, 4.5vw, 48px);
+      margin: -3px auto 0;
+      background: #c9c3ad;
+      border: 3px solid #2b2b2b;
+      border-radius: 8px 8px 14px 14px;
+      box-shadow:
+        inset 8px 6px 0 rgba(255,255,255,.26),
+        inset -8px -7px 0 rgba(0,0,0,.16);
+    }
+
+    .computer-boot-transition.is-fading .crt-computer {
+      transform: translate(-50%, -50%) scale(1.8);
+      opacity: 0;
+    }
+
+    @keyframes crtBootLoad {
+      to { width: calc(100% - 2px); }
+    }
+
+    @keyframes crtFlicker {
+      0%, 100% { opacity: .72; }
+      50% { opacity: .95; }
+    }
+
     .focus-card {
       position: absolute;
       display: grid;
@@ -296,13 +694,26 @@
       gap: 12px;
       width: clamp(380px, 38vw, 620px);
       padding: clamp(14px, 1.7vw, 20px);
-      background: var(--card);
-      border: 2px solid var(--ink);
-      border-radius: 22px;
-      box-shadow: 11px 11px 0 var(--ink);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.72));
+      border: 1px solid rgba(17,17,17,.18);
+      border-radius: 26px;
+      box-shadow:
+        0 22px 50px rgba(17,17,17,.16),
+        0 0 0 1px rgba(255,255,255,.45) inset;
+      backdrop-filter: blur(3px);
       transform: translate(-50%, -50%) scale(.18) rotate(var(--r, -1deg));
       transform-origin: center;
       transition: transform 320ms cubic-bezier(.2,.85,.22,1.15), left var(--ease), top var(--ease);
+    }
+
+    body.dark-mode .focus-card {
+      background:
+        linear-gradient(180deg, rgba(34,34,34,.9), rgba(18,18,18,.78));
+      border-color: rgba(242,242,236,.18);
+      box-shadow:
+        0 22px 50px rgba(0,0,0,.34),
+        0 0 0 1px rgba(255,255,255,.06) inset;
     }
 
     .focus-preview.visible .focus-card {
@@ -380,7 +791,6 @@
     .layer.open { opacity: 1; pointer-events: auto; }
     .modal { display: grid; place-items: center; padding: 22px; background: var(--veil); backdrop-filter: blur(3px); z-index: 50; }
     .viewer { display: grid; grid-template-rows: auto 1fr; background: var(--paper); z-index: 80; }
-    .showcase { display: grid; grid-template-rows: auto 1fr; background: var(--paper); z-index: 82; }
 
     .modal-card {
       position: relative;
@@ -397,12 +807,10 @@
     .modal-card::before { content: ""; position: absolute; inset: 12px; border: 1px dashed var(--dash); border-radius: 18px; pointer-events: none; }
     .close-modal { position: sticky; top: 0; margin-left: auto; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; z-index: 3; }
     .modal-kicker { margin: 8px 0; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; opacity: .65; }
-    .modal-card h2, .showcase-intro h2 { font-family: Caveat, cursive; line-height: 1; }
+    .modal-card h2 { font-family: Caveat, cursive; line-height: 1; }
     .modal-card h2 { margin-bottom: 12px; font-size: clamp(2rem, 4vw, 3.1rem); }
     .modal-card p { max-width: 62ch; margin-bottom: 14px; font-size: clamp(.92rem, 1.35vw, 1.05rem); line-height: 1.7; }
 
-    .sketch-grid, .showcase-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
-    .showcase-grid { gap: clamp(18px, 3vw, 34px); width: min(1180px, 100%); margin: 0 auto; }
     .mini-card { padding: 16px; background: var(--card); border: 2px solid var(--ink); border-radius: 18px; box-shadow: 6px 6px 0 var(--ink); }
     .mini-card h3 { margin-bottom: 10px; font-size: .9rem; text-transform: uppercase; letter-spacing: .04em; }
     .mini-card p { margin-bottom: 10px; font-size: clamp(.88rem, 1.2vw, .95rem); }
@@ -422,221 +830,11 @@
     }
 
     .bar-actions { display: flex; align-items: center; gap: 10px; }
-    .resume-frame, .gundam-frame { width: 100%; height: 100%; border: 0; background: white; }
+    .resume-frame { width: 100%; height: 100%; border: 0; background: white; }
     .resume-frame { display: block; }
-    .showcase-content { overflow: auto; padding: clamp(22px, 4vw, 46px); }
-    .showcase-intro { max-width: 850px; margin: 0 auto clamp(24px, 4vw, 42px); text-align: center; }
-    .showcase-intro h2 { margin-bottom: 12px; font-size: clamp(2.6rem, 5vw, 4.4rem); }
-    .showcase-intro p { font-size: clamp(.95rem, 1.4vw, 1.08rem); line-height: 1.7; }
-
-    .showcase-item {
-      position: relative;
-      overflow: hidden;
-      min-height: 280px;
-      background: white;
-      border: 2px solid var(--ink);
-      border-radius: 22px;
-      box-shadow: 8px 8px 0 var(--ink);
-    }
-
-    .instagram, .square { aspect-ratio: 1 / 1; }
-    .paper { aspect-ratio: 8.5 / 11; max-height: 760px; }
-    .wide { aspect-ratio: 16 / 9; }
-    .showcase-item img { display: block; width: 100%; height: 100%; object-fit: cover; transition: filter var(--ease), transform var(--ease); }
-    .showcase-item:hover img { filter: blur(5px); transform: scale(1.02); }
-
-    .item-overlay {
-      position: absolute;
-      inset: 0;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-      background: rgba(0,0,0,.62);
-      color: white;
-      text-align: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity var(--ease);
-    }
-
-    .showcase-item:hover .item-overlay { opacity: 1; }
-    .item-overlay h3 { margin-bottom: 10px; font-family: "Special Elite", monospace; font-size: clamp(.9rem, 1.4vw, 1.1rem); text-transform: uppercase; letter-spacing: .08em; }
-    .item-overlay p { max-width: 44ch; margin: 0 auto; font-size: clamp(.9rem, 1.25vw, 1rem); line-height: 1.65; }
-
-    .stacked-carousel { position: relative; width: 100%; height: 100%; }
-    .stacked-carousel img { position: absolute; inset: 0; opacity: 0; animation: carouselFade calc(var(--slides) * 3s) infinite; animation-delay: calc(var(--i) * 3s); }
-    .stacked-carousel img:first-child { opacity: 1; }
-
-    .frame {
-      width: min(1180px, 100%);
-      height: min(76vh, 860px);
-      margin: 0 auto clamp(26px, 4vw, 46px);
-      overflow: hidden;
-      background: white;
-      border: 2px solid var(--ink);
-      border-radius: 24px;
-      box-shadow: 10px 10px 0 var(--ink);
-    }
-
-    .wide-frame {
-      height: auto;
-      max-width: 980px;
-      padding: 0;
-      background: transparent;
-    }
-
-    .hiraeth-image-card {
-      width: 100%;
-      min-height: 0;
-      border: 0;
-      border-radius: 20px;
-      box-shadow: none;
-    }
-
-    .hiraeth-tabs {
-      width: min(1180px, 100%);
-      margin: 0 auto clamp(26px, 4vw, 46px);
-    }
-
-    .hiraeth-tab-controls {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: clamp(18px, 3vw, 28px);
-    }
-
-    .hiraeth-tab {
-      margin-top: 0;
-    }
-
-    .hiraeth-tab.is-active {
-      transform: translateY(-2px);
-      box-shadow: 6px 6px 0 var(--ink);
-      background: var(--ink);
-      color: var(--paper);
-    }
-
-    .hiraeth-tab-panel {
-      display: none;
-    }
-
-    .hiraeth-tab-panel.is-active {
-      display: block;
-    }
-
-    .hiraeth-tab-panel .wide-frame,
-    .hiraeth-tab-panel .hiraeth-demo-frame {
-      margin-bottom: 0;
-    }
-
-    .hiraeth-demo-block .gallery-title,
-    .hiraeth-tab-panel .gallery-title {
-      width: 100%;
-      margin: 0 auto 16px;
-      text-align: center;
-      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
-      opacity: .9;
-    }
-
-    .hiraeth-demo-frame {
-      height: auto;
-      max-height: none;
-    }
-
-    .hiraeth-navi-frame {
-      aspect-ratio: 1873 / 969;
-    }
-
-    .hiraeth-echo-frame {
-      aspect-ratio: 1766 / 796;
-    }
-
-    .hiraeth-frame {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border: 0;
-      background: #000;
-    }
-
-    .hiraeth-interact-caption {
-      margin-top: 20px;
-      font-family: "Special Elite", monospace;
-      font-size: clamp(.75rem, 1vw, .9rem);
-      text-align: center;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      opacity: .68;
-    }
-
-    .project-context-toggle {
-      width: min(900px, 100%);
-      margin: 0 auto;
-    }
-
-    .project-context-toggle summary {
-      list-style: none;
-      width: max-content;
-      max-width: 100%;
-      margin: 0 auto clamp(18px, 3vw, 26px);
-      padding: 10px 14px;
-      border: 2px solid var(--ink);
-      border-radius: 999px;
-      background: var(--card);
-      box-shadow: 4px 4px 0 var(--ink);
-      cursor: pointer;
-      font-family: "Special Elite", monospace;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-size: clamp(.75rem, 1vw, .9rem);
-      transition: transform var(--ease), box-shadow var(--ease);
-    }
-
-    .project-context-toggle summary::-webkit-details-marker { display: none; }
-    .project-context-toggle summary:hover { transform: translateY(-2px); box-shadow: 6px 6px 0 var(--ink); }
-
-    .project-writeup {
-      width: min(900px, 100%);
-      margin: 0 auto;
-      padding: clamp(18px, 3vw, 28px);
-      background: var(--card);
-      border: 2px solid var(--ink);
-      border-radius: 22px;
-      box-shadow: 8px 8px 0 var(--ink);
-    }
-
-    .project-writeup p {
-      margin-bottom: 16px;
-      font-size: clamp(.94rem, 1.25vw, 1.05rem);
-      line-height: 1.75;
-    }
-
-    .project-writeup p:last-child { margin-bottom: 0; }
-
-    .scroll-frame { overflow-y: auto; overflow-x: hidden; scroll-behavior: smooth; }
-    .scroll-frame img { display: block; width: 100%; height: auto; }
-
-    .corsair-case-frame {
-      height: auto;
-      aspect-ratio: 1743 / 968;
-      max-height: none;
-      overflow-y: auto;
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-
-    .corsair-case-frame img {
-      width: 100%;
-      height: auto;
-      object-fit: initial;
-    }
-    .gallery-title { width: min(1180px, 100%); margin: 0 auto 18px; text-transform: uppercase; letter-spacing: .08em; font-size: .86rem; opacity: .72; }
-    .center-actions { width: min(1180px, 100%); margin: 0 auto; display: flex; justify-content: center; }
     .scribble-list { margin: 8px 0 16px 18px; line-height: 1.8; }
 
     @keyframes blink { 50% { opacity: 0; } }
-    @keyframes carouselFade { 0% { opacity: 0; } 4% { opacity: 1; } 24% { opacity: 1; } 30% { opacity: 0; } 100% { opacity: 0; } }
 
     @media (max-width: 980px) {
       .canvas { height: 100svh; min-height: 100svh; }
@@ -647,7 +845,6 @@
       .item-resume { bottom: 18%; left: 7%; --w: 178px; }
       .item-statement { bottom: 17%; right: 6%; --w: 210px; }
     }
-
 
     @media (max-width: 700px) {
       html,
@@ -687,6 +884,12 @@
 
       .centerpiece-inner {
         max-width: 100%;
+        padding: 26px 18px;
+      }
+
+      .centerpiece-inner::before {
+        border-radius: 24px;
+        transform: none;
       }
 
       #main-title {
@@ -810,6 +1013,11 @@
         display: none;
       }
 
+
+      .corkboard-transition.is-active .corkboard-card {
+        width: min(86vw, 420px);
+      }
+
       .modal,
       .viewer,
       .showcase {
@@ -828,37 +1036,16 @@
         box-shadow: 8px 8px 0 var(--ink);
       }
 
-      .showcase-content {
-        padding: 18px 14px 32px;
-      }
-
-      .showcase-grid,
-      .sketch-grid {
-        grid-template-columns: 1fr;
-      }
-
       .bar {
         align-items: flex-start;
         flex-direction: column;
         gap: 10px;
       }
 
-      .frame {
-        width: 100%;
-        height: auto;
-        max-height: none;
-        border-radius: 18px;
-        box-shadow: 7px 7px 0 var(--ink);
-      }
-
       .resume-frame {
         width: 100%;
         height: calc(100svh - 96px);
         min-height: 0;
-      }
-
-      .gundam-frame {
-        min-height: 72svh;
       }
 
       .paper {
@@ -887,12 +1074,12 @@
     </section>
 
     <section class="canvas-items" aria-label="Portfolio sections">
-      <button class="sketch-item item-bio" data-label="Bio" data-target="modal-bio" aria-label="Open Bio section">
+      <button class="sketch-item item-bio" data-label="About Me" data-link="about-me.html" aria-label="Open About Me section">
         <img class="sketch-img" src="portfolio_images/Michael_ID.png" alt="Sketch of Michael's artist ID" />
-        <div class="item-caption">Bio</div>
+        <div class="item-caption">About Me</div>
       </button>
 
-      <button class="sketch-item item-projects" data-label="Projects" data-target="modal-projects" aria-label="Boot up Projects desktop">
+      <button class="sketch-item item-projects" data-label="Projects"  aria-label="Boot up Projects desktop">
         <img class="sketch-img" src="portfolio_images/Project_Sketch.png" alt="Sketch representing Michael's projects" />
         <div class="item-caption">Projects</div>
       </button>
@@ -909,9 +1096,9 @@
     </section>
 
     <section class="mobile-menu" aria-label="Mobile portfolio navigation">
-      <button class="mobile-menu-button" type="button" data-mobile-open="modal-bio">
-        <strong>Bio</strong>
-        <span>View Michael's ID card and short bio.</span>
+      <button class="mobile-menu-button" type="button" data-mobile-link="about-me.html">
+        <strong>About Me</strong>
+        <span>Move over to Michael's creative cork board.</span>
       </button>
 
       <button class="mobile-menu-button" type="button" data-mobile-link="port-projects.html">
@@ -950,6 +1137,29 @@
     </div>
   </div>
 
+  <div class="computer-boot-transition" id="computerBootTransition" aria-hidden="true">
+    <div class="crt-computer" aria-hidden="true">
+      <div class="crt-monitor">
+        <div class="crt-screen-glow"></div>
+        <div class="crt-boot-screen">
+          <div class="crt-boot-title">Michael 99&rsquo;</div>
+          <div class="crt-boot-line">Starting project desktop...</div>
+          <div class="crt-boot-line">Loading folders...</div>
+          <div class="crt-boot-progress" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="crt-stand"></div>
+      <div class="crt-base"></div>
+    </div>
+  </div>
+
+  <div class="corkboard-transition" id="corkboardTransition" aria-hidden="true">
+    <div class="corkboard-card" aria-hidden="true">
+      <div class="corkboard-pin"></div>
+      <div class="corkboard-note">Opening About Me</div>
+    </div>
+  </div>
+
   <div class="layer modal" id="modal-bio" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Bio section">✕</button>
@@ -959,40 +1169,6 @@
           <img class="bio-id-face bio-id-back" src="portfolio_images/IDB_Sketch.png" alt="Back of Michael Magsino ID card with bio information" />
         </div>
         <button class="btn bio-id-button" type="button" id="bioFlipButton">Click to flip over</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="layer modal" id="modal-projects" aria-hidden="true">
-    <div class="modal-card">
-      <button class="close-modal" type="button" aria-label="Close Projects section">✕</button>
-      <div class="modal-kicker">Selected Work</div>
-      <h2>Projects</h2>
-
-      <div class="sketch-grid">
-        <div class="mini-card">
-          <h3>Hiraeth UI</h3>
-          <p>A diegetic UI concept for a narrative game exploring memory, surveillance, and climate collapse.</p>
-          <button class="btn" type="button" data-open="hiraethShowcase">View Concept</button>
-        </div>
-
-        <div class="mini-card">
-          <h3>Corsair Case Study</h3>
-          <p>A brand-focused campaign and packaging exploration centered around one product across multiple touchpoints.</p>
-          <button class="btn" type="button" data-open="corsairShowcase">View Case Study</button>
-        </div>
-
-        <div class="mini-card">
-          <h3>Gundam Collection App</h3>
-          <p>A filterable web app for cataloging model kits, built with HTML, CSS, JavaScript, and a custom data structure.</p>
-          <button class="btn" type="button" data-open="gundamShowcase">View Project</button>
-        </div>
-
-        <div class="mini-card">
-          <h3>Sukoon Design Work</h3>
-          <p>Visual content for social media, newsletters, and web materials created for a mental wellness startup.</p>
-          <button class="btn" type="button" data-open="sukoonShowcase">View Showcase</button>
-        </div>
       </div>
     </div>
   </div>
@@ -1027,123 +1203,6 @@
     <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf#view=FitH&zoom=page-fit" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
   </div>
 
-  <div class="layer showcase" id="hiraethShowcase" aria-hidden="true">
-    <div class="bar">
-      <span>Hiraeth UI Showcase</span>
-      <button type="button" data-close="hiraethShowcase" aria-label="Close Hiraeth showcase">✕</button>
-    </div>
-    <div class="showcase-content">
-      <section class="showcase-intro" aria-label="Hiraeth UI project introduction">
-        <h2>Hiraeth UI</h2>
-        <p>A diegetic UX/UI system concept for a student game set in a future flooded Chicago, where interface design becomes part of the world, the player’s perception, and the story itself.</p>
-      </section>
-
-      <section class="hiraeth-tabs" aria-label="Hiraeth showcase tabs">
-        <div class="hiraeth-tab-controls" role="tablist" aria-label="Hiraeth UI views">
-          <button class="btn hiraeth-tab is-active" type="button" data-hiraeth-tab="concept">Concept Sketch</button>
-          <button class="btn hiraeth-tab" type="button" data-hiraeth-tab="navigation">Navigation UI</button>
-          <button class="btn hiraeth-tab" type="button" data-hiraeth-tab="echo">Echo UI</button>
-        </div>
-
-        <div class="hiraeth-tab-panel is-active" data-hiraeth-panel="concept">
-          <div class="frame wide-frame" aria-label="Hiraeth UI concept sketch">
-            <article class="showcase-item wide hiraeth-image-card">
-              <img src="portfolio_images/HUI.png" alt="Hiraeth diegetic UI concept sketch" loading="lazy" />
-              <div class="item-overlay">
-                <div>
-                  <h3>First Concept Sketch</h3>
-                  <p>An early visual direction for Hiraeth’s diegetic interface, exploring how Gwyn’s neural implant might reveal echoes, environmental data, and memory fragments within the game world.</p>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-
-        <div class="hiraeth-tab-panel" data-hiraeth-panel="navigation">
-          <h3 class="gallery-title">Hiraeth UI - Navigation</h3>
-          <div class="frame hiraeth-demo-frame hiraeth-navi-frame">
-            <iframe src="hiraethui-navi.html" title="Hiraeth UI - Navigation" class="hiraeth-frame" loading="lazy"></iframe>
-          </div>
-        </div>
-
-        <div class="hiraeth-tab-panel" data-hiraeth-panel="echo">
-          <h3 class="gallery-title">Hiraeth UI - Echo</h3>
-          <div class="frame hiraeth-demo-frame hiraeth-echo-frame">
-            <iframe src="hiraethui-memory.html" title="Hiraeth UI - Echo" class="hiraeth-frame" loading="lazy"></iframe>
-          </div>
-          <p class="hiraeth-interact-caption">click to interact</p>
-        </div>
-      </section>
-
-      <details class="project-context-toggle">
-        <summary>Read Project Context</summary>
-        <section class="project-writeup" aria-label="Hiraeth project description">
-        <p>For this project, I will be designing the UX/UI system for a student game titled “Hiraeth”, a primarily environmental narrative experience set in a future version of a flooded Chicago. The game will follow a girl named Gwyn, who wakes up after twenty years of government-mandated cryo sleep. She then emerges into a city that is transformed by the collapse of climate, where streets have become canals, architecture has fallen into ruin, and the silence of a once thriving population that seems to linger throughout the environment.</p>
-
-        <p>The project’s UX/UI design will be based around a diegetic UI, meaning, rather than having menus appearing as an external overlay, the interface exists naturally within the game world. This adds to the game with grounding the player within the environment to better intertwine themselves in this cataclysmic world. Instead of a traditional HUD, information will be revealed through the environment, visual distortions and lighting that feel embedded within the world.</p>
-
-        <p>One central mechanic incorporates Gwyn’s government-mandated neural implant, that allows her to access these “echoes” of the past. This is one of the key tools Gwyn and the player will use to uncover hidden memories, remnants of what once was, and traces of what happened before the collapse. Because the intention of incorporating a diegetic UI is central to the game, it is not treated as a separate interface, instead becoming an extension of Gwyn’s perception. The information itself is gathered from direct interactions from the world.</p>
-
-        <p>The aim of my goal in the part of the group project is to delve into how UX/UI can contribute to both storytelling and immersion. The use of a diegetic design in the interface becomes this additional narrative tool that pushes players to explore and discover what this calamity within Chicago holds. As of this moment, we are still figuring out the overall vibe of what these neural-based interfaces will look like within the context of the game. At the very least, I am working on ideas for the title screen and inventory system.</p>
-        </section>
-      </details>
-    </div>
-  </div>
-
-  <div class="layer showcase" id="gundamShowcase" aria-hidden="true">
-    <div class="bar">
-      <span>Gundam Collection App Showcase</span>
-      <button type="button" data-close="gundamShowcase" aria-label="Close Gundam showcase">✕</button>
-    </div>
-    <div class="showcase-content">
-      <section class="showcase-intro" aria-label="Gundam project introduction">
-        <h2>Gundam Collection App</h2>
-        <p>This Gundam Collection App was created as my final project for CT120, serving as the culmination of the coding concepts learned throughout the quarter. The project uses HTML, CSS, JavaScript, and structured data to create an interactive model kit catalog with search, filtering, featured models, and a visual cost graph.</p>
-      </section>
-      <div class="frame"><iframe src="GundamCollection.html" title="Gundam Collection App" class="gundam-frame" loading="lazy"></iframe></div>
-      <div class="center-actions"><a class="btn" href="GundamCollection.html" target="_blank" rel="noreferrer">Open Full Site</a></div>
-    </div>
-  </div>
-
-  <div class="layer showcase" id="corsairShowcase" aria-hidden="true">
-    <div class="bar">
-      <span>Corsair Case Study Showcase</span>
-      <button type="button" data-close="corsairShowcase" aria-label="Close Corsair showcase">✕</button>
-    </div>
-    <div class="showcase-content">
-      <section class="showcase-intro" aria-label="Corsair case study introduction">
-        <h2>Corsair Case Study</h2>
-        <p>A brand-focused portfolio case study exploring the Corsair Vanguard Pro 96 across presentation, web banner, packaging, and social media touchpoints. The work focuses on product hierarchy, dark visual styling, brand consistency, and adapting one product into multiple polished design contexts.</p>
-      </section>
-      <div class="frame scroll-frame corsair-case-frame" aria-label="Corsair case study presentation"><img src="corsairpics/cspec.png" alt="Corsair case study presentation" loading="lazy" /></div>
-      <h3 class="gallery-title">Product Mockups</h3>
-      <section class="showcase-grid" aria-label="Corsair product mockups">
-        <article class="showcase-item wide"><img src="corsairpics/cbanner.png" alt="Corsair Vanguard Pro 96 web banner mockup" loading="lazy" /><div class="item-overlay"><div><h3>Web Banner Mockup</h3><p>A web banner concept for the Corsair Vanguard Pro 96, focusing on product hierarchy, dark brand styling, and a direct value line: “Compact Design. Elite Speed. Hall Effect Precision.”</p></div></div></article>
-        <article class="showcase-item wide"><img src="corsairpics/cpkg.png" alt="Corsair Vanguard Pro 96 packaging mockup" loading="lazy" /><div class="item-overlay"><div><h3>Packaging Mockup</h3><p>A packaging concept for the Corsair Vanguard Pro 96, using Corsair’s high-contrast black and yellow brand language with a simplified product-focused layout.</p></div></div></article>
-        <article class="showcase-item square"><img src="corsairpics/csocial.png" alt="Corsair Vanguard Pro 96 social media mockup" loading="lazy" /><div class="item-overlay"><div><h3>Social Media Mockup</h3><p>A social media post mockup designed to match the visual tone of Corsair’s social presence after studying the brand’s existing product-focused content.</p></div></div></article>
-      </section>
-    </div>
-  </div>
-
-  <div class="layer showcase" id="sukoonShowcase" aria-hidden="true">
-    <div class="bar">
-      <span>Sukoon Visual Design Showcase</span>
-      <button type="button" data-close="sukoonShowcase" aria-label="Close Sukoon showcase">✕</button>
-    </div>
-    <div class="showcase-content">
-      <section class="showcase-intro" aria-label="Sukoon showcase introduction">
-        <h2>Sukoon Design Work</h2>
-        <p>A selection of visual content created for Sukoon, including social media graphics, newsletter design, and branded communication materials. This work supported Sukoon’s digital presence through warm, minimal, and culturally thoughtful visuals across Instagram, LinkedIn, and email distribution.</p>
-      </section>
-      <section class="showcase-grid" aria-label="Sukoon selected design work">
-        <article class="showcase-item instagram"><div class="stacked-carousel" style="--slides:4"><img src="sukoonpics/SC1.png" alt="Sukoon Circle Instagram carousel slide 1" style="--i:0" loading="lazy" /><img src="sukoonpics/SC2.png" alt="Sukoon Circle Instagram carousel slide 2" style="--i:1" loading="lazy" /><img src="sukoonpics/SC3.png" alt="Sukoon Circle Instagram carousel slide 3" style="--i:2" loading="lazy" /><img src="sukoonpics/SC4.png" alt="Sukoon Circle Instagram carousel slide 4" style="--i:3" loading="lazy" /></div><div class="item-overlay"><div><h3>Sukoon Circle Instagram Carousel</h3><p>Instagram post series promoting Sukoon Circle, Sukoon’s inaugural in-person event.</p></div></div></article>
-        <article class="showcase-item instagram"><div class="stacked-carousel" style="--slides:6"><img src="sukoonpics/sh1.png" alt="Seasonal reflection Instagram carousel slide 1" style="--i:0" loading="lazy" /><img src="sukoonpics/sh2.png" alt="Seasonal reflection Instagram carousel slide 2" style="--i:1" loading="lazy" /><img src="sukoonpics/sh3.png" alt="Seasonal reflection Instagram carousel slide 3" style="--i:2" loading="lazy" /><img src="sukoonpics/sh4.png" alt="Seasonal reflection Instagram carousel slide 4" style="--i:3" loading="lazy" /><img src="sukoonpics/sh5.png" alt="Seasonal reflection Instagram carousel slide 5" style="--i:4" loading="lazy" /><img src="sukoonpics/sh6.png" alt="Seasonal reflection Instagram carousel slide 6" style="--i:5" loading="lazy" /></div><div class="item-overlay"><div><h3>Seasonal Reflection Instagram Carousel</h3><p>Instagram carousel reflecting on changing seasons and the emotions that can come with those transitions.</p></div></div></article>
-        <article class="showcase-item paper"><img src="sukoonpics/sn.png" alt="First Sukoon newsletter opening page" loading="lazy" /><div class="item-overlay"><div><h3>First Sukoon Newsletter</h3><p>The first newsletter distributed via email by Sukoon, shown through its opening page.</p></div></div></article>
-        <article class="showcase-item instagram"><img src="sukoonpics/first.png" alt="First Sukoon LinkedIn post" loading="lazy" /><div class="item-overlay"><div><h3>First Sukoon LinkedIn Post</h3><p>The first LinkedIn post created for Sukoon, establishing an early visual direction for the brand’s professional social presence.</p></div></div></article>
-      </section>
-    </div>
-  </div>
-
   <div class="layer modal" id="modal-statement" aria-hidden="true">
     <div class="modal-card">
       <button class="close-modal" type="button" aria-label="Close Artist Statement section">✕</button>
@@ -1166,6 +1225,8 @@
     const items = document.querySelectorAll(".sketch-item");
     const bioFlipCard = document.getElementById("bioFlipCard");
     const bioFlipButton = document.getElementById("bioFlipButton");
+    const computerBootTransition = document.getElementById("computerBootTransition");
+    const corkboardTransition = document.getElementById("corkboardTransition");
 
     let isHoveringItem = false;
     let hoverTimer = null;
@@ -1192,8 +1253,15 @@
       if (mobileThemeToggle) mobileThemeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
     }
 
+    function finishDeskIntroInstantly() {
+      titleEl.textContent = "Michael Magsino's Desk";
+      titleEl.classList.remove("typing");
+      randomizeItems();
+      body.classList.add("loaded");
+    }
+
     function typeTitle() {
-      const title = "Michael Magsino's Sketchbook";
+      const title = "Michael Magsino's Desk";
       let i = 0;
       titleEl.textContent = "";
       titleEl.classList.add("typing");
@@ -1207,6 +1275,81 @@
           setTimeout(() => body.classList.add("loaded"), 180);
         }
       }, 62);
+    }
+
+    function bootIntoProjects(sourceElement = null) {
+      if (!computerBootTransition) {
+        window.location.href = "port-projects.html";
+        return;
+      }
+
+      const sourceRect = sourceElement
+        ? sourceElement.getBoundingClientRect()
+        : {
+            left: window.innerWidth / 2 - 140,
+            top: window.innerHeight / 2 - 90,
+            width: 280,
+            height: 180
+          };
+
+      computerBootTransition.classList.remove("is-active", "is-fading");
+      computerBootTransition.style.setProperty("--start-left", `${sourceRect.left + sourceRect.width / 2}px`);
+      computerBootTransition.style.setProperty("--start-top", `${sourceRect.top + sourceRect.height / 2}px`);
+      computerBootTransition.style.setProperty("--start-width", `${Math.max(sourceRect.width * 1.05, 260)}px`);
+
+      canvas.classList.remove("has-focus");
+      focusPreview.classList.remove("visible");
+      focusPreview.setAttribute("aria-hidden", "true");
+
+      requestAnimationFrame(() => {
+        computerBootTransition.classList.add("is-active");
+      });
+
+      setTimeout(() => {
+        computerBootTransition.classList.add("is-fading");
+      }, 980);
+
+      setTimeout(() => {
+        window.location.href = "port-projects.html";
+      }, 1320);
+    }
+
+    function moveToAbout(sourceElement = null) {
+      if (!corkboardTransition) {
+        window.location.href = "about-me.html";
+        return;
+      }
+
+      const sourceRect = sourceElement
+        ? sourceElement.getBoundingClientRect()
+        : {
+            left: window.innerWidth / 2 - 130,
+            top: window.innerHeight / 2 - 85,
+            width: 260,
+            height: 170
+          };
+
+      corkboardTransition.classList.remove("is-active", "is-fading");
+      corkboardTransition.style.setProperty("--about-start-left", `${sourceRect.left + sourceRect.width / 2}px`);
+      corkboardTransition.style.setProperty("--about-start-top", `${sourceRect.top + sourceRect.height / 2}px`);
+      corkboardTransition.style.setProperty("--about-start-width", `${Math.max(sourceRect.width * 1.08, 245)}px`);
+
+      canvas.classList.remove("has-focus");
+      focusPreview.classList.remove("visible");
+      focusPreview.setAttribute("aria-hidden", "true");
+      canvas.classList.add("corkboard-moving");
+
+      requestAnimationFrame(() => {
+        corkboardTransition.classList.add("is-active");
+      });
+
+      setTimeout(() => {
+        corkboardTransition.classList.add("is-fading");
+      }, 780);
+
+      setTimeout(() => {
+        window.location.href = "about-me.html";
+      }, 1080);
     }
 
     function openLayer(layer) {
@@ -1242,7 +1385,7 @@
 
       clearTimeout(bioPreviewTimer);
 
-      if (item.dataset.label === "Bio") {
+      if (item.dataset.label === "About Me") {
         const bioStage = document.createElement("div");
         bioStage.className = "bio-id-stage";
 
@@ -1272,8 +1415,8 @@
         focusIcon.replaceChildren(icon);
       }
 
-      focusHint.textContent = item.dataset.label === "Bio"
-        ? "click to inspect"
+      focusHint.textContent = item.dataset.label === "About Me"
+        ? "slide to cork board"
         : item.dataset.label === "Projects"
           ? "Boot Up Computer"
           : "click to open";
@@ -1590,14 +1733,17 @@
           return;
         }
         if (item.dataset.label === "Projects") {
-          window.location.href = "port-projects.html";
+          bootIntoProjects(item);
+          return;
+        }
+        if (item.dataset.label === "About Me" || item.dataset.link === "about-me.html") {
+          moveToAbout(item);
           return;
         }
         document.querySelectorAll(".modal.open").forEach(closeLayer);
-        openLayer(document.getElementById(item.dataset.target));
+        if (item.dataset.target) openLayer(document.getElementById(item.dataset.target));
       });
     });
-
 
     document.querySelectorAll("[data-mobile-open]").forEach(button => {
       button.addEventListener("click", () => {
@@ -1608,6 +1754,14 @@
 
     document.querySelectorAll("[data-mobile-link]").forEach(button => {
       button.addEventListener("click", () => {
+        if (button.dataset.mobileLink === "port-projects.html") {
+          bootIntoProjects(button);
+          return;
+        }
+        if (button.dataset.mobileLink === "about-me.html") {
+          moveToAbout(button);
+          return;
+        }
         window.location.href = button.dataset.mobileLink;
       });
     });
@@ -1616,39 +1770,6 @@
     window.addEventListener("pointerup", endDrag);
     window.addEventListener("pointercancel", endDrag);
     window.addEventListener("resize", () => items.forEach(clampItemToCanvas));
-
-    document.querySelectorAll(".hiraeth-tab").forEach(tab => {
-      tab.addEventListener("click", () => {
-        const target = tab.dataset.hiraethTab;
-        document.querySelectorAll(".hiraeth-tab").forEach(button => button.classList.toggle("is-active", button === tab));
-        document.querySelectorAll(".hiraeth-tab-panel").forEach(panel => {
-          panel.classList.toggle("is-active", panel.dataset.hiraethPanel === target);
-        });
-      });
-    });
-
-    const corsairFrame = document.querySelector(".corsair-case-frame");
-    let corsairScrollLock = false;
-
-    if (corsairFrame) {
-      corsairFrame.addEventListener("wheel", e => {
-        e.preventDefault();
-        if (corsairScrollLock) return;
-
-        corsairScrollLock = true;
-        const step = corsairFrame.clientHeight;
-        const direction = e.deltaY > 0 ? 1 : -1;
-        const currentSection = Math.round(corsairFrame.scrollTop / step);
-        const nextSection = Math.max(0, currentSection + direction);
-
-        corsairFrame.scrollTo({
-          top: nextSection * step,
-          behavior: "smooth"
-        });
-
-        setTimeout(() => corsairScrollLock = false, 520);
-      }, { passive: false });
-    }
 
     document.addEventListener("click", e => {
       const openTarget = e.target.closest("[data-open]");
@@ -1666,7 +1787,15 @@
       setTheme(localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light");
     });
 
-    window.addEventListener("load", typeTitle);
+    window.addEventListener("load", () => {
+      if (sessionStorage.getItem("skipDeskIntro") === "true") {
+        sessionStorage.removeItem("skipDeskIntro");
+        finishDeskIntroInstantly();
+        return;
+      }
+
+      typeTitle();
+    });
   </script>
 </body>
 </html>

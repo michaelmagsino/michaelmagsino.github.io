@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>About Michael Magsino</title>
+  <meta name="description" content="About Michael Magsino, a multidisciplinary creative focused on graphic design, UX/UI, and creative technologies." />
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700;800&family=Special+Elite&display=swap');
+
+    :root {
+      --paper: #f6f3e8;
+      --paper-deep: #e7dcc2;
+      --folder: #d8b46b;
+      --folder-dark: #b98d3d;
+      --ink: #111111;
+      --soft-ink: rgba(17, 17, 17, .68);
+      --line: rgba(17, 17, 17, .18);
+      --dash: rgba(17, 17, 17, .24);
+      --card: rgba(255, 252, 238, .88);
+      --note-yellow: #fff4aa;
+      --note-blue: #d9ecff;
+      --note-pink: #ffdce8;
+      --note-green: #dff3d7;
+      --shadow: rgba(17, 17, 17, .22);
+      --ease: 260ms ease;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      min-height: 100%;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 14%, rgba(255, 233, 184, .38), transparent 24%),
+        radial-gradient(circle at 82% 20%, rgba(120, 65, 22, .18), transparent 26%),
+        radial-gradient(circle at 38% 86%, rgba(90, 45, 18, .16), transparent 28%),
+        repeating-linear-gradient(35deg, rgba(255,255,255,.035) 0 2px, transparent 2px 9px),
+        repeating-linear-gradient(100deg, rgba(71,38,12,.055) 0 1px, transparent 1px 7px),
+        linear-gradient(180deg, #b8773d, #92582d 58%, #7d4824);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 18px;
+      border: 2px dashed rgba(70, 35, 10, .32);
+      border-radius: 24px;
+      pointer-events: none;
+      z-index: 0;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.09),
+        inset 0 0 80px rgba(54, 25, 8, .28);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.12) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(67, 33, 10, .18) 0 1px, transparent 1.5px);
+      background-position: 0 0, 18px 22px;
+      background-size: 36px 36px, 44px 44px;
+      pointer-events: none;
+      opacity: .42;
+      z-index: 0;
+      mix-blend-mode: multiply;
+    }
+
+    a,
+    button {
+      font: inherit;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .font-sketch,
+    .top-label,
+    .file-meta,
+    .tab,
+    .stamp,
+    .note-card h2,
+    .tool-chip,
+    .folder-label,
+    .footer-note,
+    .window-title {
+      font-family: "Special Elite", monospace;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 26px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding: 12px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: rgba(255, 252, 238, .66);
+      box-shadow: 6px 6px 0 var(--ink);
+      backdrop-filter: blur(4px);
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .penguin-dot {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex: 0 0 auto;
+      border: 2px solid var(--ink);
+      border-radius: 50%;
+      background: #fffdf2;
+    }
+
+    .penguin-dot img {
+      width: 82%;
+      height: 82%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .top-title {
+      min-width: 0;
+    }
+
+    .top-title strong {
+      display: block;
+      font-family: Caveat, cursive;
+      font-size: clamp(1.6rem, 4vw, 2.35rem);
+      line-height: .9;
+      white-space: nowrap;
+    }
+
+    .top-title span {
+      display: block;
+      margin-top: 4px;
+      font-family: "Special Elite", monospace;
+      font-size: .72rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--soft-ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a,
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: #fffdf2;
+      box-shadow: 4px 4px 0 var(--ink);
+      text-decoration: none;
+      font-weight: 700;
+      transition: transform var(--ease), box-shadow var(--ease), background var(--ease);
+    }
+
+    .nav-links a:hover,
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 var(--ink);
+      background: #ffffff;
+    }
+
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+      gap: clamp(22px, 4vw, 48px);
+      align-items: stretch;
+      margin-bottom: 34px;
+    }
+
+    .folder-scene {
+      position: relative;
+      min-height: 620px;
+      padding: clamp(22px, 3vw, 34px);
+    }
+
+    .folder-back {
+      position: absolute;
+      inset: 34px 8px 6px;
+      border: 3px solid var(--ink);
+      border-radius: 18px 18px 28px 28px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.12), transparent 28%),
+        linear-gradient(135deg, var(--folder), var(--folder-dark));
+      box-shadow: 16px 18px 0 rgba(17,17,17,.92);
+      transform: rotate(-1.3deg);
+    }
+
+    .folder-back::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: 34px;
+      width: 210px;
+      height: 44px;
+      border: 3px solid var(--ink);
+      border-bottom: 0;
+      border-radius: 16px 16px 0 0;
+      background: var(--folder);
+    }
+
+    .folder-label {
+      position: absolute;
+      top: -20px;
+      left: 58px;
+      z-index: 1;
+      font-size: .82rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transform: rotate(.8deg);
+    }
+
+    .profile-paper {
+      position: relative;
+      margin: 42px auto 0;
+      width: min(560px, 100%);
+      min-height: 540px;
+      padding: clamp(22px, 4vw, 34px);
+      border: 2px solid var(--ink);
+      border-radius: 20px;
+      background:
+        linear-gradient(rgba(255,255,255,.68), rgba(255,255,255,.68)),
+        repeating-linear-gradient(0deg, transparent 0, transparent 30px, rgba(17,17,17,.08) 31px),
+        #fffdf2;
+      box-shadow: 10px 10px 0 var(--ink);
+      transform: rotate(1.2deg);
+      overflow: hidden;
+    }
+
+    .top-label {
+      margin-bottom: 18px;
+      font-size: .78rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--soft-ink);
+    }
+
+    .profile-paper h1 {
+      font-family: Caveat, cursive;
+      font-size: clamp(3.35rem, 8vw, 6.2rem);
+      line-height: .85;
+      letter-spacing: -.03em;
+      max-width: 10ch;
+      margin-bottom: 16px;
+    }
+
+    .file-meta {
+      display: grid;
+      gap: 8px;
+      margin: 22px 0;
+      font-size: .86rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    .file-meta div {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 7px;
+      border-bottom: 1px dashed var(--dash);
+    }
+
+    .file-meta span:first-child {
+      opacity: .62;
+    }
+
+    .bio-copy {
+      color: var(--soft-ink);
+      font-size: clamp(.96rem, 1.5vw, 1.08rem);
+      line-height: 1.75;
+      max-width: 61ch;
+    }
+
+    .stamps {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 26px;
+    }
+
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      border: 2px solid var(--ink);
+      border-radius: 6px;
+      color: rgba(17,17,17,.78);
+      background: rgba(255,255,255,.42);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .76rem;
+      transform: rotate(var(--r, -2deg));
+    }
+
+    .desk-notes {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-content: center;
+      min-height: 620px;
+    }
+
+    .note-card {
+      position: relative;
+      min-height: 190px;
+      padding: 22px 20px 20px;
+      border: 2px solid var(--ink);
+      border-radius: 12px 12px 18px 18px;
+      background: var(--note-yellow);
+      box-shadow: 7px 7px 0 var(--ink);
+      transform: rotate(var(--r, -1deg));
+      transition: transform var(--ease), box-shadow var(--ease);
+    }
+
+    .note-card:hover {
+      transform: translateY(-5px) rotate(var(--hr, 0deg));
+      box-shadow: 10px 12px 0 var(--ink);
+    }
+
+    .note-card::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      width: 74px;
+      height: 26px;
+      transform: translateX(-50%) rotate(-2deg);
+      border: 1px solid rgba(17,17,17,.18);
+      background: rgba(255,255,255,.48);
+      box-shadow: 0 4px 10px rgba(17,17,17,.08);
+    }
+
+    .note-card h2 {
+      margin-bottom: 12px;
+      font-size: .9rem;
+      line-height: 1.25;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .note-card p {
+      color: var(--soft-ink);
+      line-height: 1.62;
+      font-size: .95rem;
+    }
+
+    .note-blue { background: var(--note-blue); --r: 2deg; --hr: .5deg; }
+    .note-pink { background: var(--note-pink); --r: -2.2deg; --hr: -1deg; }
+    .note-green { background: var(--note-green); --r: 1.4deg; --hr: .4deg; }
+    .note-yellow { background: var(--note-yellow); --r: -1deg; --hr: -2deg; }
+
+    .wide-note {
+      grid-column: 1 / -1;
+      min-height: 154px;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: clamp(22px, 4vw, 42px);
+      margin-top: 34px;
+      align-items: start;
+    }
+
+    .window-card {
+      border: 3px solid var(--ink);
+      border-radius: 14px;
+      background: #f3f0df;
+      box-shadow: 10px 10px 0 var(--ink);
+      overflow: hidden;
+    }
+
+    .window-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-bottom: 3px solid var(--ink);
+      background: linear-gradient(90deg, #1d5ebd, #77a8e8);
+      color: #ffffff;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .78rem;
+    }
+
+    .window-buttons {
+      display: flex;
+      gap: 5px;
+      flex: 0 0 auto;
+    }
+
+    .window-buttons span {
+      width: 15px;
+      height: 15px;
+      border: 2px solid #ffffff;
+      background: rgba(255,255,255,.26);
+    }
+
+    .window-body {
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .toolbox {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 38px;
+      padding: 9px 12px;
+      border: 2px solid var(--ink);
+      border-radius: 999px;
+      background: #fffdf2;
+      box-shadow: 3px 3px 0 var(--ink);
+      font-size: .78rem;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+
+    .about-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .lined-card {
+      position: relative;
+      padding: 22px;
+      border: 2px solid var(--ink);
+      border-radius: 18px;
+      background:
+        repeating-linear-gradient(0deg, transparent 0, transparent 29px, rgba(17,17,17,.08) 30px),
+        rgba(255,253,242,.9);
+      box-shadow: 7px 7px 0 var(--ink);
+    }
+
+    .lined-card h2 {
+      margin-bottom: 12px;
+      font-family: Caveat, cursive;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: .95;
+    }
+
+    .lined-card p {
+      color: var(--soft-ink);
+      line-height: 1.72;
+      margin-bottom: 12px;
+    }
+
+    .focus-list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+    }
+
+    .focus-list li {
+      position: relative;
+      padding: 10px 10px 10px 34px;
+      border: 1px dashed var(--dash);
+      border-radius: 12px;
+      background: rgba(255,255,255,.36);
+      color: var(--soft-ink);
+      line-height: 1.48;
+    }
+
+    .focus-list li::before {
+      content: "✦";
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      color: var(--ink);
+    }
+
+    .footer-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      margin-top: 34px;
+      padding: 18px;
+      border: 2px solid var(--ink);
+      border-radius: 22px;
+      background: rgba(255,252,238,.74);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+
+    .footer-note {
+      color: var(--soft-ink);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .78rem;
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+
+    .return-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 25% 24%, rgba(255, 244, 170, .5), transparent 24%),
+        radial-gradient(circle at 78% 70%, rgba(217, 236, 255, .28), transparent 22%),
+        linear-gradient(180deg, rgba(161, 94, 43, .9), rgba(111, 61, 28, .96));
+      transition: opacity 180ms ease;
+    }
+
+    .return-transition.is-active {
+      opacity: 1;
+    }
+
+    .return-transition::before {
+      content: "";
+      position: absolute;
+      inset: -4%;
+      background:
+        repeating-linear-gradient(35deg, rgba(255,255,255,.04) 0 2px, transparent 2px 9px),
+        repeating-linear-gradient(100deg, rgba(71,38,12,.07) 0 1px, transparent 1px 7px);
+      transform: translateX(0);
+      animation: corkTextureSlide 760ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    .return-card {
+      position: relative;
+      width: min(420px, calc(100vw - 44px));
+      padding: 26px 24px;
+      border: 2px solid var(--ink);
+      border-radius: 16px;
+      background: #fff4aa;
+      box-shadow: 10px 10px 0 var(--ink);
+      text-align: center;
+      transform: translateX(0) rotate(-1.4deg);
+      filter: blur(0);
+      animation: returnNoteExit 760ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    .return-card::before {
+      content: "";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      width: 82px;
+      height: 26px;
+      transform: translateX(-50%) rotate(2deg);
+      border: 1px solid rgba(17,17,17,.18);
+      background: rgba(255,255,255,.42);
+      box-shadow: 0 4px 10px rgba(17,17,17,.12);
+    }
+
+    .return-card strong {
+      display: block;
+      font-family: Caveat, cursive;
+      font-size: clamp(2.5rem, 9vw, 4rem);
+      line-height: .9;
+      margin-bottom: 10px;
+    }
+
+    .return-card span {
+      display: block;
+      font-family: "Special Elite", monospace;
+      font-size: .78rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(17,17,17,.68);
+    }
+
+    body.is-returning .page {
+      animation: pageSlideRight 760ms cubic-bezier(.2,.8,.2,1) forwards;
+      transform-origin: center;
+    }
+
+    @keyframes pageSlideRight {
+      0% {
+        transform: translateX(0);
+        filter: blur(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateX(18vw);
+        filter: blur(7px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes returnNoteExit {
+      0% {
+        transform: translateX(-18vw) rotate(-2deg) scale(.92);
+        filter: blur(7px);
+        opacity: 0;
+      }
+
+      28% {
+        transform: translateX(0) rotate(-1.4deg) scale(1);
+        filter: blur(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateX(70vw) rotate(4deg) scale(1.05);
+        filter: blur(8px);
+        opacity: 0;
+      }
+    }
+
+    @keyframes corkTextureSlide {
+      0% {
+        transform: translateX(-16vw);
+        filter: blur(5px);
+      }
+
+      100% {
+        transform: translateX(18vw);
+        filter: blur(0);
+      }
+    }
+
+    @media (max-width: 920px) {
+      body::before {
+        inset: 10px;
+      }
+
+      .page {
+        width: min(720px, calc(100% - 24px));
+        padding-top: 16px;
+      }
+
+      .topbar,
+      .footer-card {
+        align-items: stretch;
+        flex-direction: column;
+        border-radius: 22px;
+      }
+
+      .nav-links,
+      .footer-actions {
+        justify-content: flex-start;
+      }
+
+      .hero,
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .folder-scene,
+      .desk-notes {
+        min-height: 0;
+      }
+
+      .folder-scene {
+        padding: 20px 10px 34px;
+      }
+
+      .folder-back {
+        inset: 30px 0 0;
+      }
+
+      .profile-paper {
+        min-height: 0;
+      }
+
+      .desk-notes {
+        grid-template-columns: 1fr;
+      }
+
+      .wide-note {
+        grid-column: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 520px);
+      }
+
+      .topbar {
+        padding: 10px;
+      }
+
+      .topbar-left {
+        align-items: flex-start;
+      }
+
+      .penguin-dot {
+        width: 38px;
+        height: 38px;
+      }
+
+      .top-title strong {
+        white-space: normal;
+      }
+
+      .nav-links a,
+      .primary-button {
+        width: 100%;
+      }
+
+      .folder-back::before {
+        left: 22px;
+        width: 170px;
+      }
+
+      .folder-label {
+        left: 42px;
+        font-size: .7rem;
+      }
+
+      .profile-paper {
+        padding: 24px 18px;
+        transform: rotate(.4deg);
+      }
+
+      .profile-paper h1 {
+        font-size: clamp(3rem, 20vw, 4.6rem);
+      }
+
+      .file-meta div {
+        display: grid;
+        gap: 3px;
+      }
+
+      .note-card {
+        min-height: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <header class="topbar" aria-label="About page navigation">
+      <div class="topbar-left">
+        <div class="penguin-dot" aria-hidden="true">
+          <img src="portfolio_images/penguin_logo.png" alt="" />
+        </div>
+
+        <div class="top-title">
+          <strong>About Michael</strong>
+          <span>creative technologies / ux/ui / graphic design</span>
+        </div>
+      </div>
+
+      <nav class="nav-links" aria-label="Main links">
+        <a href="index.html" data-return-home>Back to Desk</a>
+        <a href="port-projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="About Michael Magsino">
+      <div class="folder-scene">
+        <div class="folder-back" aria-hidden="true">
+          <div class="folder-label">creative file</div>
+        </div>
+
+        <article class="profile-paper">
+          <div class="top-label">About Me</div>
+
+          <h1>Michael Magsino</h1>
+
+          <div class="file-meta" aria-label="Profile details">
+            <div>
+              <span>Role</span>
+              <strong>Multidisciplinary Creative</strong>
+            </div>
+            <div>
+              <span>Focus</span>
+              <strong>Graphic Design / UX/UI</strong>
+            </div>
+            <div>
+              <span>Program</span>
+              <strong>Creative Technologies</strong>
+            </div>
+            <div>
+              <span>Status</span>
+              <strong>Building, learning, experimenting</strong>
+            </div>
+          </div>
+
+          <p class="bio-copy">
+            I am a multidisciplinary creative technologist that primarily focuses on graphic design and UX/UI. I enjoy when I make work that feels concise and intentional without feeling too plain. My main goal when designing is to keep things simple and refined.
+          </p>
+
+          <div class="stamps" aria-label="Creative tags">
+            <span class="stamp" style="--r: -3deg;">UX/UI</span>
+            <span class="stamp" style="--r: 2deg;">Design</span>
+            <span class="stamp" style="--r: -1deg;">Web</span>
+            <span class="stamp" style="--r: 3deg;">Storytelling</span>
+          </div>
+        </article>
+      </div>
+
+      <aside class="desk-notes" aria-label="Desk notes">
+        <article class="note-card note-yellow">
+          <h2>What I Make</h2>
+          <p>
+            I create web experiences, brand materials, interactive designs, and interface concepts that stay simple and refined.
+          </p>
+        </article>
+
+        <article class="note-card note-blue">
+          <h2>What I Care About</h2>
+          <p>
+            I care about clarity, atmosphere, and small details that make a design feel intentional instead of cookie-cutter.
+          </p>
+        </article>
+
+        <article class="note-card note-pink">
+          <h2>Current Interests</h2>
+          <p>
+            Brand identities and interaction designs that feel simple, focused, and visually interesting.
+          </p>
+        </article>
+
+        <article class="note-card note-green">
+          <h2>Creative Approach</h2>
+          <p>
+            I like starting with vibe and function, then shaping the design until it feels useful and visually cohesive.
+          </p>
+        </article>
+
+        <article class="note-card note-yellow wide-note">
+          <h2>Creative Values</h2>
+          <p>
+            I try to make work that feels clear and intentional, with enough personality to make it memorable without feeling too busy or unnecessary.
+          </p>
+        </article>
+      </aside>
+    </section>
+
+    <section class="section-grid" aria-label="Creative background and tools">
+      <article class="window-card">
+        <div class="window-title">
+          <span>toolbox.exe</span>
+          <div class="window-buttons" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+
+        <div class="window-body">
+          <div class="toolbox" aria-label="Tools Michael uses">
+            <span class="tool-chip">Figma</span>
+            <span class="tool-chip">Adobe Photoshop</span>
+            <span class="tool-chip">Adobe Illustrator</span>
+            <span class="tool-chip">Adobe Audition</span>
+            <span class="tool-chip">Canva</span>
+            <span class="tool-chip">Framer</span>
+            <span class="tool-chip">HTML</span>
+            <span class="tool-chip">CSS</span>
+            <span class="tool-chip">GitHub</span>
+            <span class="tool-chip">p5.js</span>
+          </div>
+        </div>
+      </article>
+
+      <div class="about-stack">
+        <article class="lined-card">
+          <h2>Design Background</h2>
+          <p>
+            My creative work sits between graphic design, UX/UI, and creative technology. I have worked on social graphics, web layouts, brand systems, and interface concepts.
+          </p>
+          <p>
+            I am especially interested in how design can guide people without feeling flat or overly technical. A good interface should help someone move through an experience and should also carry the vibe of the work!
+          </p>
+        </article>
+
+        <article class="lined-card">
+          <h2>Currently Exploring</h2>
+          <ul class="focus-list">
+            <li>Diegetic UI systems for narrative-driven games and environmental storytelling.</li>
+            <li>Interactive web experiences that shows off my aesthetic.</li>
+            <li>Brand identity work with personality.</li>
+            <li>Sound and atmosphere as supporting elements for digital experiences.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="return-transition" id="returnTransition" aria-hidden="true">
+    <div class="return-card">
+      <strong>Back to Desk</strong>
+      <span>sliding the note back</span>
+    </div>
+  </div>
+
+  <script>
+    const returnTransition = document.getElementById("returnTransition");
+
+    document.querySelectorAll("[data-return-home]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+
+        sessionStorage.setItem("skipDeskIntro", "true");
+
+        if (!returnTransition) {
+          window.location.href = link.href;
+          return;
+        }
+
+        document.body.classList.add("is-returning");
+        returnTransition.classList.add("is-active");
+
+        setTimeout(() => {
+          window.location.href = link.href;
+        }, 760);
+      });
+    });
+  </script>
+</body>
+</html>

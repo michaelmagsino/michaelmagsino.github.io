@@ -726,6 +726,268 @@
       border-color: var(--window-dark) var(--window-light) var(--window-light) var(--window-dark);
     }
 
+    .power-off-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      background: #000;
+      transition: opacity 120ms ease;
+    }
+
+    .power-off-transition.is-active {
+      opacity: 1;
+    }
+
+    .crt-shutdown-screen {
+      position: relative;
+      width: min(76vw, 820px);
+      height: min(42vw, 360px);
+      max-height: 54vh;
+      overflow: hidden;
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(118,216,255,.08), transparent 44%),
+        #000;
+      box-shadow:
+        0 0 0 4px rgba(255,255,255,.04),
+        0 0 0 10px rgba(0,0,0,.9),
+        inset 0 0 80px rgba(118,216,255,.11);
+      opacity: 0;
+      transform: scale(.98);
+    }
+
+    .power-off-transition.is-active .crt-shutdown-screen {
+      animation: shutdownScreenAppear 980ms ease forwards;
+    }
+
+    .crt-shutdown-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at center, rgba(118,216,255,.22), rgba(118,216,255,.07) 24%, transparent 58%);
+      opacity: 0;
+      animation: shutdownGlowBloom 980ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    .crt-shutdown-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 0;
+      height: 5px;
+      border-radius: 999px;
+      background: #ffffff;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      box-shadow:
+        0 0 6px rgba(255,255,255,1),
+        0 0 16px rgba(255,255,255,.95),
+        0 0 34px rgba(118,216,255,.92),
+        0 0 74px rgba(118,216,255,.72),
+        0 0 120px rgba(118,216,255,.42);
+      animation: shutdownLineHold 980ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    .crt-shutdown-line::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 108%;
+      height: 42px;
+      border-radius: 999px;
+      background: radial-gradient(ellipse at center, rgba(118,216,255,.34), transparent 70%);
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      animation: shutdownLineAura 980ms ease forwards;
+    }
+
+    .crt-shutdown-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ffffff;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(.6);
+      box-shadow:
+        0 0 8px rgba(255,255,255,1),
+        0 0 24px rgba(255,255,255,.95),
+        0 0 54px rgba(118,216,255,.9),
+        0 0 100px rgba(118,216,255,.7);
+      animation: shutdownDotPop 980ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    body.is-powering-off .desktop,
+    body.is-powering-off .taskbar,
+    body.is-powering-off .start-menu {
+      animation: desktopPowerBlur 420ms cubic-bezier(.2,.8,.2,1) forwards;
+    }
+
+    @keyframes shutdownScreenAppear {
+      0% {
+        opacity: 0;
+        transform: scale(.98);
+      }
+
+      10%, 82% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(.995);
+      }
+    }
+
+    @keyframes shutdownGlowBloom {
+      0%, 12% {
+        opacity: 0;
+        transform: scale(.86);
+      }
+
+      28% {
+        opacity: .75;
+        transform: scale(1);
+      }
+
+      72% {
+        opacity: .42;
+        transform: scale(.88);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(.22);
+      }
+    }
+
+    @keyframes shutdownLineHold {
+      0%, 16% {
+        width: 0;
+        opacity: 0;
+        height: 5px;
+      }
+
+      28% {
+        width: 86%;
+        opacity: 1;
+        height: 5px;
+      }
+
+      60% {
+        width: 86%;
+        opacity: 1;
+        height: 5px;
+      }
+
+      76% {
+        width: 18%;
+        opacity: .95;
+        height: 4px;
+      }
+
+      88%, 100% {
+        width: 0;
+        opacity: 0;
+        height: 2px;
+      }
+    }
+
+    @keyframes shutdownLineAura {
+      0%, 16% {
+        opacity: 0;
+      }
+
+      28%, 62% {
+        opacity: 1;
+      }
+
+      88%, 100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes shutdownDotPop {
+      0%, 72% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.45);
+      }
+
+      82% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.55);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.05);
+      }
+    }
+
+    @keyframes desktopPowerBlur {
+      0% {
+        filter: blur(0) brightness(1);
+        opacity: 1;
+      }
+
+      100% {
+        filter: blur(4px) brightness(.08);
+        opacity: 0;
+      }
+    }
+
+
+
+      44% {
+        filter: blur(1px) brightness(1.35);
+        transform: scale(1.004);
+        opacity: .9;
+      }
+
+      100% {
+        filter: blur(6px) brightness(.08);
+        transform: scale(.985);
+        opacity: 0;
+      }
+    }
+
+
+
+      100% {
+        filter: blur(4px) brightness(.18);
+        transform: scale(.985);
+        opacity: .1;
+      }
+    }
+
+
+
+      100% {
+        filter: blur(5px) brightness(.22);
+        transform: scale(.985);
+        opacity: .14;
+      }
+    }
+
+
+
+      100% {
+        filter: blur(5px) brightness(.35);
+        transform: scale(.985);
+        opacity: .2;
+      }
+    }
+
+
     @media (max-width: 520px) {
       .boot-brand {
         align-items: flex-start;
@@ -1119,7 +1381,7 @@
   <nav class="start-menu" id="startMenu" aria-label="Start menu">
     <div class="start-menu-header">Projects</div>
     <div class="start-menu-items">
-      <a class="start-menu-item" href="index.html">
+      <a class="start-menu-item" href="index.html" data-power-home>
         <span class="start-menu-icon" aria-hidden="true">⌂</span>
         <span>Go Home</span>
       </a>
@@ -1145,6 +1407,15 @@
       <div class="clock" id="clock" aria-label="Current local time">--:-- --</div>
     </div>
   </footer>
+
+
+  
+      <div class="power-off-transition" id="powerOffTransition" aria-hidden="true">
+    <div class="crt-shutdown-screen">
+      <div class="crt-shutdown-line"></div>
+      <div class="crt-shutdown-dot"></div>
+    </div>
+  </div>
 
   <script>
     const bootScreen = document.getElementById("bootScreen");
@@ -1477,6 +1748,34 @@
 
     window.addEventListener("pointercancel", () => {
       activeDragWindow = null;
+    });
+
+
+    const powerOffTransition = document.getElementById("powerOffTransition");
+
+    function returnHomeWithPowerOff(href) {
+      sessionStorage.setItem("skipDeskIntro", "true");
+
+      if (!powerOffTransition) {
+        window.location.href = href;
+        return;
+      }
+
+      startMenu.classList.remove("is-open");
+      startButton.setAttribute("aria-expanded", "false");
+      document.body.classList.add("is-powering-off");
+      powerOffTransition.classList.add("is-active");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 1040);
+    }
+
+    document.querySelectorAll("[data-power-home]").forEach(link => {
+      link.addEventListener("click", event => {
+        event.preventDefault();
+        returnHomeWithPowerOff(link.href);
+      });
     });
 
     updateClock();
