@@ -3,15 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Michael Magsino's Portfolio</title>
-  <meta name="description" content="Michael Magsino's Portfolio." />
+  <title>Michael Magsino's Desk</title>
+  <meta name="description" content="Michael Magsino's interactive desk portfolio." />
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap');
 
     :root {
-      --desk-scale: clamp(.78, min(100vw / 1440, 100vh / 900), 1);
-      --desk-safe-scale: clamp(.72, min(100vw / 1440, 100vh / 900), 1);
       --paper: #f6f6f2;
       --paper-dark: #ecece6;
       --ink: #111;
@@ -174,8 +172,6 @@
       position: relative;
       width: 100%;
       height: 100vh;
-      height: 100vh;
-      height: 100dvh;
       min-height: 100vh;
       padding: clamp(18px, 2vw, 32px);
       overflow: hidden;
@@ -199,10 +195,9 @@
       place-items: center;
       text-align: center;
       pointer-events: none;
-      padding: clamp(34px, 4vw, 70px);
-      z-index: 2;
-      transform: scale(var(--desk-scale));
-      transform-origin: center;
+      padding: 20px;
+      z-index: 5;
+      transition: filter var(--ease), opacity var(--ease);
     }
 
     .centerpiece-inner {
@@ -327,10 +322,10 @@
       transform: rotate(calc(var(--r, 0deg) * -.25));
     }
 
-    .item-bio { top: 14%; left: clamp(7%, 12vw, 18%); --w: clamp(210px, calc(18vw * var(--desk-safe-scale)), 360px); --r: -6deg; --hr: -1deg; --d: 0ms; }
-    .item-projects { top: 15%; right: clamp(5%, 11vw, 18%); --w: clamp(220px, calc(20vw * var(--desk-safe-scale)), 385px); --r: 7deg; --hr: 2deg; --d: 140ms; }
-    .item-resume { bottom: 12%; left: clamp(6%, 14vw, 21%); --w: clamp(205px, calc(19vw * var(--desk-safe-scale)), 350px); --r: 5deg; --hr: 1deg; --d: 280ms; }
-    .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(205px, calc(18.5vw * var(--desk-safe-scale)), 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
+    .item-bio { top: 18%; left: clamp(4%, 10vw, 14%); --w: clamp(255px, 21vw, 390px); --r: -9deg; --hr: -4deg; --d: 120ms; }
+    .item-projects { top: 15%; right: clamp(3%, 8vw, 12%); --w: clamp(280px, 23vw, 430px); --r: 7deg; --hr: 3deg; --d: 220ms; }
+    .item-resume { bottom: 20%; left: clamp(10%, 18vw, 24%); --w: clamp(200px, 16.5vw, 300px); --r: 8deg; --hr: 4deg; --d: 320ms; }
+    .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(230px, 18.5vw, 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
 
     .mobile-menu {
       display: none;
@@ -342,6 +337,172 @@
 
     .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
     .focus-preview.visible { opacity: 1; }
+
+    .canvas.corkboard-moving {
+      animation: deskRushLeft 760ms cubic-bezier(.18,.82,.22,1) forwards;
+      transform-origin: center;
+    }
+
+    .canvas.corkboard-moving .sketch-item,
+    .canvas.corkboard-moving .centerpiece {
+      filter: blur(7px);
+    }
+
+    .corkboard-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 118;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      overflow: hidden;
+      background: rgba(246,243,232,0);
+      transition: opacity 180ms ease, background 360ms ease;
+    }
+
+    .corkboard-transition.is-active {
+      opacity: 1;
+      background: rgba(246,243,232,.82);
+    }
+
+    body.dark-mode .corkboard-transition.is-active {
+      background: rgba(12,12,12,.82);
+    }
+
+    .corkboard-transition::before,
+    .corkboard-transition::after {
+      content: "";
+      position: absolute;
+      inset: -12%;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .corkboard-transition::before {
+      background:
+        linear-gradient(90deg, transparent 0 12%, rgba(17,17,17,.08) 22%, transparent 34%),
+        linear-gradient(90deg, transparent 0 24%, rgba(17,17,17,.06) 42%, transparent 58%),
+        linear-gradient(90deg, transparent 0 46%, rgba(17,17,17,.05) 62%, transparent 78%);
+      transform: translateX(46vw);
+    }
+
+    .corkboard-transition.is-active::before {
+      animation: speedLinesLeft 720ms cubic-bezier(.18,.82,.22,1) forwards;
+      opacity: 1;
+    }
+
+    .corkboard-transition::after {
+      background:
+        radial-gradient(circle at 30% 35%, rgba(255,255,255,.38), transparent 22%),
+        radial-gradient(circle at 70% 62%, rgba(255,255,255,.2), transparent 26%);
+      mix-blend-mode: screen;
+    }
+
+    .corkboard-card {
+      position: fixed;
+      left: var(--about-start-left, 50vw);
+      top: var(--about-start-top, 50vh);
+      width: var(--about-start-width, 260px);
+      min-height: 170px;
+      transform: translate(-50%, -50%) rotate(-8deg) scale(.6);
+      transform-origin: center;
+      opacity: 0;
+      border: 3px solid #1b160f;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 18% 22%, rgba(255,255,255,.32), transparent 16%),
+        linear-gradient(135deg, #c98b45, #9f642f);
+      box-shadow:
+        12px 12px 0 #1b160f,
+        0 22px 60px rgba(17,17,17,.26);
+      transition:
+        left 780ms cubic-bezier(.18,.82,.22,1),
+        top 780ms cubic-bezier(.18,.82,.22,1),
+        width 780ms cubic-bezier(.18,.82,.22,1),
+        transform 780ms cubic-bezier(.18,.82,.22,1),
+        opacity 160ms ease;
+      overflow: hidden;
+    }
+
+    .corkboard-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(45deg, rgba(255,255,255,.05) 0 8px, transparent 8px 18px),
+        repeating-linear-gradient(-45deg, rgba(0,0,0,.05) 0 6px, transparent 6px 17px);
+      opacity: .7;
+    }
+
+    .corkboard-card::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 2px dashed rgba(27,22,15,.42);
+      border-radius: 12px;
+    }
+
+    .corkboard-note {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      width: 58%;
+      min-height: 42%;
+      padding: 14px;
+      transform: translate(-50%, -50%) rotate(2deg);
+      border: 2px solid #1b160f;
+      background: #fff4aa;
+      box-shadow: 5px 5px 0 #1b160f;
+      font-family: "Special Elite", monospace;
+      font-size: clamp(.68rem, 1.5vw, 1.05rem);
+      letter-spacing: .08em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .corkboard-pin {
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      z-index: 3;
+      width: 20px;
+      height: 20px;
+      transform: translateX(-50%);
+      border: 2px solid #1b160f;
+      border-radius: 50%;
+      background: #e64b45;
+      box-shadow: 2px 2px 0 #1b160f;
+    }
+
+    .corkboard-transition.is-active .corkboard-card {
+      left: 50%;
+      top: 50%;
+      width: min(74vw, 720px);
+      transform: translate(-50%, -50%) rotate(-1deg) scale(1);
+      opacity: 1;
+    }
+
+    .corkboard-transition.is-fading .corkboard-card {
+      transform: translate(-68%, -50%) rotate(-2deg) scale(1.08);
+      filter: blur(9px);
+      opacity: 0;
+    }
+
+    @keyframes deskRushLeft {
+      0% { transform: translateX(0) scale(1); opacity: 1; }
+      60% { transform: translateX(-22vw) scale(.985); opacity: .72; }
+      100% { transform: translateX(-54vw) scale(.96); opacity: 0; }
+    }
+
+    @keyframes speedLinesLeft {
+      0% { transform: translateX(52vw); opacity: 0; filter: blur(12px); }
+      18% { opacity: 1; }
+      100% { transform: translateX(-34vw); opacity: 0; filter: blur(2px); }
+    }
     .computer-boot-transition {
       position: fixed;
       inset: 0;
@@ -685,49 +846,7 @@
       .item-statement { bottom: 17%; right: 6%; --w: 210px; }
     }
 
-
-    @media (min-width: 701px) and (max-height: 820px) {
-      :root {
-        --desk-scale: clamp(.68, min(100vw / 1440, 100vh / 980), .92);
-        --desk-safe-scale: clamp(.62, min(100vw / 1440, 100vh / 980), .9);
-      }
-
-      .canvas {
-        padding: 18px;
-      }
-
-      .canvas::after {
-        inset: 14px;
-      }
-
-      .item-bio { top: 10%; }
-      .item-projects { top: 10%; }
-      .item-resume { bottom: 8%; }
-      .item-statement { bottom: 12%; }
-    }
-
-    @media (min-width: 701px) and (max-width: 1180px) {
-      :root {
-        --desk-scale: clamp(.68, min(100vw / 1320, 100vh / 900), .9);
-        --desk-safe-scale: clamp(.62, min(100vw / 1320, 100vh / 900), .88);
-      }
-
-      .centerpiece-inner {
-        max-width: min(760px, 54vw);
-      }
-
-      .item-bio { left: 6%; }
-      .item-projects { right: 5%; }
-      .item-resume { left: 6%; }
-      .item-statement { right: 7%; }
-    }
-
     @media (max-width: 700px) {
-      :root {
-        --desk-scale: 1;
-        --desk-safe-scale: 1;
-      }
-
       html,
       body {
         width: 100%;
@@ -894,6 +1013,11 @@
         display: none;
       }
 
+
+      .corkboard-transition.is-active .corkboard-card {
+        width: min(86vw, 420px);
+      }
+
       .modal,
       .viewer,
       .showcase {
@@ -950,9 +1074,9 @@
     </section>
 
     <section class="canvas-items" aria-label="Portfolio sections">
-      <button class="sketch-item item-bio" data-label="Bio" data-target="modal-bio" aria-label="Open Bio section">
+      <button class="sketch-item item-bio" data-label="About Me" data-link="about-me.html" aria-label="Open About Me section">
         <img class="sketch-img" src="portfolio_images/Michael_ID.png" alt="Sketch of Michael's artist ID" />
-        <div class="item-caption">Bio</div>
+        <div class="item-caption">About Me</div>
       </button>
 
       <button class="sketch-item item-projects" data-label="Projects"  aria-label="Boot up Projects desktop">
@@ -972,9 +1096,9 @@
     </section>
 
     <section class="mobile-menu" aria-label="Mobile portfolio navigation">
-      <button class="mobile-menu-button" type="button" data-mobile-open="modal-bio">
-        <strong>Bio</strong>
-        <span>View Michael's ID card and short bio.</span>
+      <button class="mobile-menu-button" type="button" data-mobile-link="about-me.html">
+        <strong>About Me</strong>
+        <span>Move over to Michael's creative cork board.</span>
       </button>
 
       <button class="mobile-menu-button" type="button" data-mobile-link="port-projects.html">
@@ -1026,6 +1150,13 @@
       </div>
       <div class="crt-stand"></div>
       <div class="crt-base"></div>
+    </div>
+  </div>
+
+  <div class="corkboard-transition" id="corkboardTransition" aria-hidden="true">
+    <div class="corkboard-card" aria-hidden="true">
+      <div class="corkboard-pin"></div>
+      <div class="corkboard-note">Opening About Me</div>
     </div>
   </div>
 
@@ -1095,6 +1226,7 @@
     const bioFlipCard = document.getElementById("bioFlipCard");
     const bioFlipButton = document.getElementById("bioFlipButton");
     const computerBootTransition = document.getElementById("computerBootTransition");
+    const corkboardTransition = document.getElementById("corkboardTransition");
 
     let isHoveringItem = false;
     let hoverTimer = null;
@@ -1119,6 +1251,13 @@
       if (mobileThemeText) mobileThemeText.textContent = mode === "dark" ? "Turn On" : "Turn Off";
       themeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
       if (mobileThemeToggle) mobileThemeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    }
+
+    function finishDeskIntroInstantly() {
+      titleEl.textContent = "Michael Magsino's Desk";
+      titleEl.classList.remove("typing");
+      randomizeItems();
+      body.classList.add("loaded");
     }
 
     function typeTitle() {
@@ -1175,6 +1314,44 @@
       }, 1320);
     }
 
+    function moveToAbout(sourceElement = null) {
+      if (!corkboardTransition) {
+        window.location.href = "about-me.html";
+        return;
+      }
+
+      const sourceRect = sourceElement
+        ? sourceElement.getBoundingClientRect()
+        : {
+            left: window.innerWidth / 2 - 130,
+            top: window.innerHeight / 2 - 85,
+            width: 260,
+            height: 170
+          };
+
+      corkboardTransition.classList.remove("is-active", "is-fading");
+      corkboardTransition.style.setProperty("--about-start-left", `${sourceRect.left + sourceRect.width / 2}px`);
+      corkboardTransition.style.setProperty("--about-start-top", `${sourceRect.top + sourceRect.height / 2}px`);
+      corkboardTransition.style.setProperty("--about-start-width", `${Math.max(sourceRect.width * 1.08, 245)}px`);
+
+      canvas.classList.remove("has-focus");
+      focusPreview.classList.remove("visible");
+      focusPreview.setAttribute("aria-hidden", "true");
+      canvas.classList.add("corkboard-moving");
+
+      requestAnimationFrame(() => {
+        corkboardTransition.classList.add("is-active");
+      });
+
+      setTimeout(() => {
+        corkboardTransition.classList.add("is-fading");
+      }, 780);
+
+      setTimeout(() => {
+        window.location.href = "about-me.html";
+      }, 1080);
+    }
+
     function openLayer(layer) {
       if (!layer) return;
       layer.classList.add("open");
@@ -1208,7 +1385,7 @@
 
       clearTimeout(bioPreviewTimer);
 
-      if (item.dataset.label === "Bio") {
+      if (item.dataset.label === "About Me") {
         const bioStage = document.createElement("div");
         bioStage.className = "bio-id-stage";
 
@@ -1238,8 +1415,8 @@
         focusIcon.replaceChildren(icon);
       }
 
-      focusHint.textContent = item.dataset.label === "Bio"
-        ? "click to inspect"
+      focusHint.textContent = item.dataset.label === "About Me"
+        ? "slide to cork board"
         : item.dataset.label === "Projects"
           ? "Boot Up Computer"
           : "click to open";
@@ -1559,6 +1736,10 @@
           bootIntoProjects(item);
           return;
         }
+        if (item.dataset.label === "About Me" || item.dataset.link === "about-me.html") {
+          moveToAbout(item);
+          return;
+        }
         document.querySelectorAll(".modal.open").forEach(closeLayer);
         if (item.dataset.target) openLayer(document.getElementById(item.dataset.target));
       });
@@ -1575,6 +1756,10 @@
       button.addEventListener("click", () => {
         if (button.dataset.mobileLink === "port-projects.html") {
           bootIntoProjects(button);
+          return;
+        }
+        if (button.dataset.mobileLink === "about-me.html") {
+          moveToAbout(button);
           return;
         }
         window.location.href = button.dataset.mobileLink;
@@ -1602,7 +1787,15 @@
       setTheme(localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light");
     });
 
-    window.addEventListener("load", typeTitle);
+    window.addEventListener("load", () => {
+      if (sessionStorage.getItem("skipDeskIntro") === "true") {
+        sessionStorage.removeItem("skipDeskIntro");
+        finishDeskIntroInstantly();
+        return;
+      }
+
+      typeTitle();
+    });
   </script>
 </body>
 </html>

@@ -1,86 +1,440 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Gundam Cost Graph</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
+    :root {
+      --accent: #9c6bff;
+      --bg: #111;
+      --panel: #1f1f1f;
+      --panel-light: #222;
+      --text: #eee;
+      --muted: #ccc;
+
+      --hg-blue: #3aa7ff;
+      --rg-green: #46d369;
+      --mg-red: #ff4d5a;
+      --pg-yellow: #ffd84d;
+    }
+
     body {
-      background-color: #111;
-      color: #eee;
+      background-color: var(--bg);
+      color: var(--text);
       font-family: system-ui, sans-serif;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
+      min-height: 100vh;
+      overflow: hidden;
     }
-    h1 {
-      color: #9c6bff;
+
+    header {
+      height: 110px;
+      max-width: none;
+      margin: 0;
+      padding: 1.25rem 2rem 0.75rem;
       text-align: center;
+      box-sizing: border-box;
+      position: relative;
     }
+
+    h1 {
+      color: var(--accent);
+      margin: 0 0 0.25rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .back-link {
+      position: absolute;
+      top: 1.25rem;
+      left: 2rem;
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      background-color: var(--panel);
+      border: 1px solid #333;
+      padding: 0.5rem 0.8rem;
+      border-radius: 8px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .back-link:hover {
+      background-color: #333;
+      color: #fff;
+    }
+
+    main {
+      height: calc(100vh - 110px);
+      padding: 0 1.25rem 1.25rem;
+      box-sizing: border-box;
+    }
+
+    .chart-card {
+      width: 100%;
+      height: 100%;
+      background-color: var(--panel);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 0 20px rgba(156, 107, 255, 0.08);
+      box-sizing: border-box;
+      position: relative;
+    }
+
+    .legend {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      background-color: rgba(17, 17, 17, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 0.5rem 0.75rem;
+      z-index: 2;
+      backdrop-filter: blur(8px);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.85rem;
+      color: #ddd;
+    }
+
+    .legend-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .legend-dot.hg {
+      background-color: var(--hg-blue);
+    }
+
+    .legend-dot.rg {
+      background-color: var(--rg-green);
+    }
+
+    .legend-dot.mg {
+      background-color: var(--mg-red);
+    }
+
+    .legend-dot.pg {
+      background-color: var(--pg-yellow);
+    }
+
     canvas {
       display: block;
-      max-width: 900px;
-      margin: 2rem auto;
-      background-color: #222;
+      width: 100%;
+      height: 100%;
+      background-color: var(--panel-light);
       border-radius: 12px;
       padding: 1rem;
+      box-sizing: border-box;
     }
+
     #tooltip {
-      position: absolute;
+      position: fixed;
       background-color: #1f1f1f;
       color: #eee;
-      padding: 0.5rem;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      padding: 0.75rem;
+      border-radius: 10px;
+      box-shadow: 0 0 16px rgba(0, 0, 0, 0.55);
       display: none;
       pointer-events: none;
       z-index: 999;
+      width: 180px;
+      border: 1px solid rgba(156, 107, 255, 0.45);
+      box-sizing: border-box;
     }
-    #tooltip img {
-      width: 80px;
-      height: auto;
-      border-radius: 6px;
+
+    #tooltip strong {
+      color: var(--accent);
       display: block;
-      margin-top: 0.5rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .tooltip-grade {
+      display: inline-block;
+      margin: 0.2rem 0;
+      padding: 0.15rem 0.45rem;
+      border-radius: 999px;
+      color: #111;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    #tooltip img {
+      width: 100%;
+      height: auto;
+      max-height: 140px;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+      margin-top: 0.6rem;
+    }
+
+    .error {
+      position: fixed;
+      left: 50%;
+      bottom: 1.5rem;
+      transform: translateX(-50%);
+      max-width: 900px;
+      background: #2a1515;
+      color: #ffd6d6;
+      border: 1px solid #7c2d2d;
+      border-radius: 12px;
+      padding: 1rem;
+      display: none;
+      z-index: 1000;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        overflow: auto;
+      }
+
+      header {
+        height: auto;
+        min-height: 140px;
+        padding: 4.5rem 1rem 1rem;
+      }
+
+      .back-link {
+        top: 1rem;
+        left: 1rem;
+      }
+
+      main {
+        height: 75vh;
+        padding: 0 1rem 1rem;
+      }
+
+      .legend {
+        top: 1.25rem;
+        right: 1.25rem;
+        left: 1.25rem;
+        justify-content: center;
+        border-radius: 14px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <h1>Gundam Cost Graph</h1>
-  <canvas id="costChart" width="900" height="500"></canvas>
-  <div id="tooltip"></div>
+  <header>
+    <a class="back-link" href="GundamCollection.html">← Back to Collection</a>
+    <h1>Gundam Cost Graph</h1>
+    <p class="subtitle">A visual breakdown of kit prices by purchase date.</p>
+  </header>
+
+  <main>
+    <div class="chart-card">
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot hg"></span>
+          <span>HG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot rg"></span>
+          <span>RG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot mg"></span>
+          <span>MG</span>
+        </div>
+
+        <div class="legend-item">
+          <span class="legend-dot pg"></span>
+          <span>PG</span>
+        </div>
+      </div>
+
+      <canvas id="costChart"></canvas>
+    </div>
+
+    <div id="errorMessage" class="error"></div>
+    <div id="tooltip"></div>
+  </main>
 
   <script>
-    fetch('Gundams.json')
-      .then(res => res.json())
+    const monthMap = {
+      january: 0,
+      february: 1,
+      march: 2,
+      april: 3,
+      may: 4,
+      june: 5,
+      july: 6,
+      august: 7,
+      september: 8,
+      october: 9,
+      november: 10,
+      december: 11
+    };
+
+    const gradeColors = {
+      HG: "#3aa7ff",
+      RG: "#46d369",
+      MG: "#ff4d5a",
+      PG: "#ffd84d"
+    };
+
+    function parsePurchaseDate(purchaseText) {
+      if (!purchaseText || typeof purchaseText !== "string") {
+        return null;
+      }
+
+      const parts = purchaseText.trim().split(/\s+/);
+
+      if (parts.length < 2) {
+        return null;
+      }
+
+      const monthName = parts[0].toLowerCase();
+      const year = Number(parts[1]);
+
+      if (!(monthName in monthMap) || Number.isNaN(year)) {
+        return null;
+      }
+
+      return new Date(year, monthMap[monthName], 1);
+    }
+
+    function formatMonthYear(date) {
+      return date.toLocaleDateString("en-US", {
+        month: "short",
+        year: "numeric"
+      });
+    }
+
+    function positionTooltip(event, tooltip) {
+      const spacing = 16;
+      const pagePadding = 12;
+
+      const mouseX = event.native.clientX;
+      const mouseY = event.native.clientY;
+
+      const tooltipWidth = tooltip.offsetWidth;
+      const tooltipHeight = tooltip.offsetHeight;
+
+      let left = mouseX + spacing;
+      let top;
+
+      const isLowerHalf = mouseY > window.innerHeight / 2;
+
+      if (isLowerHalf) {
+        top = mouseY - tooltipHeight - spacing;
+      } else {
+        top = mouseY + spacing;
+      }
+
+      if (left + tooltipWidth > window.innerWidth - pagePadding) {
+        left = mouseX - tooltipWidth - spacing;
+      }
+
+      if (left < pagePadding) {
+        left = pagePadding;
+      }
+
+      if (top < pagePadding) {
+        top = pagePadding;
+      }
+
+      if (top + tooltipHeight > window.innerHeight - pagePadding) {
+        top = window.innerHeight - tooltipHeight - pagePadding;
+      }
+
+      tooltip.style.left = left + "px";
+      tooltip.style.top = top + "px";
+    }
+
+    fetch("Gundams.json")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Could not load Gundams.json. Check that the file name and path are correct.");
+        }
+
+        return response.json();
+      })
       .then(data => {
-        const gundams = data.Gundams.filter(kit => kit["Purchased"]);
+        const gundams = data.Gundams
+          .map(kit => {
+            const parsedDate = parsePurchaseDate(kit["Purchased on"]);
 
-        const ctx = document.getElementById('costChart').getContext('2d');
-        const tooltip = document.getElementById('tooltip');
+            return {
+              ...kit,
+              parsedDate
+            };
+          })
+          .filter(kit => kit.parsedDate && typeof kit.price === "number")
+          .sort((a, b) => a.parsedDate - b.parsedDate);
 
-        const labels = gundams.map(kit => kit.name);
-        const prices = gundams.map(kit => kit.price);
-        const years = gundams.map(kit => kit["Purchased"]);
-        const images = gundams.map(kit => kit.img);
+        if (!gundams.length) {
+          throw new Error("No valid Gundam purchase dates were found. Make sure your JSON uses dates like 'February 2025'.");
+        }
 
-        const scatterData = gundams.map((kit, i) => ({
-          x: +kit["Purchased"],
-          y: kit.price,
-          name: kit.name,
-          img: kit.img
-        }));
+        const purchaseDateCounts = {};
 
-        const chart = new Chart(ctx, {
-          type: 'scatter',
+        const scatterData = gundams.map(kit => {
+          const baseTime = kit.parsedDate.getTime();
+          const dateKey = kit["Purchased on"];
+
+          purchaseDateCounts[dateKey] = (purchaseDateCounts[dateKey] || 0) + 1;
+
+          const offsetIndex = purchaseDateCounts[dateKey] - 1;
+          const dayOffset = offsetIndex * 4 * 24 * 60 * 60 * 1000;
+
+          return {
+            x: baseTime + dayOffset,
+            y: kit.price,
+            name: kit.name,
+            grade: kit.grade,
+            scale: kit.scale,
+            purchased: kit["Purchased on"],
+            img: kit.img,
+            color: gradeColors[kit.grade] || "#9c6bff"
+          };
+        });
+
+        const ctx = document.getElementById("costChart").getContext("2d");
+        const tooltip = document.getElementById("tooltip");
+
+        new Chart(ctx, {
+          type: "scatter",
           data: {
-            datasets: [{
-              label: 'Gundam Kit Cost',
-              data: scatterData,
-              backgroundColor: '#9c6bff',
-              pointRadius: 6
-            }]
+            datasets: [
+              {
+                label: "Gundam Kit Cost",
+                data: scatterData,
+                backgroundColor: function(context) {
+                  return context.raw.color;
+                },
+                borderColor: "#ffffff",
+                pointRadius: 9,
+                pointHoverRadius: 14,
+                pointBorderWidth: 2
+              }
+            ]
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: "nearest",
+              intersect: true
+            },
             plugins: {
               legend: {
                 display: false
@@ -91,40 +445,69 @@
             },
             scales: {
               x: {
+                type: "linear",
                 title: {
                   display: true,
-                  text: 'Year Purchased',
-                  color: '#ccc'
+                  text: "Purchase Date",
+                  color: "#ccc"
                 },
-                ticks: { color: '#ccc' }
+                ticks: {
+                  color: "#ccc",
+                  callback: function(value) {
+                    return formatMonthYear(new Date(value));
+                  }
+                },
+                grid: {
+                  color: "rgba(255, 255, 255, 0.08)"
+                }
               },
               y: {
                 title: {
                   display: true,
-                  text: 'Cost ($)',
-                  color: '#ccc'
+                  text: "Cost ($)",
+                  color: "#ccc"
                 },
-                ticks: { color: '#ccc' }
+                ticks: {
+                  color: "#ccc",
+                  callback: function(value) {
+                    return "$" + value;
+                  }
+                },
+                grid: {
+                  color: "rgba(255, 255, 255, 0.08)"
+                },
+                beginAtZero: true
               }
             },
             onHover: (event, chartElements) => {
               if (chartElements.length > 0) {
                 const point = chartElements[0];
-                const dataset = point.element.$context.raw;
-                tooltip.style.display = 'block';
-                tooltip.style.left = event.clientX + 15 + 'px';
-                tooltip.style.top = event.clientY + 15 + 'px';
+                const kit = point.element.$context.raw;
+
+                tooltip.style.display = "block";
+
                 tooltip.innerHTML = `
-                  <strong>${dataset.name}</strong>
-                  <br>$${dataset.y.toFixed(2)}
-                  <img src="${dataset.img}" alt="${dataset.name}">
+                  <strong>${kit.name}</strong>
+                  <span class="tooltip-grade" style="background-color: ${kit.color};">${kit.grade}</span><br>
+                  <span>${kit.scale}</span><br>
+                  <span>${kit.purchased}</span><br>
+                  <span>$${kit.y.toFixed(2)}</span>
+                  <img src="${kit.img}" alt="${kit.name}">
                 `;
+
+                positionTooltip(event, tooltip);
               } else {
-                tooltip.style.display = 'none';
+                tooltip.style.display = "none";
               }
             }
           }
         });
+      })
+      .catch(error => {
+        const errorBox = document.getElementById("errorMessage");
+        errorBox.style.display = "block";
+        errorBox.textContent = error.message;
+        console.error(error);
       });
   </script>
 </body>
