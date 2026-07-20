@@ -2,56 +2,1607 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Michael Magsino's Projects</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Michael Magsino's Portfolio</title>
+  <meta name="description" content="Michael Magsino's Portfolio." />
+
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap');
+
+    :root {
+      --desk-scale: clamp(.78, min(100vw / 1440, 100vh / 900), 1);
+      --desk-safe-scale: clamp(.72, min(100vw / 1440, 100vh / 900), 1);
+      --paper: #f6f6f2;
+      --paper-dark: #ecece6;
+      --ink: #111;
+      --card: rgba(255,255,255,.88);
+      --head: rgba(255,255,255,.92);
+      --soft: rgba(17,17,17,.08);
+      --dash: rgba(17,17,17,.18);
+      --veil: rgba(0,0,0,.22);
+      --blur: 5px;
+      --ease: 260ms ease;
+    }
+
+    body.dark-mode {
+      --paper: #181818;
+      --paper-dark: #101010;
+      --ink: #f2f2ec;
+      --card: rgba(24,24,24,.92);
+      --head: rgba(24,24,24,.92);
+      --soft: rgba(242,242,236,.14);
+      --dash: rgba(242,242,236,.18);
+      --veil: rgba(0,0,0,.48);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      overflow: hidden;
+      scroll-behavior: smooth;
+    }
+
     body {
-      margin: 0;
-      padding: 40px 20px;
-      background-color: rgb(40, 40, 72);
-      color: #fff;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-      text-align: center;
+      font-family: Inter, sans-serif;
+      color: var(--ink);
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(255,255,255,.2), rgba(255,255,255,.2)),
+        repeating-linear-gradient(0deg, transparent 0, transparent 27px, rgba(0,0,0,.018) 28px),
+        linear-gradient(180deg, var(--paper), var(--paper-dark));
     }
 
-    h1 {
-      font-size: 3rem;
-      font-weight: 600;
-      margin-bottom: 50px;
+    body.dark-mode {
+      background:
+        linear-gradient(180deg, var(--paper), var(--paper-dark));
     }
 
-    .glass-button {
+    body.modal-open { overflow: hidden; }
+    button, a { font: inherit; }
+    button { color: inherit; }
+
+    .font-sketch,
+    .small-label,
+    .subcopy,
+    .item-caption,
+    .modal-kicker,
+    .mini-card h3,
+    .bar,
+    .gallery-title,
+    .focus-hint { font-family: "Special Elite", monospace; }
+
+    .btn,
+    .theme-toggle,
+    .close-modal,
+    .bar button,
+    .bar a {
+      border: 2px solid var(--ink);
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 4px 4px 0 var(--ink);
+      cursor: pointer;
+      transition: transform var(--ease), box-shadow var(--ease), background var(--ease), color var(--ease);
+    }
+
+    .btn:hover,
+    .theme-toggle:hover,
+    .close-modal:hover,
+    .bar button:hover,
+    .bar a:hover {
+      transform: translateY(-2px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .btn,
+    .bar button,
+    .bar a {
       display: inline-block;
-      width: 90%;
-      max-width: 400px;
-      margin: 20px auto;
-      padding: 20px;
-      font-size: 1.2rem;
-      font-weight: 500;
-      color: white;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      margin-top: 6px;
+      padding: 10px 14px;
+      border-radius: 999px;
       text-decoration: none;
-      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      font-weight: 600;
     }
 
-    .glass-button:hover {
-      background: linear-gradient(135deg, rgba(0,122,255,0.3), rgba(88,86,214,0.3));
-      box-shadow: 0 0 20px rgba(88, 86, 214, 0.4);
-      transform: scale(1.03);
+    .theme-toggle {
+      position: fixed;
+      top: clamp(16px, 2vw, 26px);
+      right: clamp(16px, 2vw, 26px);
+      z-index: 40;
+      display: grid;
+      justify-items: center;
+      gap: 5px;
+      width: clamp(58px, 7vw, 78px);
+      padding: 7px;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+      text-transform: uppercase;
+      letter-spacing: .08em;
     }
+
+    .theme-toggle:hover {
+      transform: none;
+      box-shadow: none;
+    }
+
+    .theme-toggle:hover .theme-toggle-text {
+      transform: translateY(-2px) rotate(2deg);
+      opacity: 1;
+    }
+
+    .theme-icon-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+    }
+
+    .theme-icon {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 420ms ease, filter var(--ease);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .theme-icon-dark { opacity: 0; }
+    .theme-icon-light { opacity: 1; }
+    body.dark-mode .theme-icon-light { opacity: 0; }
+    body.dark-mode .theme-icon-dark { opacity: 1; }
+
+    .theme-toggle-text {
+      font-family: "Special Elite", monospace;
+      font-size: clamp(.55rem, .8vw, .68rem);
+      line-height: 1;
+      text-align: center;
+      white-space: nowrap;
+      opacity: .75;
+      transition: transform 300ms cubic-bezier(.18,.89,.32,1.1), opacity var(--ease);
+    }
+
+    body.dark-mode .theme-toggle-text {
+      transform: translateY(1px);
+    }
+
+    .canvas {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      height: 100vh;
+      height: 100dvh;
+      min-height: 100vh;
+      padding: clamp(18px, 2vw, 32px);
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .canvas::after {
+      content: "";
+      position: absolute;
+      inset: clamp(10px, 1.3vw, 18px);
+      border: 2px dashed var(--soft);
+      border-radius: 22px;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .centerpiece {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      pointer-events: none;
+      padding: clamp(34px, 4vw, 70px);
+      z-index: 2;
+      transform: scale(var(--desk-scale));
+      transform-origin: center;
+    }
+
+    .centerpiece-inner {
+      position: relative;
+      max-width: min(860px, 48vw);
+      padding: clamp(28px, 4vw, 54px) clamp(30px, 5vw, 70px);
+    }
+
+    .centerpiece-inner::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: 34px;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.5), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.52), rgba(17,17,17,.035));
+      border: 1px solid rgba(17,17,17,.1);
+      box-shadow:
+        0 22px 60px rgba(17,17,17,.08),
+        inset 0 1px 0 rgba(255,255,255,.55);
+      transform: none;
+    }
+
+    body.dark-mode .centerpiece-inner::before {
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.08), transparent 34%),
+        linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.018));
+      border-color: rgba(242,242,236,.1);
+      box-shadow:
+        0 22px 60px rgba(0,0,0,.25),
+        inset 0 1px 0 rgba(255,255,255,.08);
+    }
+    .small-label { font-size: clamp(.7rem, 1vw, .9rem); text-transform: uppercase; letter-spacing: .16em; opacity: .72; margin-bottom: 14px; }
+
+    #main-title {
+      position: relative;
+      display: inline-block;
+      min-height: 1.1em;
+      font-family: Caveat, cursive;
+      font-size: clamp(3.5rem, 7.1vw, 7.8rem);
+      font-weight: 700;
+      line-height: .92;
+      letter-spacing: -.02em;
+      text-wrap: balance;
+      white-space: pre-line;
+    }
+
+    #main-title.typing::after {
+      content: "";
+      position: absolute;
+      right: -10px;
+      top: 14%;
+      width: 3px;
+      height: 72%;
+      background: var(--ink);
+      animation: blink .8s steps(1) infinite;
+    }
+
+    .subcopy { margin: clamp(12px, 1.6vw, 18px) auto 0; max-width: 560px; font-size: clamp(.85rem, 1.1vw, 1rem); line-height: 1.6; opacity: .72; }
+    .canvas-items {
+      position: relative;
+      height: 100%;
+      min-height: 0;
+      z-index: 10;
+    }
+
+    .sketch-item {
+      position: absolute;
+      width: var(--w, 180px);
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(18px) scale(.94) rotate(var(--r, 0deg));
+      transition: transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--ease), left 360ms cubic-bezier(.18,.89,.32,1.18), top 360ms cubic-bezier(.18,.89,.32,1.18);
+      transition-delay: var(--d, 0ms);
+      outline: none;
+      user-select: none;
+      touch-action: none;
+    }
+
+    body.loaded .sketch-item { opacity: 1; transform: translateY(0) scale(1) rotate(var(--r, 0deg)); }
+    .sketch-item.is-dragging { transition: transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--ease); }
+    .sketch-item.is-bouncing { transition: left 420ms cubic-bezier(.18,.89,.32,1.25), top 420ms cubic-bezier(.18,.89,.32,1.25), transform 520ms cubic-bezier(.18,.89,.32,1.1), opacity 420ms ease, filter var(--ease); }
+    .sketch-item:hover, .sketch-item:focus-visible { transform: translateY(-8px) scale(1.06) rotate(var(--hr, var(--r, 0deg))); }
+    .sketch-item:focus-visible img {
+      outline: 2px dashed var(--ink);
+      outline-offset: 10px;
+      border-radius: 12px;
+    }
+    .canvas.has-focus .centerpiece, .canvas.has-focus .sketch-item { filter: blur(var(--blur)); opacity: .2; }
+    .canvas.has-focus .sketch-item.is-origin { filter: none; opacity: 0; }
+
+    .sketch-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      filter: drop-shadow(8px 12px 10px rgba(17,17,17,.12));
+    }
+    body.dark-mode .sketch-img {
+      filter: invert(1) drop-shadow(8px 12px 10px rgba(0,0,0,.28));
+    }
+
+    body.dark-mode .focus-icon .sketch-img,
+    body.dark-mode .bio-id-face {
+      filter: invert(1);
+    }
+
+    .item-caption {
+      margin-top: clamp(5px, .8vw, 8px);
+      font-size: clamp(.58rem, .9vw, .72rem);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      opacity: .64;
+      text-align: center;
+      transform: rotate(calc(var(--r, 0deg) * -.25));
+    }
+
+    .item-bio { top: 14%; left: clamp(7%, 12vw, 18%); --w: clamp(210px, calc(18vw * var(--desk-safe-scale)), 360px); --r: -6deg; --hr: -1deg; --d: 0ms; }
+    .item-projects { top: 15%; right: clamp(5%, 11vw, 18%); --w: clamp(220px, calc(20vw * var(--desk-safe-scale)), 385px); --r: 7deg; --hr: 2deg; --d: 140ms; }
+    .item-resume { bottom: 12%; left: clamp(6%, 14vw, 21%); --w: clamp(205px, calc(19vw * var(--desk-safe-scale)), 350px); --r: 5deg; --hr: 1deg; --d: 280ms; }
+    .item-statement { bottom: 19%; right: clamp(10%, 18vw, 24%); --w: clamp(205px, calc(18.5vw * var(--desk-safe-scale)), 350px); --r: -7deg; --hr: -3deg; --d: 420ms; }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    .mobile-theme-toggle {
+      display: none;
+    }
+
+    .focus-preview { position: fixed; inset: 0; pointer-events: none; opacity: 0; transition: opacity var(--ease); z-index: 20; }
+    .focus-preview.visible { opacity: 1; }
+    .computer-boot-transition {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+      opacity: 0;
+      background: rgba(246,246,242,0);
+      transition: background 880ms ease, opacity 180ms ease;
+    }
+
+    .computer-boot-transition.is-active {
+      opacity: 1;
+      background: rgba(246,246,242,.82);
+    }
+
+    body.dark-mode .computer-boot-transition.is-active {
+      background: rgba(12,12,12,.86);
+    }
+
+    .crt-computer {
+      position: fixed;
+      left: var(--start-left, 50vw);
+      top: var(--start-top, 50vh);
+      width: var(--start-width, 300px);
+      transform: translate(-50%, -50%) scale(.92);
+      transform-origin: center;
+      opacity: 0;
+      transition:
+        left 850ms cubic-bezier(.2,.78,.2,1),
+        top 850ms cubic-bezier(.2,.78,.2,1),
+        width 850ms cubic-bezier(.2,.78,.2,1),
+        transform 850ms cubic-bezier(.2,.78,.2,1),
+        opacity 220ms ease;
+    }
+
+    .computer-boot-transition.is-active .crt-computer {
+      left: 50%;
+      top: 50%;
+      width: min(118vw, 118vh);
+      transform: translate(-50%, -50%) scale(1.08);
+      opacity: 1;
+    }
+
+    .crt-monitor {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1.18 / 1;
+      background: #c9c3ad;
+      border: 3px solid #2b2b2b;
+      border-radius: 9% 9% 6% 6%;
+      box-shadow:
+        0 28px 70px rgba(17,17,17,.22),
+        inset 10px 10px 0 rgba(255,255,255,.32),
+        inset -10px -12px 0 rgba(0,0,0,.16);
+      overflow: hidden;
+    }
+
+    .crt-monitor::before {
+      content: "";
+      position: absolute;
+      inset: 6% 7% 22%;
+      border-radius: 6%;
+      background: #111;
+      border: 4px solid #383838;
+      box-shadow:
+        inset 0 0 22px rgba(16,132,208,.22),
+        inset 0 0 0 3px rgba(255,255,255,.06);
+    }
+
+    .crt-monitor::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      bottom: 8%;
+      width: 12%;
+      height: 4%;
+      border-radius: 999px;
+      transform: translateX(-50%);
+      background: #8b866f;
+      border: 2px solid rgba(0,0,0,.45);
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.22);
+    }
+
+    .crt-screen-glow {
+      position: absolute;
+      inset: 8% 9% 24%;
+      border-radius: 5%;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(255,255,255,.08) 0 1px,
+          transparent 1px 4px
+        ),
+        radial-gradient(circle at 50% 42%, rgba(16,132,208,.5), rgba(0,0,0,.92) 58%);
+      opacity: .78;
+      animation: crtFlicker 780ms steps(2) infinite;
+    }
+
+    .crt-boot-screen {
+      position: absolute;
+      inset: 9% 10% 25%;
+      display: grid;
+      align-content: center;
+      gap: .45em;
+      padding: 7%;
+      color: #76d8ff;
+      font-family: "Pixelify Sans", "MS Sans Serif", Tahoma, Geneva, sans-serif;
+      text-transform: uppercase;
+      text-shadow: 0 0 8px rgba(118,216,255,.72);
+      opacity: .95;
+    }
+
+    .crt-boot-title {
+      color: #f2fbff;
+      font-family: "Press Start 2P", "Pixelify Sans", monospace;
+      font-size: clamp(.38rem, 1.15vw, .78rem);
+      line-height: 1.35;
+      letter-spacing: .04em;
+    }
+
+    .crt-boot-line {
+      font-size: clamp(.42rem, 1.35vw, .82rem);
+      line-height: 1.25;
+    }
+
+    .crt-boot-progress {
+      position: relative;
+      height: clamp(5px, .9vw, 12px);
+      margin-top: .35em;
+      border: 1px solid rgba(118,216,255,.9);
+      box-shadow: 0 0 8px rgba(118,216,255,.35);
+      overflow: hidden;
+    }
+
+    .crt-boot-progress::before {
+      content: "";
+      position: absolute;
+      inset: 1px;
+      width: 0;
+      background: #76d8ff;
+      box-shadow: 0 0 10px rgba(118,216,255,.8);
+      animation: crtBootLoad 1.08s steps(10) forwards;
+    }
+
+    .crt-stand {
+      width: 34%;
+      height: clamp(18px, 5vw, 56px);
+      margin: 0 auto;
+      background: #aaa38c;
+      border: 3px solid #2b2b2b;
+      border-top: 0;
+      box-shadow:
+        inset 6px 0 0 rgba(255,255,255,.24),
+        inset -6px -6px 0 rgba(0,0,0,.16);
+    }
+
+    .crt-base {
+      width: 58%;
+      height: clamp(16px, 4.5vw, 48px);
+      margin: -3px auto 0;
+      background: #c9c3ad;
+      border: 3px solid #2b2b2b;
+      border-radius: 8px 8px 14px 14px;
+      box-shadow:
+        inset 8px 6px 0 rgba(255,255,255,.26),
+        inset -8px -7px 0 rgba(0,0,0,.16);
+    }
+
+    .computer-boot-transition.is-fading .crt-computer {
+      transform: translate(-50%, -50%) scale(1.8);
+      opacity: 0;
+    }
+
+    @keyframes crtBootLoad {
+      to { width: calc(100% - 2px); }
+    }
+
+    @keyframes crtFlicker {
+      0%, 100% { opacity: .72; }
+      50% { opacity: .95; }
+    }
+
+    .focus-card {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      gap: 12px;
+      width: clamp(380px, 38vw, 620px);
+      padding: clamp(14px, 1.7vw, 20px);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,.72));
+      border: 1px solid rgba(17,17,17,.18);
+      border-radius: 26px;
+      box-shadow:
+        0 22px 50px rgba(17,17,17,.16),
+        0 0 0 1px rgba(255,255,255,.45) inset;
+      backdrop-filter: blur(3px);
+      transform: translate(-50%, -50%) scale(.18) rotate(var(--r, -1deg));
+      transform-origin: center;
+      transition: transform 320ms cubic-bezier(.2,.85,.22,1.15), left var(--ease), top var(--ease);
+    }
+
+    body.dark-mode .focus-card {
+      background:
+        linear-gradient(180deg, rgba(34,34,34,.9), rgba(18,18,18,.78));
+      border-color: rgba(242,242,236,.18);
+      box-shadow:
+        0 22px 50px rgba(0,0,0,.34),
+        0 0 0 1px rgba(255,255,255,.06) inset;
+    }
+
+    .focus-preview.visible .focus-card {
+      transform: translate(-50%, -50%) scale(1) rotate(var(--r, -1deg));
+    }
+    .focus-card.compact-hover { width: clamp(260px, 26vw, 420px); }
+    .focus-card.compact-hover .focus-icon { max-width: 340px; }
+    .focus-icon { width: 100%; max-width: 520px; }
+    .focus-text { text-align: center; }
+    .focus-label-wrap { display: inline-block; max-width: 100%; overflow: hidden; white-space: nowrap; }
+    .focus-label {
+      display: inline-block;
+      font-family: Caveat, cursive;
+      font-size: clamp(1.8rem, 3vw, 2.35rem);
+      line-height: 1;
+      white-space: nowrap;
+      opacity: 1;
+    }
+    .focus-hint { margin-top: 6px; font-size: clamp(.66rem, 1vw, .78rem); opacity: .65; }
+    .focus-card .bio-id-stage {
+      width: 100%;
+      max-width: 520px;
+      perspective: 1200px;
+    }
+
+    .focus-card .bio-id-flip {
+      max-width: 520px;
+      transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .focus-card .bio-id-flip.is-preview-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .bio-id-flip {
+      position: relative;
+      width: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .bio-id-face {
+      width: 100%;
+      height: auto;
+      display: block;
+      backface-visibility: hidden;
+    }
+    .bio-id-back {
+      position: absolute;
+      inset: 0;
+      transform: rotateY(180deg);
+    }
+
+    .bio-id-stage {
+      display: grid;
+      gap: 16px;
+      justify-items: center;
+      padding: 6px 0 2px;
+      perspective: 1200px;
+    }
+
+    .bio-id-flip {
+      max-width: 620px;
+      transition: transform 700ms cubic-bezier(.2,.8,.2,1);
+    }
+
+    .bio-id-flip.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .bio-id-button {
+      margin-top: 4px;
+    }
+
+    .layer { position: fixed; inset: 0; opacity: 0; pointer-events: none; transition: opacity var(--ease); }
+    .layer.open { opacity: 1; pointer-events: auto; }
+    .modal { display: grid; place-items: center; padding: 22px; background: var(--veil); backdrop-filter: blur(3px); z-index: 50; }
+    .viewer { display: grid; grid-template-rows: auto 1fr; background: var(--paper); z-index: 80; }
+
+    .modal-card {
+      position: relative;
+      width: min(760px, calc(100vw - 44px));
+      max-height: 88vh;
+      overflow: auto;
+      padding: 28px;
+      background: var(--paper);
+      border: 2px solid var(--ink);
+      border-radius: 24px;
+      box-shadow: 12px 12px 0 var(--ink);
+    }
+
+    .modal-card::before { content: ""; position: absolute; inset: 12px; border: 1px dashed var(--dash); border-radius: 18px; pointer-events: none; }
+    .close-modal { position: sticky; top: 0; margin-left: auto; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; font-size: 1.2rem; z-index: 3; }
+    .modal-kicker { margin: 8px 0; font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; opacity: .65; }
+    .modal-card h2 { font-family: Caveat, cursive; line-height: 1; }
+    .modal-card h2 { margin-bottom: 12px; font-size: clamp(2rem, 4vw, 3.1rem); }
+    .modal-card p { max-width: 62ch; margin-bottom: 14px; font-size: clamp(.92rem, 1.35vw, 1.05rem); line-height: 1.7; }
+
+    .mini-card { padding: 16px; background: var(--card); border: 2px solid var(--ink); border-radius: 18px; box-shadow: 6px 6px 0 var(--ink); }
+    .mini-card h3 { margin-bottom: 10px; font-size: .9rem; text-transform: uppercase; letter-spacing: .04em; }
+    .mini-card p { margin-bottom: 10px; font-size: clamp(.88rem, 1.2vw, .95rem); }
+    .resume-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--ink);
+      background: var(--head);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: .8rem;
+    }
+
+    .bar-actions { display: flex; align-items: center; gap: 10px; }
+    .resume-frame { width: 100%; height: 100%; border: 0; background: white; }
+    .resume-frame { display: block; }
+    .scribble-list { margin: 8px 0 16px 18px; line-height: 1.8; }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    @media (max-width: 980px) {
+      .canvas { height: 100svh; min-height: 100svh; }
+      .centerpiece { min-height: 100svh; }
+      .canvas-items { height: 100%; min-height: 0; }
+      .item-bio { top: 17%; left: 5%; --w: 215px; }
+      .item-projects { top: 17%; right: 2%; --w: 250px; }
+      .item-resume { bottom: 18%; left: 7%; --w: 178px; }
+      .item-statement { bottom: 17%; right: 6%; --w: 210px; }
+    }
+
+
+    @media (min-width: 701px) and (max-height: 820px) {
+      :root {
+        --desk-scale: clamp(.68, min(100vw / 1440, 100vh / 980), .92);
+        --desk-safe-scale: clamp(.62, min(100vw / 1440, 100vh / 980), .9);
+      }
+
+      .canvas {
+        padding: 18px;
+      }
+
+      .canvas::after {
+        inset: 14px;
+      }
+
+      .item-bio { top: 10%; }
+      .item-projects { top: 10%; }
+      .item-resume { bottom: 8%; }
+      .item-statement { bottom: 12%; }
+    }
+
+    @media (min-width: 701px) and (max-width: 1180px) {
+      :root {
+        --desk-scale: clamp(.68, min(100vw / 1320, 100vh / 900), .9);
+        --desk-safe-scale: clamp(.62, min(100vw / 1320, 100vh / 900), .88);
+      }
+
+      .centerpiece-inner {
+        max-width: min(760px, 54vw);
+      }
+
+      .item-bio { left: 6%; }
+      .item-projects { right: 5%; }
+      .item-resume { left: 6%; }
+      .item-statement { right: 7%; }
+    }
+
+    @media (max-width: 700px) {
+      :root {
+        --desk-scale: 1;
+        --desk-safe-scale: 1;
+      }
+
+      html,
+      body {
+        width: 100%;
+        min-height: 100%;
+        height: auto;
+        overflow: auto;
+      }
+
+      body {
+        overflow-x: hidden;
+      }
+
+      body.modal-open {
+        overflow: hidden;
+      }
+
+      .canvas {
+        min-height: 100svh;
+        height: auto;
+        padding: 18px 16px 92px;
+        overflow: visible;
+      }
+
+      .canvas::after {
+        inset: 10px;
+        border-radius: 18px;
+      }
+
+      .centerpiece {
+        position: relative;
+        min-height: 0;
+        display: block;
+        padding: 86px 14px 24px;
+      }
+
+      .centerpiece-inner {
+        max-width: 100%;
+        padding: 26px 18px;
+      }
+
+      .centerpiece-inner::before {
+        border-radius: 24px;
+        transform: none;
+      }
+
+      #main-title {
+        max-width: calc(100vw - 56px);
+        font-size: clamp(2.65rem, 13.5vw, 4.25rem);
+        overflow-wrap: anywhere;
+      }
+
+      .subcopy {
+        display: none;
+      }
+
+      .canvas-items {
+        display: none;
+      }
+
+      .mobile-menu {
+        position: relative;
+        z-index: 12;
+        display: grid;
+        gap: 14px;
+        width: min(420px, 100%);
+        margin: 0 auto;
+      }
+
+      .mobile-menu-button {
+        width: 100%;
+        padding: 16px 16px;
+        background: var(--card);
+        color: var(--ink);
+        border: 2px solid var(--ink);
+        border-radius: 18px;
+        box-shadow: 6px 6px 0 var(--ink);
+        font-family: "Special Elite", monospace;
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+      }
+
+      .mobile-menu-button strong {
+        display: block;
+        margin-bottom: 5px;
+        font-family: Caveat, cursive;
+        font-size: 2rem;
+        line-height: 1;
+        text-transform: none;
+        letter-spacing: 0;
+      }
+
+      .mobile-menu-button span {
+        display: block;
+        font-size: .72rem;
+        line-height: 1.4;
+        opacity: .72;
+      }
+
+      .mobile-menu-button:active {
+        transform: translate(2px, 2px);
+        box-shadow: 4px 4px 0 var(--ink);
+      }
+
+      .theme-toggle {
+        display: none;
+      }
+
+      .mobile-theme-toggle {
+        justify-self: center;
+        display: grid;
+        justify-items: center;
+        gap: 5px;
+        width: 58px;
+        margin-top: 8px;
+        padding: 4px;
+        border: 0;
+        background: transparent;
+        color: var(--ink);
+        font-family: "Special Elite", monospace;
+        font-size: .62rem;
+        line-height: 1;
+        text-transform: uppercase;
+        letter-spacing: .08em;
+        cursor: pointer;
+      }
+
+      .mobile-theme-icon-wrap {
+        position: relative;
+        width: 48px;
+        aspect-ratio: 1;
+      }
+
+      .mobile-theme-icon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: opacity 420ms ease;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .mobile-theme-icon-dark {
+        opacity: 0;
+      }
+
+      .mobile-theme-icon-light {
+        opacity: 1;
+      }
+
+      body.dark-mode .mobile-theme-icon-light {
+        opacity: 0;
+      }
+
+      body.dark-mode .mobile-theme-icon-dark {
+        opacity: 1;
+      }
+
+      .focus-preview {
+        display: none;
+      }
+
+      .modal,
+      .viewer,
+      .showcase {
+        position: fixed;
+        inset: 0;
+      }
+
+      .modal {
+        padding: 14px;
+      }
+
+      .modal-card {
+        width: min(100%, 460px);
+        max-height: calc(100svh - 28px);
+        border-radius: 18px;
+        box-shadow: 8px 8px 0 var(--ink);
+      }
+
+      .bar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .resume-frame {
+        width: 100%;
+        height: calc(100svh - 96px);
+        min-height: 0;
+      }
+
+      .paper {
+        max-height: none;
+      }
+    }
+
   </style>
 </head>
 <body>
-  <h1>Michael Magsino</h1>
+  <main class="canvas" id="canvas">
+    <button class="theme-toggle font-sketch" type="button" id="themeToggle" aria-label="Switch to dark mode">
+      <span class="theme-icon-wrap" aria-hidden="true">
+        <img class="theme-icon theme-icon-light" src="portfolio_images/Light.png" alt="" />
+        <img class="theme-icon theme-icon-dark" src="portfolio_images/Dark.png" alt="" />
+      </span>
+      <span class="theme-toggle-text" id="themeToggleText">Turn Off</span>
+    </button>
 
-  <a href="dom.html" class="glass-button">About Me</a>
-  <a href="CT20.html" class="glass-button">CT 20 Projects (Winter Quarter 2025)</a>
-  <a href="CT120.html" class="glass-button">CT 120 Projects (Spring Quarter 2025)</a>
-  <a href="CTCourses.html" class="glass-button">Additional CT Projects</a>
-  <a href="CT100_Portfolio.html" class="glass-button">CT 100 Portfolio</a>
+    <section class="centerpiece" aria-label="Main title">
+      <div class="centerpiece-inner">
+        <div class="small-label">designer • ux/ui • creative technologies</div>
+        <h1 id="main-title" class="typing" aria-live="polite"></h1>
+        <p class="subcopy">Hover, click, and drag each image.</p>
+      </div>
+    </section>
+
+    <section class="canvas-items" aria-label="Portfolio sections">
+      <button class="sketch-item item-bio" data-label="Bio" data-target="modal-bio" aria-label="Open Bio section">
+        <img class="sketch-img" src="portfolio_images/Michael_ID.png" alt="Sketch of Michael's artist ID" />
+        <div class="item-caption">Bio</div>
+      </button>
+
+      <button class="sketch-item item-projects" data-label="Projects"  aria-label="Boot up Projects desktop">
+        <img class="sketch-img" src="portfolio_images/Project_Sketch.png" alt="Sketch representing Michael's projects" />
+        <div class="item-caption">Projects</div>
+      </button>
+
+      <button class="sketch-item item-resume" data-label="Resume" data-target="modal-resume" aria-label="Open Resume section">
+        <img class="sketch-img" src="portfolio_images/Resume_Sketch.png" alt="Sketch representing Michael's resume" />
+        <div class="item-caption">Resume</div>
+      </button>
+
+      <button class="sketch-item item-statement" data-label="Artist Statement" data-target="modal-statement" aria-label="Open Artist Statement section">
+        <img class="sketch-img" src="portfolio_images/Statement_Sketch.png" alt="Sketch representing Michael's artist statement" />
+        <div class="item-caption">Artist Statement</div>
+      </button>
+    </section>
+
+    <section class="mobile-menu" aria-label="Mobile portfolio navigation">
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-bio">
+        <strong>Bio</strong>
+        <span>View Michael's ID card and short bio.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-link="port-projects.html">
+        <strong>Projects</strong>
+        <span>Boot up the Michael 99’ projects desktop.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-resume">
+        <strong>Resume</strong>
+        <span>View or download Michael's resume.</span>
+      </button>
+
+      <button class="mobile-menu-button" type="button" data-mobile-open="modal-statement">
+        <strong>Artist Statement</strong>
+        <span>Read Michael's creative statement.</span>
+      </button>
+
+      <button class="mobile-theme-toggle" type="button" id="mobileThemeToggle" aria-label="Switch to dark mode">
+        <span class="mobile-theme-icon-wrap" aria-hidden="true">
+          <img class="mobile-theme-icon mobile-theme-icon-light" src="portfolio_images/Light.png" alt="" />
+          <img class="mobile-theme-icon mobile-theme-icon-dark" src="portfolio_images/Dark.png" alt="" />
+        </span>
+        <span id="mobileThemeToggleText">Turn Off</span>
+      </button>
+    </section>
+
+  </main>
+
+  <div class="focus-preview" id="focusPreview" aria-hidden="true">
+    <div class="focus-card">
+      <div class="focus-icon" id="focusIcon"></div>
+      <div class="focus-text">
+        <span class="focus-label-wrap"><span class="focus-label" id="focusLabel"></span></span>
+        <div class="focus-hint" id="focusHint">click to open</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="computer-boot-transition" id="computerBootTransition" aria-hidden="true">
+    <div class="crt-computer" aria-hidden="true">
+      <div class="crt-monitor">
+        <div class="crt-screen-glow"></div>
+        <div class="crt-boot-screen">
+          <div class="crt-boot-title">Michael 99&rsquo;</div>
+          <div class="crt-boot-line">Starting project desktop...</div>
+          <div class="crt-boot-line">Loading folders...</div>
+          <div class="crt-boot-progress" aria-hidden="true"></div>
+        </div>
+      </div>
+      <div class="crt-stand"></div>
+      <div class="crt-base"></div>
+    </div>
+  </div>
+
+  <div class="layer modal" id="modal-bio" aria-hidden="true">
+    <div class="modal-card">
+      <button class="close-modal" type="button" aria-label="Close Bio section">✕</button>
+      <div class="bio-id-stage">
+        <div class="bio-id-flip" id="bioFlipCard" aria-label="Flippable ID card with Michael Magsino's bio information">
+          <img class="bio-id-face bio-id-front" src="portfolio_images/Michael_ID.png" alt="Front of Michael Magsino ID card" />
+          <img class="bio-id-face bio-id-back" src="portfolio_images/IDB_Sketch.png" alt="Back of Michael Magsino ID card with bio information" />
+        </div>
+        <button class="btn bio-id-button" type="button" id="bioFlipButton">Click to flip over</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer modal" id="modal-resume" aria-hidden="true">
+    <div class="modal-card">
+      <button class="close-modal" type="button" aria-label="Close Resume section">✕</button>
+      <div class="modal-kicker">Credentials</div>
+      <h2>Resume Overview</h2>
+      <p>View or download my resume below. It includes my graphic design, UX/UI, creative technology, and visual content experience across web, print, branding, and digital marketing work.</p>
+      <ul class="scribble-list">
+        <li>Graphic Designer</li>
+        <li>Creative Strategy and Content Creation Lead at Sukoon</li>
+        <li>Dean's Student Leadership Board Member at UCSC</li>
+        <li>Tools: Figma, Adobe Creative Suite, Canva, Framer, HTML, CSS, and GitHub</li>
+      </ul>
+      <div class="resume-actions">
+        <button class="btn" type="button" data-open="resumeViewer">View Resume</button>
+        <a class="btn" href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download Resume</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="layer viewer" id="resumeViewer" aria-hidden="true">
+    <div class="bar">
+      <span>Michael Magsino Resume</span>
+      <div class="bar-actions">
+        <a href="portfolio_pdf/MichaelMagsino_Resume.pdf" download>Download</a>
+        <button type="button" data-close="resumeViewer" aria-label="Close resume viewer">✕</button>
+      </div>
+    </div>
+    <iframe src="portfolio_pdf/MichaelMagsino_Resume.pdf#view=FitH&zoom=page-fit" title="Michael Magsino Resume PDF" class="resume-frame"></iframe>
+  </div>
+
+  <div class="layer modal" id="modal-statement" aria-hidden="true">
+    <div class="modal-card">
+      <button class="close-modal" type="button" aria-label="Close Artist Statement section">✕</button>
+      <div class="modal-kicker">Perspective</div>
+      <h2>Creative Statement</h2>
+      <p>Michael Magsino (he/him) is a multidisciplinary creative that primarily focuses on graphic design, UX/UI, and some recent projects within sound design. Much of his latest pieces have revolved around the dissection of mental health and the many ways he copes with them. Alongside that, various works in personal/school sites, web/app prototyping, and numerous graphic design works. Throughout his venture within the arts, he has worked with assorted tools such as the Adobe Suite (Photoshop, Illustrator, Audition), Canva, Figma, and Framer, just to name a few.</p>
+      <p>With his recent work in a health-tech startup as the creative design lead, he was able to synthesize his skills in both design and marketing to produce graphic design work across socials, websites, and collaborative initiatives with mental health professionals during his time with the company. This granted him the opportunity to sharpen his ability to work within deadlines, lead projects, and collaborate with diverse teams.</p>
+    </div>
+  </div>
+
+  <script>
+    const body = document.body;
+    const canvas = document.getElementById("canvas");
+    const titleEl = document.getElementById("main-title");
+    const themeToggle = document.getElementById("themeToggle");
+    const focusPreview = document.getElementById("focusPreview");
+    const focusIcon = document.getElementById("focusIcon");
+    const focusLabel = document.getElementById("focusLabel");
+    const focusHint = document.getElementById("focusHint");
+    const items = document.querySelectorAll(".sketch-item");
+    const bioFlipCard = document.getElementById("bioFlipCard");
+    const bioFlipButton = document.getElementById("bioFlipButton");
+    const computerBootTransition = document.getElementById("computerBootTransition");
+
+    let isHoveringItem = false;
+    let hoverTimer = null;
+    let bioPreviewTimer = null;
+    let dragItem = null;
+    let didDrag = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let itemStartX = 0;
+    let itemStartY = 0;
+
+    const lastSafePositions = new WeakMap();
+    const imageGap = 20;
+    const boundaryMargin = 64;
+
+    function setTheme(mode) {
+      body.classList.toggle("dark-mode", mode === "dark");
+      localStorage.setItem("portfolio-theme", mode);
+      document.getElementById("themeToggleText").textContent = mode === "dark" ? "Turn On" : "Turn Off";
+      const mobileThemeText = document.getElementById("mobileThemeToggleText");
+      const mobileThemeToggle = document.getElementById("mobileThemeToggle");
+      if (mobileThemeText) mobileThemeText.textContent = mode === "dark" ? "Turn On" : "Turn Off";
+      themeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      if (mobileThemeToggle) mobileThemeToggle.setAttribute("aria-label", mode === "dark" ? "Switch to light mode" : "Switch to dark mode");
+    }
+
+    function typeTitle() {
+      const title = "Michael Magsino's Desk";
+      let i = 0;
+      titleEl.textContent = "";
+      titleEl.classList.add("typing");
+
+      const interval = setInterval(() => {
+        titleEl.textContent += title[i++];
+        if (i >= title.length) {
+          clearInterval(interval);
+          titleEl.classList.remove("typing");
+          randomizeItems();
+          setTimeout(() => body.classList.add("loaded"), 180);
+        }
+      }, 62);
+    }
+
+    function bootIntoProjects(sourceElement = null) {
+      if (!computerBootTransition) {
+        window.location.href = "port-projects.html";
+        return;
+      }
+
+      const sourceRect = sourceElement
+        ? sourceElement.getBoundingClientRect()
+        : {
+            left: window.innerWidth / 2 - 140,
+            top: window.innerHeight / 2 - 90,
+            width: 280,
+            height: 180
+          };
+
+      computerBootTransition.classList.remove("is-active", "is-fading");
+      computerBootTransition.style.setProperty("--start-left", `${sourceRect.left + sourceRect.width / 2}px`);
+      computerBootTransition.style.setProperty("--start-top", `${sourceRect.top + sourceRect.height / 2}px`);
+      computerBootTransition.style.setProperty("--start-width", `${Math.max(sourceRect.width * 1.05, 260)}px`);
+
+      canvas.classList.remove("has-focus");
+      focusPreview.classList.remove("visible");
+      focusPreview.setAttribute("aria-hidden", "true");
+
+      requestAnimationFrame(() => {
+        computerBootTransition.classList.add("is-active");
+      });
+
+      setTimeout(() => {
+        computerBootTransition.classList.add("is-fading");
+      }, 980);
+
+      setTimeout(() => {
+        window.location.href = "port-projects.html";
+      }, 1320);
+    }
+
+    function openLayer(layer) {
+      if (!layer) return;
+      layer.classList.add("open");
+      layer.setAttribute("aria-hidden", "false");
+      body.classList.add("modal-open");
+      if (layer.classList.contains("modal")) {
+        canvas.classList.add("has-focus");
+        focusPreview.classList.remove("visible");
+      }
+    }
+
+    function closeLayer(layer) {
+      if (!layer) return;
+      layer.classList.remove("open");
+      layer.setAttribute("aria-hidden", "true");
+      if (!document.querySelector(".layer.open")) {
+        body.classList.remove("modal-open");
+        canvas.classList.remove("has-focus");
+        items.forEach(item => item.classList.remove("is-origin"));
+        focusPreview.classList.remove("visible");
+        focusPreview.setAttribute("aria-hidden", "true");
+      }
+    }
+
+    function showPreview(item) {
+      if (dragItem) return;
+      isHoveringItem = true;
+      canvas.classList.add("has-focus");
+      items.forEach(el => el.classList.remove("is-origin"));
+      item.classList.add("is-origin");
+
+      clearTimeout(bioPreviewTimer);
+
+      if (item.dataset.label === "Bio") {
+        const bioStage = document.createElement("div");
+        bioStage.className = "bio-id-stage";
+
+        const bioFlip = document.createElement("div");
+        bioFlip.className = "bio-id-flip";
+        bioFlip.id = "bioPreviewFlip";
+
+        const front = document.createElement("img");
+        front.className = "bio-id-face bio-id-front";
+        front.src = "portfolio_images/Michael_ID.png";
+        front.alt = "Front of Michael Magsino ID card";
+
+        const back = document.createElement("img");
+        back.className = "bio-id-face bio-id-back";
+        back.src = "portfolio_images/IDB_Sketch.png";
+        back.alt = "Back of Michael Magsino ID card";
+
+        bioFlip.append(front, back);
+        bioStage.append(bioFlip);
+        focusIcon.replaceChildren(bioStage);
+
+        bioPreviewTimer = setTimeout(() => {
+          bioFlip.classList.add("is-preview-flipped");
+        }, 750);
+      } else {
+        const icon = item.querySelector("img").cloneNode(true);
+        focusIcon.replaceChildren(icon);
+      }
+
+      focusHint.textContent = item.dataset.label === "Bio"
+        ? "click to inspect"
+        : item.dataset.label === "Projects"
+          ? "Boot Up Computer"
+          : "click to open";
+      focusLabel.textContent = item.dataset.label;
+      focusPreview.classList.add("visible");
+      focusPreview.setAttribute("aria-hidden", "false");
+
+      const card = focusPreview.querySelector(".focus-card");
+      card.classList.toggle("compact-hover", item.dataset.label === "Resume" || item.dataset.label === "Artist Statement");
+      const rect = item.getBoundingClientRect();
+
+      requestAnimationFrame(() => {
+        const margin = 32;
+        const pageWidth = document.documentElement.clientWidth;
+        const pageHeight = document.documentElement.clientHeight;
+        const cardWidth = card.offsetWidth;
+        const cardHeight = card.offsetHeight;
+        const minLeft = cardWidth / 2 + margin;
+        const maxLeft = pageWidth - cardWidth / 2 - margin;
+        const minTop = cardHeight / 2 + margin;
+        const maxTop = pageHeight - cardHeight / 2 - margin;
+        const preferredLeft = rect.left + rect.width / 2;
+        const preferredTop = rect.top + rect.height / 2;
+
+        card.style.left = `${Math.max(minLeft, Math.min(preferredLeft, maxLeft))}px`;
+        card.style.top = `${Math.max(minTop, Math.min(preferredTop, maxTop))}px`;
+      });
+    }
+
+    function hidePreview() {
+      clearTimeout(hoverTimer);
+      clearTimeout(bioPreviewTimer);
+      isHoveringItem = false;
+      setTimeout(() => {
+        if (isHoveringItem || dragItem || document.querySelector(".modal.open")) return;
+        canvas.classList.remove("has-focus");
+        items.forEach(item => item.classList.remove("is-origin"));
+        focusPreview.classList.remove("visible");
+        focusPreview.setAttribute("aria-hidden", "true");
+      }, 80);
+    }
+
+    function getTitleBounds() {
+      const canvasRect = canvas.getBoundingClientRect();
+      const titleRect = document.querySelector(".centerpiece-inner").getBoundingClientRect();
+      const padding = 36;
+      return {
+        left: titleRect.left - canvasRect.left - padding,
+        top: titleRect.top - canvasRect.top - padding,
+        right: titleRect.right - canvasRect.left + padding,
+        bottom: titleRect.bottom - canvasRect.top + padding
+      };
+    }
+
+    function rectsOverlap(a, b) {
+      return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    }
+
+    function makeBox(left, top, width, height, gap = imageGap) {
+      return {
+        left: left - gap,
+        top: top - gap,
+        right: left + width + gap,
+        bottom: top + height + gap
+      };
+    }
+
+    function pushAwayFromTitle(left, top, width, height) {
+      const title = getTitleBounds();
+      const box = makeBox(left, top, width, height, 0);
+      if (!rectsOverlap(box, title)) return { left, top };
+
+      const options = [
+        { left: title.left - width - imageGap, top },
+        { left: title.right + imageGap, top },
+        { left, top: title.top - height - imageGap },
+        { left, top: title.bottom + imageGap }
+      ];
+
+      return options
+        .map(pos => ({ ...pos, distance: Math.hypot(pos.left - left, pos.top - top) }))
+        .sort((a, b) => a.distance - b.distance)[0];
+    }
+
+    function clampPosition(left, top, width, height) {
+      let pushed = pushAwayFromTitle(left, top, width, height);
+      const maxLeft = Math.max(boundaryMargin, canvas.clientWidth - width - boundaryMargin);
+      const maxTop = Math.max(boundaryMargin, canvas.clientHeight - height - boundaryMargin);
+      let boundedLeft = Math.max(boundaryMargin, Math.min(pushed.left, maxLeft));
+      let boundedTop = Math.max(boundaryMargin, Math.min(pushed.top, maxTop));
+
+      pushed = pushAwayFromTitle(boundedLeft, boundedTop, width, height);
+      boundedLeft = Math.max(boundaryMargin, Math.min(pushed.left, maxLeft));
+      boundedTop = Math.max(boundaryMargin, Math.min(pushed.top, maxTop));
+
+      return { left: boundedLeft, top: boundedTop };
+    }
+
+    function getItemCollision(currentItem, left, top, width, height) {
+      const currentBox = makeBox(left, top, width, height);
+      const canvasRect = canvas.getBoundingClientRect();
+
+      for (const item of items) {
+        if (item === currentItem) continue;
+        const rect = item.getBoundingClientRect();
+        const itemLeft = parseFloat(item.style.left) || rect.left - canvasRect.left;
+        const itemTop = parseFloat(item.style.top) || rect.top - canvasRect.top;
+        const otherBox = makeBox(itemLeft, itemTop, rect.width, rect.height, 0);
+
+        if (rectsOverlap(currentBox, otherBox)) {
+          return { item, rect, left: itemLeft, top: itemTop };
+        }
+      }
+      return null;
+    }
+
+    function nudgeAwayFromItem(left, top, width, height, collision) {
+      const otherCenterX = collision.left + collision.rect.width / 2;
+      const otherCenterY = collision.top + collision.rect.height / 2;
+      const itemCenterX = left + width / 2;
+      const itemCenterY = top + height / 2;
+      const dx = itemCenterX - otherCenterX;
+      const dy = itemCenterY - otherCenterY;
+      const nudge = imageGap + 28;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        left = dx >= 0 ? collision.left + collision.rect.width + nudge : collision.left - width - nudge;
+      } else {
+        top = dy >= 0 ? collision.top + collision.rect.height + nudge : collision.top - height - nudge;
+      }
+
+      return clampPosition(left, top, width, height);
+    }
+
+    function getItemSize(item) {
+      const rect = item.getBoundingClientRect();
+      return {
+        width: Math.ceil(Math.max(rect.width, item.offsetWidth)) + 18,
+        height: Math.ceil(Math.max(rect.height, item.offsetHeight)) + 26
+      };
+    }
+
+    function getQuadrantSlots() {
+      const title = getTitleBounds();
+      return [
+        {
+          name: "top-left",
+          left: boundaryMargin,
+          top: boundaryMargin,
+          right: Math.max(boundaryMargin, title.left - imageGap),
+          bottom: Math.max(boundaryMargin, title.top - imageGap)
+        },
+        {
+          name: "top-right",
+          left: Math.min(canvas.clientWidth - boundaryMargin, title.right + imageGap),
+          top: boundaryMargin,
+          right: canvas.clientWidth - boundaryMargin,
+          bottom: Math.max(boundaryMargin, title.top - imageGap)
+        },
+        {
+          name: "bottom-left",
+          left: boundaryMargin,
+          top: Math.min(canvas.clientHeight - boundaryMargin, title.bottom + imageGap),
+          right: Math.max(boundaryMargin, title.left - imageGap),
+          bottom: canvas.clientHeight - boundaryMargin
+        },
+        {
+          name: "bottom-right",
+          left: Math.min(canvas.clientWidth - boundaryMargin, title.right + imageGap),
+          top: Math.min(canvas.clientHeight - boundaryMargin, title.bottom + imageGap),
+          right: canvas.clientWidth - boundaryMargin,
+          bottom: canvas.clientHeight - boundaryMargin
+        }
+      ];
+    }
+
+    function placeItemInSlot(item, slot) {
+      const { width, height } = getItemSize(item);
+      const slotWidth = Math.max(0, slot.right - slot.left);
+      const slotHeight = Math.max(0, slot.bottom - slot.top);
+
+      let left = slot.left + (slotWidth - width) / 2;
+      let top = slot.top + (slotHeight - height) / 2;
+
+      left += (Math.random() - 0.5) * Math.min(42, Math.max(0, slotWidth - width));
+      top += (Math.random() - 0.5) * Math.min(42, Math.max(0, slotHeight - height));
+
+      const position = clampPosition(left, top, width, height);
+      item.style.left = `${position.left}px`;
+      item.style.top = `${position.top}px`;
+      item.style.right = "auto";
+      item.style.bottom = "auto";
+      lastSafePositions.set(item, position);
+    }
+
+    function randomizeItems() {
+      const shuffledItems = [...items].sort(() => Math.random() - 0.5);
+      const shuffledSlots = getQuadrantSlots().sort(() => Math.random() - 0.5);
+
+      shuffledItems.forEach((item, index) => {
+        placeItemInSlot(item, shuffledSlots[index]);
+      });
+    }
+
+    function startDrag(e, item) {
+      if (e.button !== 0) return;
+      clearTimeout(hoverTimer);
+      focusPreview.classList.remove("visible");
+      focusPreview.setAttribute("aria-hidden", "true");
+      item.classList.remove("is-bouncing");
+      item.classList.add("is-dragging");
+
+      dragItem = item;
+      didDrag = false;
+      dragStartX = e.clientX;
+      dragStartY = e.clientY;
+
+      const itemRect = item.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+      itemStartX = itemRect.left - canvasRect.left;
+      itemStartY = itemRect.top - canvasRect.top;
+
+      item.style.left = `${itemStartX}px`;
+      item.style.top = `${itemStartY}px`;
+      item.style.right = "auto";
+      item.style.bottom = "auto";
+      item.style.zIndex = "30";
+      item.setPointerCapture(e.pointerId);
+    }
+
+    function moveDrag(e) {
+      if (!dragItem) return;
+      const moveX = e.clientX - dragStartX;
+      const moveY = e.clientY - dragStartY;
+      if (Math.abs(moveX) > 4 || Math.abs(moveY) > 4) didDrag = true;
+      dragItem.style.left = `${itemStartX + moveX}px`;
+      dragItem.style.top = `${itemStartY + moveY}px`;
+    }
+
+    function clampItemToCanvas(item) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      const currentLeft = parseFloat(item.style.left) || itemRect.left - canvasRect.left;
+      const currentTop = parseFloat(item.style.top) || itemRect.top - canvasRect.top;
+      let bounded = clampPosition(currentLeft, currentTop, itemRect.width, itemRect.height);
+      const collision = getItemCollision(item, bounded.left, bounded.top, itemRect.width, itemRect.height);
+
+      if (collision) {
+        bounded = nudgeAwayFromItem(bounded.left, bounded.top, itemRect.width, itemRect.height, collision);
+        if (getItemCollision(item, bounded.left, bounded.top, itemRect.width, itemRect.height)) {
+          bounded = lastSafePositions.get(item) || clampPosition(itemStartX, itemStartY, itemRect.width, itemRect.height);
+        }
+      }
+
+      item.classList.remove("is-dragging");
+
+      if (bounded.left !== currentLeft || bounded.top !== currentTop || collision) {
+        item.classList.add("is-bouncing");
+        item.style.left = `${bounded.left}px`;
+        item.style.top = `${bounded.top}px`;
+        setTimeout(() => item.classList.remove("is-bouncing"), 430);
+      } else {
+        lastSafePositions.set(item, bounded);
+      }
+    }
+
+    function endDrag(e) {
+      if (!dragItem) return;
+      dragItem.releasePointerCapture(e.pointerId);
+      dragItem.style.zIndex = "";
+      const releasedItem = dragItem;
+      clampItemToCanvas(releasedItem);
+      dragItem = null;
+      setTimeout(() => didDrag = false, 0);
+
+      if (isHoveringItem) {
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => showPreview(releasedItem), 500);
+      }
+    }
+
+    themeToggle.addEventListener("click", () => setTheme(body.classList.contains("dark-mode") ? "light" : "dark"));
+
+    document.addEventListener("click", e => {
+      if (e.target.closest("#mobileThemeToggle")) {
+        setTheme(body.classList.contains("dark-mode") ? "light" : "dark");
+      }
+    });
+
+    bioFlipButton.addEventListener("click", () => {
+      bioFlipCard.classList.toggle("is-flipped");
+      bioFlipButton.textContent = bioFlipCard.classList.contains("is-flipped") ? "Flip to front" : "Click to flip over";
+    });
+
+    items.forEach(item => {
+      item.addEventListener("mouseenter", () => {
+        isHoveringItem = true;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => showPreview(item), 500);
+      });
+      item.addEventListener("focus", () => {
+        isHoveringItem = true;
+        clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => showPreview(item), 500);
+      });
+      item.addEventListener("mouseleave", hidePreview);
+      item.addEventListener("blur", hidePreview);
+      item.addEventListener("pointerdown", e => startDrag(e, item));
+      item.addEventListener("dragstart", e => e.preventDefault());
+      item.addEventListener("click", e => {
+        if (didDrag) {
+          e.preventDefault();
+          e.stopPropagation();
+          return;
+        }
+        if (item.dataset.label === "Projects") {
+          bootIntoProjects(item);
+          return;
+        }
+        document.querySelectorAll(".modal.open").forEach(closeLayer);
+        if (item.dataset.target) openLayer(document.getElementById(item.dataset.target));
+      });
+    });
+
+    document.querySelectorAll("[data-mobile-open]").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".modal.open").forEach(closeLayer);
+        openLayer(document.getElementById(button.dataset.mobileOpen));
+      });
+    });
+
+    document.querySelectorAll("[data-mobile-link]").forEach(button => {
+      button.addEventListener("click", () => {
+        if (button.dataset.mobileLink === "port-projects.html") {
+          bootIntoProjects(button);
+          return;
+        }
+        window.location.href = button.dataset.mobileLink;
+      });
+    });
+
+    window.addEventListener("pointermove", moveDrag);
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
+    window.addEventListener("resize", () => items.forEach(clampItemToCanvas));
+
+    document.addEventListener("click", e => {
+      const openTarget = e.target.closest("[data-open]");
+      const closeTarget = e.target.closest("[data-close], .close-modal");
+      if (openTarget) openLayer(document.getElementById(openTarget.dataset.open));
+      if (closeTarget) closeLayer(closeTarget.closest(".layer") || document.getElementById(closeTarget.dataset.close));
+      if (e.target.classList.contains("modal")) closeLayer(e.target);
+    });
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") document.querySelectorAll(".layer.open").forEach(closeLayer);
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      setTheme(localStorage.getItem("portfolio-theme") === "dark" ? "dark" : "light");
+    });
+
+    window.addEventListener("load", typeTitle);
+  </script>
 </body>
 </html>
